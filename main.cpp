@@ -25,7 +25,7 @@ int main(int agr, char* args[])
 		SDL_Quit();
 		return 1;
 	}
-	SDL_Surface *bg=IMG_Load("res/replay.png");
+	SDL_Surface *bg=IMG_Load("/home/student/Documents/elonti-belonti/res/replay.png");
 	if(!bg)
 	{
 		printf("Failed to load image:%s",SDL_GetError());
@@ -35,19 +35,19 @@ int main(int agr, char* args[])
 		return 1;
 	}
 	//Apply the image
-			//SDL_BlitSurface(bg,win,NULL);
+			SDL_BlitSurface(bg,NULL,bg,NULL);
 			
 			//Update the surface
 			SDL_UpdateWindowSurface(win);
-	SDL_Texture* tex = SDL_CreateTextureFromSurface(rendr, bg);
- 	//SDL_FreeSurface(bg);
- 	if(!tex){
- 		printf("Redline Texture %s\n",SDL_GetError());
- 		SDL_DestroyRenderer(rendr);
- 		SDL_DestroyWindow(win);
- 		SDL_Quit();
-		return 1;
- 	}
+	// SDL_Texture* tex = SDL_CreateTextureFromSurface(rendr, bg);
+ 	// //SDL_FreeSurface(bg);
+ 	// if(!tex){
+ 	// 	printf("Redline Texture %s\n",SDL_GetError());
+ 	// 	SDL_DestroyRenderer(rendr);
+ 	// 	SDL_DestroyWindow(win);
+ 	// 	SDL_Quit();
+	// 	return 1;
+ 	// }
 	SDL_Delay(6000);
  	SDL_DestroyRenderer(rendr);
  	SDL_DestroyWindow(win);
