@@ -25,7 +25,7 @@ int main(int agr, char* args[])
 		SDL_Quit();
 		return 1;
 	}
-	SDL_Surface *bg=IMG_Load("/home/student/Documents/elonti-belonti/res/replay.png");
+	SDL_Surface *bg=IMG_Load("/home/student/Documents/elonti-belonti/res/bg.jpg");
 	if(!bg)
 	{
 		printf("Failed to load image:%s",SDL_GetError());
@@ -34,20 +34,57 @@ int main(int agr, char* args[])
 		SDL_Quit();
 		return 1;
 	}
-	//Apply the image
-			SDL_BlitSurface(bg,NULL,bg,NULL);
+	SDL_Texture* tex = SDL_CreateTextureFromSurface(rendr, bg);
+ 	SDL_FreeSurface(bg);
+ 	if(!tex){
+ 		printf("Redline Texture %s\n",SDL_GetError());
+ 		SDL_DestroyRenderer(rendr);
+ 		SDL_DestroyWindow(win);
+ 		SDL_Quit();
+		return 1;
+ 	}
+	bg=IMG_Load("/home/student/Documents/elonti-belonti/res/boy.jpg");
+	if(!bg)
+	{
+		printf("Failed to load image:%s",SDL_GetError());
+		SDL_DestroyRenderer(rendr);
+		SDL_DestroyWindow(win);
+		SDL_Quit();
+		return 1;
+	}
+	// //Apply the image
+	// 		SDL_BlitSurface(bg,NULL,bg,NULL);
 			
-			//Update the surface
-			SDL_UpdateWindowSurface(win);
-	// SDL_Texture* tex = SDL_CreateTextureFromSurface(rendr, bg);
- 	// //SDL_FreeSurface(bg);
- 	// if(!tex){
- 	// 	printf("Redline Texture %s\n",SDL_GetError());
- 	// 	SDL_DestroyRenderer(rendr);
- 	// 	SDL_DestroyWindow(win);
- 	// 	SDL_Quit();
-	// 	return 1;
- 	// }
+	// 		//Update the surface
+	// 		SDL_UpdateWindowSurface(win);
+	
+	SDL_Texture* tex2 = SDL_CreateTextureFromSurface(rendr, bg);
+ 	if(!tex2){
+ 		printf("Redline Texture %s\n",SDL_GetError());
+ 		SDL_DestroyRenderer(rendr);
+ 		SDL_DestroyWindow(win);
+ 		SDL_Quit();
+		return 1;
+ 	}
+	SDL_RenderClear(rendr);
+	SDL_RenderCopy(rendr, tex2, NULL, NULL);
+ 	SDL_RenderCopy(rendr, tex, NULL, NULL);
+ 	//SDL_RenderPresent(rendr);
+	//SDL_RenderClear(rendr);
+ 	
+ 	SDL_RenderPresent(rendr);
+	int close=0;
+	while(!close){
+ 		SDL_Event event;
+ 		while(SDL_PollEvent(&event)){
+ 			switch(event.type){
+ 				case SDL_QUIT:
+ 					close = 1;
+ 					break;
+			}
+		}
+	}
+
 	SDL_Delay(6000);
  	SDL_DestroyRenderer(rendr);
  	SDL_DestroyWindow(win);
