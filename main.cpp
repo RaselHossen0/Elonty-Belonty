@@ -26,7 +26,11 @@ int main(int agr, char* args[])
 		SDL_Quit();
 		return 1;
 	}
+<<<<<<< HEAD
 	SDL_Surface *bg=IMG_Load("res/bg.jpg");
+=======
+	SDL_Surface *bg=IMG_Load("/home/student/Documents/GitHub/DRM-game/res/bg.jpg");
+>>>>>>> eee55a0ad6b66c5788c16babecc34fd09dffba80
 	if(!bg)
 	{
 		printf("Failed to load image:%s",SDL_GetError());
