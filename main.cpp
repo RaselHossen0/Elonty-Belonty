@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 int main(int agr, char* args[])
 {
 	if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER)>0)
@@ -25,7 +26,7 @@ int main(int agr, char* args[])
 		SDL_Quit();
 		return 1;
 	}
-	SDL_Surface *bg=IMG_Load("/home/student/Documents/elonti-belonti/res/bg.jpg");
+	SDL_Surface *bg=IMG_Load("res/bg.jpg");
 	if(!bg)
 	{
 		printf("Failed to load image:%s",SDL_GetError());
@@ -43,7 +44,7 @@ int main(int agr, char* args[])
  		SDL_Quit();
 		return 1;
  	}
-	bg=IMG_Load("/home/student/Documents/elonti-belonti/res/boy.jpg");
+	bg=IMG_Load("res/boy.jpg");
 	if(!bg)
 	{
 		printf("Failed to load image:%s",SDL_GetError());
@@ -76,14 +77,17 @@ int main(int agr, char* args[])
 	int close=0;
 	while(!close){
  		SDL_Event event;
- 		while(SDL_PollEvent(&event)){
+ 		while(SDL_PollEvent(&event))
+		{
  			switch(event.type){
  				case SDL_QUIT:
  					close = 1;
  					break;
 			}
 		}
+
 	}
+	//SDL_MixAudio *audio=Mix_LoadWAV("sound/coinsound.mp3");
 
 	SDL_Delay(6000);
  	SDL_DestroyRenderer(rendr);
