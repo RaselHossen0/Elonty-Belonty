@@ -7,7 +7,8 @@
 #define WINDOW_HEIGHT (720)
 #define SCROLL_SPEED (900)
 #define RECT_SPEED (5.0)
-
+void init();
+void error();
 float min(float x, float y)
 {
     if (x < y)
@@ -24,34 +25,17 @@ float max(float x, float y)
 int main(int agr, char *args[])
 {
 
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) > 0)
-    {
-        printf("video and timer: %s\n", SDL_GetError());
-    }
-    /*if (!(IMG_Init(IMG_INIT_PNG|IMG_INIT_JPG)))
-        printf("image: %s\n",SDL_GetError());*/
-
-    printf("Initialization Complete\n");
-
+    init();
     SDL_Window *win = SDL_CreateWindow("SDL Demonstration", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-
-    if (!win)
+     
+          if (!win)
     {
         printf("window: %s\n", SDL_GetError());
         SDL_Quit();
         return 1;
     }
-
     Uint32 render_flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
-
-    if (!rend)
-    {
-        printf("renderer: %s\n", SDL_GetError());
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
     SDL_Surface *surface = IMG_Load("res/dip.jpg");
     if (!surface)
     {
@@ -76,8 +60,6 @@ int main(int agr, char *args[])
     SDL_RenderCopy(rend, tex0, NULL, NULL);
     SDL_RenderPresent(rend);
     SDL_Delay(1000);
-    
-    
     surface = IMG_Load("res/start.jpg");
     if (!surface)
     {
@@ -105,8 +87,9 @@ int main(int agr, char *args[])
     start_rect.y = (WINDOW_HEIGHT - start_rect.h) / 2 - 100;
     
    
-   //SDL_SetRenderDrawColor(rend, 0xFF, 0xFF, 0xFF, 0xFF);
-
+   SDL_SetRenderDrawColor(rend, 0xFF, 0xFF, 0xFF, 0xFF);
+ SDL_SetRenderDrawColor(rend, 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_SetRenderDrawColor(rend, 0xFF, 0xFF, 0xFF, 0xFF);
     
 
     surface = IMG_Load("res/clipart3291119.png");
@@ -140,7 +123,7 @@ int main(int agr, char *args[])
 
     
 
-    surface = IMG_Load("res/gameover.jpeg");
+    surface = IMG_Load("res/gameover.jpg");
     if (!surface)
     {
         printf("Green rectangle Surface Error: %s\n", IMG_GetError());
@@ -240,7 +223,7 @@ SDL_Delay(3000);
             SDL_RenderClear(rend);
             SDL_SetRenderDrawColor(rend,0x00,0x00,0x00,0x00);
             SDL_RenderDrawLine(rend,1200,1100,900,300);
-           // SDL_RenderDrawLine();
+          // SDL_RenderDrawLine();
             SDL_RenderCopy(rend, tex, NULL, &dest);
             SDL_RenderPresent(rend);
             SDL_Delay(1000 / 60);
@@ -275,17 +258,10 @@ SDL_Delay(3000);
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend, gameover_tex, NULL, &gameover_rect);
             SDL_RenderCopy(rend, replay_tex, NULL, &replay_rect);
-
-            
-
-          
-
             SDL_RenderPresent(rend);
-
             int mousex, mousey;
             int buttons = SDL_GetMouseState(&mousex, &mousey);
             printf("%d %d\n", mousex, mousey);
-
             if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT))
             {
                 if (mousex >= replay_rect.x && mousex <= (replay_rect.x + replay_rect.w) && mousey >= replay_rect.y && mousey <= (replay_rect.y + replay_rect.h))
@@ -293,9 +269,7 @@ SDL_Delay(3000);
                     gameover = 0;
                     x_pos=0;
                     dest.x=0;
-                    dest.y = (int)WINDOW_HEIGHT - (WINDOW_HEIGHT * 0.6);
-                    
-                   
+                    dest.y = (int)WINDOW_HEIGHT - (WINDOW_HEIGHT * 0.6);   
                 }
             }
         }
@@ -311,3 +285,13 @@ SDL_FreeWAV(wavBuffer);
     SDL_Quit();
     return 0;
 }
+void init(){
+         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) > 0)
+    {
+        printf("video and timer: %s\n", SDL_GetError());
+    }
+    printf("Initialization Complete\n");
+
+}
+
+    

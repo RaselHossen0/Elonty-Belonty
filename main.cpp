@@ -10,7 +10,7 @@ int main(int agr, char* args[])
   }
   printf("successful Initialization\n");
   SDL_Window *win;
-  win=SDL_CreateWindow("Elonti-Belonti",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,792,420,0);
+  win=SDL_CreateWindow("Elonti-Belonti",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,792,500,0);
   if(!win)
   {
     printf("Failed to create window:%s",SDL_GetError());
@@ -44,19 +44,19 @@ int main(int agr, char* args[])
      SDL_Quit();
     return 1;
    }
-  bg=IMG_Load("res/a.png");
-  if(!bg)
-  {
-    printf("Failed to load image:%s",SDL_GetError());
-    SDL_DestroyRenderer(rendr);
-    SDL_DestroyWindow(win);
-    SDL_Quit();
-    return 1;
-  }
-  SDL_RenderClear(rendr);
-   SDL_RenderCopy(rendr, tex, NULL, NULL);
-   SDL_RenderPresent(rendr);
-  SDL_Texture* tex2 = SDL_CreateTextureFromSurface(rendr, bg);
+  // bg=IMG_Load("res/boy-running.gif");
+  // if(!bg)
+  // {
+  //   printf("Failed to load image:%s",SDL_GetError());
+  //   SDL_DestroyRenderer(rendr);
+  //   SDL_DestroyWindow(win);
+  //   SDL_Quit();
+  //   return 1;
+  // }
+  // SDL_RenderClear(rendr);
+  //  SDL_RenderCopy(rendr, tex, NULL, NULL);
+  //  SDL_RenderPresent(rendr);
+  SDL_Texture* tex2 = IMG_LoadTexture(rendr,"res/boy-running.gif");
    if(!tex2){
      printf("Redline Texture %s\n",SDL_GetError());
      SDL_DestroyRenderer(rendr);
