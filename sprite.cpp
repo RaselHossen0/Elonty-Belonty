@@ -47,12 +47,15 @@ int main(int argc, char *argv[])
     SDL_SetRenderDrawColor(renderTarget,0xFF,0,0,0xFF);
 
     bool isRunning =true;
-    float x_pos = 0;
-   
     SDL_Event ev;
     while(isRunning){
+        /*while(SDL_PollEvent(&ev)!=0){
+            if(ev.type==SDL_QUIT)
+            isRunning=false;
+        }
+        */
         
-         while (SDL_PollEvent(&ev))
+        while (SDL_PollEvent(&ev))
         {
             switch (ev.type)
             {
@@ -63,43 +66,10 @@ int main(int argc, char *argv[])
                 switch (ev.key.keysym.scancode)
                 {
                 case SDL_SCANCODE_LEFT:
-                  {
-                    x_pos =  x_pos - (900 / 60);
-                    if(x_pos>0)
-                     playerPosition.x = (int)x_pos;
-                     else
-                     {x_pos=0;
-                     playerPosition.x =0;}
-                      playerRect.x-=frameWidth;
-                      if(playerRect.x<=0)
-                         playerRect.x=0;
-                      if(playerRect.y>0&&playerRect.x==0)
-                         {playerRect.y-=frameHeight;
-                         playerRect.x=textureWidth-frameWidth;}
-                      if(playerRect.y==0&&playerRect.x==0)
-                       {playerRect.x=textureWidth-frameWidth;
-                       playerRect.y=textureHeight-frameHeight;}
-
-                
-                 }
-                    
+                    frameTime--;
                     break;
                 case SDL_SCANCODE_RIGHT:
-                 {
-                      x_pos = x_pos + (900 / 60);
-                      if(x_pos<1150)
-                       playerPosition.x = (int)x_pos;
-                       else
-                      { x_pos=1150;
-                       playerPosition.x =1150;}
-
-                      playerRect.x+=frameWidth;
-                      if(playerRect.x>=textureWidth)
-                         {playerRect.x=0;
-                         playerRect.y+=frameHeight;}
-                      if(playerRect.y>=textureHeight)
-                         playerRect.y=0;
-                 }
+                    frameTime++;
                 }
             }
         }
@@ -107,7 +77,12 @@ int main(int argc, char *argv[])
         if(FPS/frameTime==1)//will be repeated 7 times a second
         {
             frameTime=0;//repeat
-          
+            playerRect.x+=frameWidth;
+            if(playerRect.x>=textureWidth)
+            {playerRect.x=0;
+            playerRect.y+=frameHeight;}
+            if(playerRect.y>=textureHeight)
+            playerRect.y=0;
         }
         SDL_RenderClear(renderTarget);
         SDL_RenderCopy(renderTarget,currentImage,&playerRect,&playerPosition);

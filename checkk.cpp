@@ -4,23 +4,11 @@
 #include <stdio.h>
 
 #define WINDOW_WIDTH (1280)
-#define WINDOW_HEIGHT (700)
+#define WINDOW_HEIGHT (720)
 #define SCROLL_SPEED (900)
 #define RECT_SPEED (5.0)
-void setrects(SDL_Rect* clip)
 
-float min(float x, float y)
-{
-    if (x < y)
-        return x;
-    return y;
-}
-float max(float x, float y)
-{
-    if (x > y)
-        return x;
-    return y;
-}
+
 
 int main(int agr, char *args[])
 {
@@ -53,7 +41,7 @@ int main(int agr, char *args[])
         SDL_Quit();
         return 1;
     }
-    SDL_Surface *surface = IMG_Load("/home/student/Documents/GitHub/DRM-game/res/dip.jpg");
+    SDL_Surface *surface = IMG_Load("res/dip.jpg");
     if (!surface)
     {
         printf("Redbar Surface Error: %s\n", IMG_GetError());
@@ -76,10 +64,10 @@ int main(int agr, char *args[])
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, tex0, NULL, NULL);
     SDL_RenderPresent(rend);
-    SDL_Delay(1000);
+    SDL_Delay(1000/2);
     
     
-    surface = IMG_Load("/home/student/Documents/GitHub/DRM-game/res/start.jpg");
+    surface = IMG_Load("res/start.jpg");
     if (!surface)
     {
         printf("Redbar Surface Error: %s\n", IMG_GetError());
@@ -106,11 +94,10 @@ int main(int agr, char *args[])
     start_rect.y = (WINDOW_HEIGHT - start_rect.h) / 2 - 100;
     
    
-   //SDL_SetRenderDrawColor(rend, 0xFF, 0xFF, 0xFF, 0xFF);
 
     
 
-    surface = IMG_Load("res/clipart3291119.png");
+    surface = IMG_Load("res/runman.png");
     if (!surface)
     {
         printf("Redbar Surface Error: %s\n", IMG_GetError());
@@ -131,13 +118,26 @@ int main(int agr, char *args[])
         return 1;
     }
 
-    SDL_Rect dest;
-    SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h);
+    SDL_Rect  playerRect;
+    SDL_Rect playerPosition;
+    playerPosition.x=0;
+    playerPosition.y=400;
+    playerPosition.w=playerPosition.h=320;
+
     
-    dest.x = 0;
-    dest.y = (int)WINDOW_HEIGHT - (WINDOW_HEIGHT * 0.6);
-    float x_pos = 0;
-    int direction = 1;
+
+    int frameWidth,frameHeight;
+    int textureWidth,textureHeight;
+    SDL_QueryTexture(tex,NULL,NULL,&textureWidth,&textureHeight);
+
+     frameWidth=textureWidth/4;
+    frameHeight=textureHeight/2;
+    playerRect.x=playerRect.y=0;
+    playerRect.w=frameWidth;
+    playerRect.h=frameHeight;
+   // SDL_SetRenderDrawColor(rend,0xFF,0,0,0xFF);
+
+    
 
     
 
@@ -186,128 +186,115 @@ int main(int agr, char *args[])
         SDL_Quit();
         return 1;
     }
+ SDL_Init(SDL_INIT_AUDIO);
+  SDL_AudioSpec wavSpec;
+Uint32 wavLength;
+Uint8 *wavBuffer;
+ 
+SDL_LoadWAV("res/background.wav", &wavSpec, &wavBuffer, &wavLength);
+SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
+ //   SDL_Rect dest;
+ //  SDL_QueryTexture(tex2, NULL, NULL, &dest.w, &dest.h);
 
+int success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
+SDL_PauseAudioDevice(deviceId, 0);
+
+SDL_Delay(1000);
     SDL_Rect replay_rect;
     replay_rect.w = 300;
     replay_rect.h = 150;
     replay_rect.x = (WINDOW_WIDTH - replay_rect.w) / 2;
     replay_rect.y = (WINDOW_HEIGHT - replay_rect.h) / 2 + 100;
 
-    int close = 0;
+   bool isRunning =true;
+    float x_pos = 0;
     int gameover = 1;
+    int frameTime=0,FPS=60;
 
-    while (!close)
-    {
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
+    SDL_Event ev;
+    while(isRunning){
+        
+         while (SDL_PollEvent(&ev))
         {
-            switch (event.type)
+            switch (ev.type)
             {
             case SDL_QUIT:
-                close = 1;
+                isRunning=false;
                 break;
             case SDL_KEYDOWN:
-                switch (event.key.keysym.scancode)
+                switch (ev.key.keysym.scancode)
                 {
-                case SDL_SCANCODE_LEFT:
-                    x_pos = max(0, x_pos - (SCROLL_SPEED / 60));
+            case SDL_SCANCODE_LEFT:
+                  {
+                    x_pos =  x_pos - (900 / 60);
+                    if(x_pos>0)
+                     playerPosition.x = (int)x_pos;
+                    else
+                       {x_pos=0;
+                        playerPosition.x =0;}
+                        playerRect.x-=frameWidth;
+                    if(playerRect.x<=0)
+                        playerRect.x=0;
+                    if(playerRect.y>0&&playerRect.x==0)
+                        {playerRect.y-=frameHeight;
+                         playerRect.x=textureWidth-frameWidth;}
+                    if(playerRect.y==0&&playerRect.x==0)
+                       {playerRect.x=textureWidth-frameWidth;
+                        playerRect.y=textureHeight-frameHeight;}
+
+                
+                    }
+                    
                     break;
-                case SDL_SCANCODE_RIGHT:
-                    x_pos = min(WINDOW_WIDTH - dest.w, x_pos + (SCROLL_SPEED / 60));
+            case SDL_SCANCODE_RIGHT:
+                 {
+                         x_pos = x_pos + (900 / 60);
+                      if(x_pos<1150)
+                         playerPosition.x = (int)x_pos;
+                      else
+                        {x_pos=1150;
+                         playerPosition.x =1150;}
+
+                      playerRect.x+=frameWidth;
+                      if(playerRect.x>=textureWidth)
+                        {playerRect.x=0;
+                         playerRect.y+=frameHeight;}
+                      if(playerRect.y>=textureHeight)
+                         playerRect.y=0;
+                 }
                 }
             }
         }
-
       
-    
+        
     
        if (gameover == 0)
         {
-           dest.x = (int)x_pos;
-           
-        
-             surface = IMG_Load("res/man.png");
-    if (!surface)
-    {
-        printf("replay Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture *texx = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!texx)
-    {
-        printf("replayTexture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    
-    SDL_Rect gSpriteClips[6];
-    setrects(rects){
-    gSpriteClips[ 0 ].x =   0;
-    gSpriteClips[ 0 ].y =   0;
-    gSpriteClips[ 0 ].w =  71;
-    gSpriteClips[ 0 ].h =  145;
+           frameTime++;
+           if(FPS/frameTime==1)//will be repeated 7 times a second
+          {
+            frameTime=0;//repeat
+          
+          }
+       
 
-    gSpriteClips[ 1 ].x =  98;
-    gSpriteClips[ 1 ].y =  0;
-    gSpriteClips[ 1 ].w =  83;
-    gSpriteClips[ 1 ].h =  145;
-
-    gSpriteClips[ 2 ].x = 212;
-    gSpriteClips[ 2 ].y =   0;
-    gSpriteClips[ 2 ].w =  98;
-    gSpriteClips[ 2 ].h = 145;;
-
-    gSpriteClips[ 3 ].x =   329;
-    gSpriteClips[ 3 ].y =  0;
-    gSpriteClips[ 3 ].w =  87;
-    gSpriteClips[ 3 ].h = 145;
-
-    gSpriteClips[ 4 ].x =   440;
-    gSpriteClips[ 4 ].y =  0;
-    gSpriteClips[ 4 ].w = 74;
-    gSpriteClips[ 4 ].h = 145;
-
-    gSpriteClips[ 5 ].x =  540;
-    gSpriteClips[ 5 ].y =  0;
-    gSpriteClips[ 5 ].w =  85;
-    gSpriteClips[ 5 ].h = 145;
-    
-    }
-
-    //SDL_RenderClear(rend);
-    //SDL_RenderCopy(rend, texx, NULL, &gSpriteClips[6]);
-    //SDL_RenderPresent(rend);
-           
-            
-           
-            
-            
-           
-
-          /* 
-            SDL_SetRenderDrawColor(rend,0xFF,0xFF,0xFF,0xFF);
-  
+            //SDL_SetRenderDrawColor(rend,0xFF,0xFF,0xFF,0xFF);
+            SDL_SetRenderDrawColor(rend,0xFF,0,0,0xFF);
             SDL_RenderClear(rend);
             SDL_SetRenderDrawColor(rend,0x00,0x00,0x00,0x00);
-            SDL_RenderDrawLine(rend,1200,1100,900,300);
-
-           
-            SDL_RenderCopy(rend, tex, NULL, &dest);
+            for(int i=0;i<5;i++)
+            SDL_RenderDrawLine(rend,1200+i,1100+i,900+i,300+i);
+             //SDL_RenderDrawLine(rend,1201,1101,901,301);
+            // SDL_RenderDrawLine();
+            //SDL_RenderClear(rend);
+            SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
             SDL_RenderPresent(rend);
-
-
-            SDL_Delay(1000 / 60);
-            if(dest.x>=WINDOW_WIDTH*0.79)
-            {dest.x=WINDOW_WIDTH*0.79;
-
-            gameover=2;}
-*/
+        
+           
+            if(playerPosition.x>=WINDOW_WIDTH*0.75)
+            {playerPosition.x=WINDOW_WIDTH*0.75;
+            gameover=2;
+            }
         }
         else if(gameover==1)
     {
@@ -317,7 +304,7 @@ int main(int agr, char *args[])
     //SDL_Delay(3000);
         int mousx, mousy;
             int button = SDL_GetMouseState(&mousx, &mousy);
-            printf("%d %d\n", mousx, mousy);
+            //printf("%d %d\n", mousx, mousy);
 
             if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
             {
@@ -333,12 +320,6 @@ int main(int agr, char *args[])
         {
 
             SDL_RenderClear(rend);
-
-
-            
-
-           
-
             SDL_RenderCopy(rend, gameover_tex, NULL, &gameover_rect);
             SDL_RenderCopy(rend, replay_tex, NULL, &replay_rect);
 
@@ -350,7 +331,7 @@ int main(int agr, char *args[])
 
             int mousex, mousey;
             int buttons = SDL_GetMouseState(&mousex, &mousey);
-            printf("%d %d\n", mousex, mousey);
+            //printf("%d %d\n", mousex, mousey);
 
             if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT))
             {
@@ -358,8 +339,9 @@ int main(int agr, char *args[])
                 {
                     gameover = 0;
                     x_pos=0;
-                    dest.x=0;
-                    dest.y = (int)WINDOW_HEIGHT - (WINDOW_HEIGHT * 0.6);
+                   playerPosition.x=0;
+                   playerPosition.y=400;
+                   playerRect.x=playerRect.y=0;
                     
                    
                 }
@@ -368,7 +350,9 @@ int main(int agr, char *args[])
     }
     
 
-    SDL_Delay(1000);
+    SDL_Delay(100);
+    SDL_CloseAudioDevice(deviceId);
+    SDL_FreeWAV(wavBuffer);
     SDL_DestroyRenderer(rend);
     SDL_DestroyWindow(win);
 
