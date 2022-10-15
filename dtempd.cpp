@@ -118,6 +118,7 @@ int main(int agr, char *args[])
         return 1;
     }
 
+   
     SDL_Rect  playerRect;//rect for a single frame of the sprite sheet
     SDL_Rect playerPosition;//rect for the whole sprite sheet
     playerPosition.x=0;
@@ -289,14 +290,10 @@ SDL_Delay(1000);
             //SDL_RenderClear(rend);
             SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
             SDL_RenderPresent(rend);
-            
         
            
-            if(playerPosition.x>=WINDOW_WIDTH*0.756)
-            {
-                SDL_Delay(1500);
-
-            playerPosition.x=WINDOW_WIDTH*0.756;
+            if(playerPosition.x>=WINDOW_WIDTH*0.75)
+            {playerPosition.x=WINDOW_WIDTH*0.75;
             gameover=2;
             }
         }
