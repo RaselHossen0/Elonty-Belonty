@@ -232,7 +232,7 @@ SDL_Delay(1000);
                     else
                        {x_pos=0;
                         playerPosition.x =0;}
-                        playerRect.x-=frameWidth;
+                    playerRect.x-=frameWidth;
                     if(playerRect.x<=0)
                         playerRect.x=0;
                     if(playerRect.y>0&&playerRect.x==0)
@@ -284,9 +284,7 @@ SDL_Delay(1000);
             SDL_SetRenderDrawColor(rend,0x00,0x00,0x00,0x00);
             for(int i=0;i<5;i++)
             SDL_RenderDrawLine(rend,1200+i,1100+i,900+i,300+i);
-             //SDL_RenderDrawLine(rend,1201,1101,901,301);
-            // SDL_RenderDrawLine();
-            //SDL_RenderClear(rend);
+            
             SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
             SDL_RenderPresent(rend);
             
@@ -303,9 +301,9 @@ SDL_Delay(1000);
         else if(gameover==1)
     {
         SDL_RenderClear(rend);
-    SDL_RenderCopy(rend, tex3, NULL, &start_rect);
-    SDL_RenderPresent(rend);
-    //SDL_Delay(3000);
+        SDL_RenderCopy(rend, tex3, NULL, &start_rect);
+        SDL_RenderPresent(rend);
+    
         int mousx, mousy;
             int button = SDL_GetMouseState(&mousx, &mousy);
             //printf("%d %d\n", mousx, mousy);
