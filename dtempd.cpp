@@ -223,6 +223,8 @@ int success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
 SDL_PauseAudioDevice(deviceId, 0);
 
 
+
+
     SDL_Rect replay_rect;
     replay_rect.w = 300;
     replay_rect.h = 150;
