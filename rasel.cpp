@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 
 #define WINDOW_WIDTH (1280)
@@ -33,7 +34,7 @@ int main(int agr, char *args[])
         SDL_Quit();
         return 1;
     }
-
+ TTF_Init();
     Uint32 render_flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
 
@@ -99,6 +100,12 @@ int main(int agr, char *args[])
         SDL_Quit();
         return 1;
     }
+    TTF_Font *font =TTF_OpenFont("res/font/Oswald-Bold.ttf",40);
+    surface=TTF_RenderText_Solid(font,"Elonti-Belonti",{0,0,0});
+    SDL_Texture *fontTex=SDL_CreateTextureFromSurface(rend,surface);
+    SDL_Rect textRect ={40,40,500,50};
+    SDL_FreeSurface(surface);
+
     SDL_Rect start_rect;
     start_rect.w = 300;
     start_rect.h = 150;
@@ -260,7 +267,6 @@ SDL_PauseAudioDevice(deviceId, 0);
 
 
 
-
     SDL_Rect replay_rect;
     replay_rect.w = 300;
     replay_rect.h = 150;
@@ -274,7 +280,8 @@ SDL_PauseAudioDevice(deviceId, 0);
     int frameTime=0,FPS=60;
 
     SDL_Event ev;
-    while(isRunning){
+    while(isRunning)
+    {
         
          while (SDL_PollEvent(&ev))
         {
@@ -283,6 +290,36 @@ SDL_PauseAudioDevice(deviceId, 0);
             case SDL_QUIT:
                 isRunning=false;
                 break;
+                 case SDLK_a:
+                        {
+                            y_pos1 =  y_pos1 - (550 / 60);
+                    if(y_pos1>0)
+                     boy2_pos.y= (int)y_pos1;
+                    else
+                       {
+                        y_pos1=0;
+                        boy2_pos.y=0;
+                        }
+                   boy2.x+=frameWidth;
+                      if(boy2.x>=textureWidth-frameWidth)
+                        boy2.x=0;
+                        }
+                        case SDLK_f:
+                 {
+                        y_pos1 = y_pos1 + (560 / 60);
+                      if(y_pos1<550)
+                         boy2_pos.y= (int)y_pos1;
+                      else
+                        {
+                            y_pos1=550;
+                         boy2_pos.y =550;
+                         }
+
+                      boy2.x-=frameWidth;
+                      if(boy2.x<=0)
+                        {boy2.x=0;
+                        boy2.x=textureWidth-frameWidth;}
+                 }
             case SDL_KEYDOWN:
                 switch (ev.key.keysym.scancode)
                 {
@@ -292,26 +329,23 @@ SDL_PauseAudioDevice(deviceId, 0);
                     if(y_pos>0)
                      playerPosition.y= (int)y_pos;
                     else
-                       {y_pos=0;
-                        playerPosition.y=0;}
+                       {
+                        y_pos=0;
+                        playerPosition.y=0;
+                        }
                    playerRect.x+=frameWidth;
                       if(playerRect.x>=textureWidth-frameWidth)
                         playerRect.x=0;
+                          break;
+                          }
 
-                         y_pos1 =  y_pos1 - (550 / 60);
-                    if(y_pos1>0)
-                     boy2_pos.y= (int)y_pos1;
-                    else
-                       {y_pos1=0;
-                        boy2_pos.y=0;}
-                   boy2.x+=frameWidth;
-                      if(boy2.x>=textureWidth-frameWidth)
-                        boy2.x=0;
+                       
+
+                         
 
                 
-                    }
                     
-                    break;
+                  
             case SDL_SCANCODE_DOWN:
                  {
                          y_pos = y_pos + (500 / 60);
@@ -327,21 +361,8 @@ SDL_PauseAudioDevice(deviceId, 0);
                       if(playerRect.x<=0)
                         {playerRect.x=0;
                         playerRect.x=textureWidth-frameWidth;}
-
-                        y_pos1 = y_pos1 + (560 / 60);
-                      if(y_pos1<550)
-                         boy2_pos.y= (int)y_pos1;
-                      else
-                        {
-                            y_pos1=550;
-                         boy2_pos.y =550;
-                         }
-
-                      boy2.x-=frameWidth;
-                      if(boy2.x<=0)
-                        {boy2.x=0;
-                        boy2.x=textureWidth-frameWidth;}
                  }
+                 
                 }
             }
         }
@@ -400,22 +421,24 @@ SDL_PauseAudioDevice(deviceId, 0);
             if(playerPosition.y<=100)
             {
                 SDL_Delay(1500);
-
+          gameover=2;
             playerPosition.y=100;
-
+            }
              if(boy2_pos.y<=100)
             {
                 SDL_Delay(1500);
 
             boy2_pos.y=100;
-            gameover=2;
+           gameover=2;
             }
-        }
+             
+        
         }
         else if(gameover==1)
     {
         Mix_PlayChannel( -1, replay, 0 );
         SDL_RenderClear(rend);
+        SDL_RenderCopy(rend,fontTex,NULL,&textRect);
         SDL_RenderCopy(rend, tex3, NULL, &start_rect);
         SDL_RenderPresent(rend);
     
@@ -461,7 +484,7 @@ SDL_PauseAudioDevice(deviceId, 0);
                    playerPosition.y=550;
                    playerRect.x=playerRect.y=0;
 
-                     y_pos1=550.0;
+                     y_pos1=580.0;
                    boy2_pos.x=400;
                    boy2_pos.y=550;
                    boy2.x=boy2.y=0;
