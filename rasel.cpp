@@ -12,11 +12,11 @@
 #define RECT_SPEED (5.0)
 
 
-
-int main(int agr, char *args[])
-{
-
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) > 0)
+SDL_Window *win;
+SDL_Renderer *rend;
+SDL_Surface *surface;
+void init(){
+ if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) > 0)
     {
         printf("video and timer: %s\n", SDL_GetError());
     }
@@ -26,26 +26,34 @@ int main(int agr, char *args[])
     printf("Initialization Complete\n");
     SDL_Init(SDL_INIT_AUDIO);
 
-    SDL_Window *win = SDL_CreateWindow("SDL Demonstration", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+    win = SDL_CreateWindow("SDL Demonstration", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 
     if (!win)
     {
         printf("window: %s\n", SDL_GetError());
         SDL_Quit();
-        return 1;
+      //  return 1;
     }
  TTF_Init();
     Uint32 render_flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
-    SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
+    rend = SDL_CreateRenderer(win, -1, render_flags);
 
     if (!rend)
     {
         printf("renderer: %s\n", SDL_GetError());
         SDL_DestroyWindow(win);
         SDL_Quit();
-        return 1;
+        //return 1;
     }
-    SDL_Surface *surface = IMG_Load("res/dip.jpg");
+}
+// void loadmedia(){
+    
+// }
+int main(int agr, char *args[])
+{
+
+   init();
+    surface = IMG_Load("res/dip.jpg");
     if (!surface)
     {
         printf("Redbar Surface Error: %s\n", IMG_GetError());
@@ -54,17 +62,7 @@ int main(int agr, char *args[])
         SDL_Quit();
         return 1;
     }
-
-    //Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,1024);
-    if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
-				{
-					printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
-					//success = false;
-				}
-   Mix_Music *music=Mix_LoadMUS("res/replay.mp3");
-    Mix_Chunk *replay=Mix_LoadWAV("res/music.wav");
-    Mix_Chunk *replay1=Mix_LoadWAV("res/game_over.wav");
-    SDL_Texture *tex0 = SDL_CreateTextureFromSurface(rend, surface);
+  SDL_Texture *tex0 = SDL_CreateTextureFromSurface(rend, surface);
     SDL_FreeSurface(surface);
     if (!tex0)
     {
@@ -78,6 +76,18 @@ int main(int agr, char *args[])
     SDL_RenderCopy(rend, tex0, NULL, NULL);
     SDL_RenderPresent(rend);
     SDL_Delay(1000/3);
+    //Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,1024);
+    if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+				{
+					printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+				
+				}
+   Mix_Music *music=Mix_LoadMUS("res/replay.mp3");
+    Mix_Chunk *replay=Mix_LoadWAV("res/music.wav");
+    Mix_Chunk *replay1=Mix_LoadWAV("res/game_over.wav");
+    Mix_Chunk *run1=Mix_LoadWAV("");
+    Mix_Chunk *run2=Mix_LoadWAV("");
+  
     
     
     surface = IMG_Load("res/start.jpg");
@@ -163,13 +173,6 @@ int main(int agr, char *args[])
     boy2_pos.h=150;//ei rec(square) er moddher kothao texture (runman) load hobe
 
     
-
-    // int frameWidth,frameHeight;
-    // int textureWidth,textureHeight;
-   // SDL_QueryTexture(tex,NULL,NULL,&textureWidth,&textureHeight);
-
-    // frameWidth=textureWidth/9;
-    // frameHeight=textureHeight;
     boy2.x=400;
     boy2.y=50;
     boy2.w=frameWidth;
@@ -254,16 +257,16 @@ int main(int agr, char *args[])
         return 1;
     }
  
-SDL_AudioSpec wavSpec;
-Uint32 wavLength;
-Uint8 *wavBuffer;
+// SDL_AudioSpec wavSpec;
+// Uint32 wavLength;
+// Uint8 *wavBuffer;
  
-SDL_LoadWAV("res/background.wav", &wavSpec, &wavBuffer, &wavLength);
-SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
+// SDL_LoadWAV("res/background.wav", &wavSpec, &wavBuffer, &wavLength);
+// SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
 
 
-int success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
-SDL_PauseAudioDevice(deviceId, 0);
+// int success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
+// SDL_PauseAudioDevice(deviceId, 0);
 
 
 
@@ -498,9 +501,9 @@ SDL_PauseAudioDevice(deviceId, 0);
     
 
     SDL_Delay(100);
-    SDL_CloseAudioDevice(deviceId);
+   // SDL_CloseAudioDevice(deviceId);
     Mix_FreeChunk(replay);
-    SDL_FreeWAV(wavBuffer);
+  //  SDL_FreeWAV(wavBuffer);
     SDL_DestroyRenderer(rend);
     SDL_DestroyWindow(win);
 
