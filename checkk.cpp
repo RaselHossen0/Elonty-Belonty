@@ -1,12 +1,14 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
-#include <stdio.h>
+#include <bits/stdc++.h>
 
 #define WINDOW_WIDTH (1280)
 #define WINDOW_HEIGHT (720)
 #define SCROLL_SPEED (900)
 #define RECT_SPEED (5.0)
+
+
 
 
 
@@ -168,21 +170,54 @@ int main(int agr, char *args[])
     gameover_rect.x = (WINDOW_WIDTH - gameover_rect.w) / 2;
     gameover_rect.y = (WINDOW_HEIGHT - gameover_rect.h) / 2 - 150;
 
-    surface =IMG_Load("res/bg.png");
+    surface =IMG_Load("res/3.png");
     SDL_Texture *bg_Tex =SDL_CreateTextureFromSurface(rend,surface);
+    SDL_FreeSurface(surface);
+     surface =IMG_Load("res/fire.png");
+    SDL_Texture *fire_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
 
     surface =IMG_Load("res/putull.png");
     SDL_Texture *Putul_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
-
-    SDL_Rect  playrRect;//rect for a single frame of the sprite sheet
-    SDL_Rect playrPosition;//rect for the whole sprite sheet
+    SDL_Rect  playrRect;
+    SDL_Rect playrPosition;
     playrPosition.x=568;
     playrPosition.y=30;
     playrPosition.w=75;
-    playrPosition.h=75;//ei rec(square) er moddher kothao texture (runman) load hobe
+    playrPosition.h=75;
 
+    SDL_Rect  plarRect;//rect for a single frame of the sprite sheet
+    SDL_Rect plarPosition;//rect for the whole sprite sheet
+    plarPosition.x=268;
+    plarPosition.y=100;
+    plarPosition.w=130;
+    plarPosition.h=130;//ei rec(square) er moddher kothao texture (runman) load hobe
+    int frmWidth,frmHeight;
+    int txturWidth,txturHeight;
+    SDL_QueryTexture(fire_Tex,NULL,NULL,&txturWidth,&txturHeight);
+
+    frmWidth=txturWidth/10;
+    frmHeight=txturHeight;
+    plarRect.x=plarRect.y=0;
+    plarRect.w=frmWidth;
+    plarRect.h=frmHeight;
+
+    SDL_Rect  plarRect1;//rect for a single frame of the sprite sheet
+    SDL_Rect plarPosition1;//rect for the whole sprite sheet
+    plarPosition1.x=168;
+    plarPosition1.y=100;
+    plarPosition1.w=130;
+    plarPosition1.h=130;//ei rec(square) er moddher kothao texture (runman) load hobe
+    int frmWidth1,frmHeight1;
+    int txturWidth1,txturHeight1;
+    SDL_QueryTexture(fire_Tex,NULL,NULL,&txturWidth1,&txturHeight1);
+
+    frmWidth1=txturWidth1/10;
+    frmHeight1=txturHeight1;
+    plarRect1.x=plarRect1.y=0;
+    plarRect1.w=frmWidth1;
+    plarRect1.h=frmHeight1;
     
 
     int framWidth,framHeight;
@@ -309,6 +344,15 @@ SDL_PauseAudioDevice(deviceId, 0);
                          playrRect.y+=framHeight;}
             if(playrRect.y>=texturHeight-framHeight)
                          playrRect.y=0;
+
+           
+           plarRect.x+=frmWidth;
+           if(plarRect.x>=txturWidth-frmWidth)
+                        plarRect.x=0;
+                        plarRect1.x+=frmWidth1;
+           if(plarRect1.x>=txturWidth1-frmWidth1)
+                        plarRect1.x=0;
+              
           
           }
          // SDL_RenderClear(rend);
@@ -329,6 +373,8 @@ SDL_PauseAudioDevice(deviceId, 0);
             
             SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
             SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
+            SDL_RenderCopy(rend,fire_Tex,&plarRect,&plarPosition);
+            SDL_RenderCopy(rend,fire_Tex,&plarRect1,&plarPosition1);
             
             SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
              
