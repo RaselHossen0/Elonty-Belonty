@@ -192,9 +192,9 @@ int main(int agr, char *args[])
     SDL_FreeSurface(surface);
     SDL_Rect next;
     // SDL_QueryTexture(next_level,NULL,NULL,&next.w,&next.h);
-    next.w = 300;
-    next.h = 150;
-    next.x = 400;
+    next.w = 180;
+    next.h = 180;
+    next.x = 490;
     next.y = 450;
     surface = IMG_Load("res/sprite-02.png");
     SDL_Texture *l2boy = SDL_CreateTextureFromSurface(rend, surface);
@@ -210,7 +210,7 @@ int main(int agr, char *args[])
     src_l2b.x = src_l2b.y = 0;
     dest_l2b.w = 250;
     dest_l2b.h = 450;
-    dest_l2b.x = 0;
+    dest_l2b.x = 100;
     dest_l2b.y = 100;
     int framWidth, framHeight;
     int texturWidth, texturHeight;
@@ -427,33 +427,32 @@ int main(int agr, char *args[])
         if (main_game)
         {
 
-            int startTime = SDL_GetTicks() / 1000;
+            double startTime = SDL_GetTicks() / 1000.0;
         
-            if (startTime  == 2)
+            if (startTime  >= 2&&startTime<=10)
             {
                 Mix_PlayChannel(-1,rand1,0);
-                 int end=SDL_GetTicks64()/1000;
-            printf("%d ",end);
-
-            if(end==4)
-            Mix_PauseMusic();
-              //  startTime=0;
             }
-            if (startTime  == 15)
+              if (startTime  >= 9.5&&startTime<=12.5)
+            {
+             if(ev.type==SDL_KEYDOWN&&ev.key.keysym.sym==SDLK_UP)
+                gameover==1;
+            }
+            
+            if (startTime  >= 12.0&&startTime<=18.0)
             {
                 Mix_PlayChannel(-1,rand2,0);
-                if(ev.type==SDL_KEYDOWN&&ev.key.keysym.sym==SDLK_UP)
-                gameover==1;
-               // startTime=0;
+                // if(ev.type==SDL_KEYDOWN&&ev.key.keysym.sym==SDLK_UP)
+                // gameover==1;
             }
-              if (startTime  == 25)
+              if (startTime  >= 20.0&&startTime<=25)
             {
                 Mix_PlayChannel(-1,rand3,0);
-               // startTime=0;
-            }
-                printf("%d\n", startTime);
+        
+            }   
 
-            // SDL_AddTimer(3000,NULL,NULL);
+            printf("%lf  *", startTime);
+
            
             cloud_rect.x += 1;
             if (cloud_rect.x >= WINDOW_WIDTH)
