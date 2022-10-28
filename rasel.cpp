@@ -65,8 +65,6 @@ SDL_Delay(1000/3);
 audio();
 
 
-
-
 surface = IMG_Load("res/start.jpg");
 if (!surface)
 {
@@ -89,6 +87,7 @@ if (!tex3)
 }
 TTF_Font *font =TTF_OpenFont("res/font/Oswald-Bold.ttf",40);
 surface=TTF_RenderText_Solid(font,"Elonti-Belonti",{0,0,0});
+
 SDL_Texture *fontTex=SDL_CreateTextureFromSurface(rend,surface);
 SDL_Rect textRect ={40,40,500,50};
 SDL_FreeSurface(surface);
@@ -135,7 +134,7 @@ SDL_QueryTexture(tex,NULL,NULL,&textureWidth,&textureHeight);
 
 frameWidth=textureWidth/9;
 frameHeight=textureHeight;
-printf("%d %d",frameHeight,frameWidth);
+//printf("%d %d",frameHeight,frameWidth);
 playerRect.x=playerRect.y=0;
 playerRect.w=frameWidth;
 playerRect.h=frameHeight;
@@ -203,6 +202,21 @@ next.w=300;
 next.h=150;
 next.x=400;
 next.y=450;
+surface=IMG_Load("res/sprite-02.png");
+SDL_Texture *l2boy=SDL_CreateTextureFromSurface(rend,surface);
+SDL_FreeSurface(surface);
+int tx1W,tx1H,f1W,f1H;
+SDL_Rect src_l2b,dest_l2b;
+SDL_QueryTexture(l2boy,NULL,NULL,&tx1W,&tx1H);
+f1W=tx1W/2;f1H=tx1H;
+printf("%d %d",f1W,f1H);
+src_l2b.w=f1W;
+src_l2b.h=f1H;
+src_l2b.x=src_l2b.y=0;
+dest_l2b.w=250;
+dest_l2b.h=450;
+dest_l2b.x=0;
+dest_l2b.y=100;
 int framWidth,framHeight;
 int texturWidth,texturHeight;
 SDL_QueryTexture(Putul_Tex,NULL,NULL,&texturWidth,&texturHeight);
@@ -347,6 +361,20 @@ replay_rect.h = 100;
 replay_rect.x = (WINDOW_WIDTH - replay_rect.w) / 2;
 replay_rect.y = (WINDOW_HEIGHT - replay_rect.h) / 2;
 
+surface=IMG_Load("res/cloud.png");
+SDL_Texture *cloud =SDL_CreateTextureFromSurface(rend,surface);
+SDL_FreeSurface(surface);
+
+SDL_Rect cloud_rect;
+SDL_QueryTexture(cloud,NULL,NULL,&cloud_rect.w,&cloud_rect.h);
+cloud_rect.w/=8;
+cloud_rect.h/=8;
+cloud_rect.x=0;
+cloud_rect.y=0;
+
+
+
+
 bool isRunning =true;
 float y_pos = 550.0;
 float y_pos1=450.0;
@@ -355,6 +383,7 @@ int start =1;
 int main_game=0;
 int next_lvl=0;
 int frameTime=0,FPS=60;
+int scroll=0;
 
 SDL_Event ev;
 while(isRunning)
@@ -411,6 +440,13 @@ while(isRunning)
 
     if (main_game)
     {
+       int endTime=SDL_GetTicks()/1000;
+       printf("%d\n",endTime);
+
+     // SDL_AddTimer(3000,NULL,NULL);
+        cloud_rect.x+=1;
+        if(cloud_rect.x>=WINDOW_WIDTH)
+        cloud_rect.x=0;
         frameTime++;
         if(FPS/frameTime==1)//will be repeated 7 times a second
         {
@@ -449,10 +485,9 @@ while(isRunning)
         SDL_RenderCopy(rend, tex0, NULL, NULL);
         SDL_SetRenderDrawColor(rend,0x00,0x00,0x00,0x00);
         for(int i=0;i<5;i++)
-        SDL_RenderDrawLine(rend,135+i,135+i,1200+i,135+i);
-
-        
+        SDL_RenderDrawLine(rend,135+i,135+i,1200+i,135+i);        
         SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
+        SDL_RenderCopy(rend,cloud,NULL,&cloud_rect);
         SDL_RenderCopy(rend,tex,&boy2,&boy2_pos);
         SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
         SDL_RenderCopy(rend,fire_Tex,&plarRect,&plarPosition);
@@ -488,12 +523,12 @@ while(isRunning)
         int button = SDL_GetMouseState(&mousx, &mousy);
         //printf("%d %d\n", mousx, mousy);
 
-        if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
+        if (button & SDL_BUTTON(1))
         {
             if (mousx >= start_rect.x && mousx <= (start_rect.x + start_rect.w) && mousy >= start_rect.y && mousy <= (start_rect.y + start_rect.h))
             {
                 Mix_PlayChannel(-1,mouse,4);
-               SDL_Delay(2000);
+               //SDL_Delay(2000);
                 main_game=1;
                 
             }
@@ -510,8 +545,9 @@ while(isRunning)
 
         int mousex, mousey;
         int buttons = SDL_GetMouseState(&mousex, &mousey);
+        //printf("%d %d",mousex,mousey);
 
-        if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT))
+        if (buttons & SDL_BUTTON(1))
         {
             if (mousex >= replay_rect.x && mousex <= (replay_rect.x + replay_rect.w) && mousey >= replay_rect.y && mousey <= (replay_rect.y + replay_rect.h))
             {
@@ -522,21 +558,36 @@ while(isRunning)
                 playerRect.x=playerRect.y=0;
                 main_game=1;
             }
-        }
-         else if (buttons & SDL_BUTTON(NULL))
-        {
+        
+       
             if (mousex >= next.x && mousex <= (next.x + next.w) && mousey >= next.y && mousey <= (next.y + next.h))
             {
+               
                  next_lvl=1;
+                 main_game=0;
+                 gameover=0;
             }
         }
         }
         else if(next_lvl==1)
         {
+        cloud_rect.x+=1;
+        if(cloud_rect.x>=WINDOW_WIDTH)
+        cloud_rect.x=0;
+        frameTime++;
+        if(FPS/frameTime==1){
+            frameTime=0;
+        src_l2b.x+=f1W;
+           if(src_l2b.x>=tx1W-f1W)
+        src_l2b.x=0;
+        }
+         SDL_SetRenderDrawColor(rend,0x00,0x00,0x00,0x00);
             SDL_RenderClear(rend);
-            SDL_RenderCopy(rend,next_level,NULL,&next);
+            SDL_RenderCopy(rend,cloud,NULL,&cloud_rect);
+             SDL_RenderCopy(rend,l2boy,&src_l2b,&dest_l2b);
             SDL_RenderPresent(rend);
         }
+
 }
 SDL_Delay(100);
 Mix_FreeChunk(replay1);
