@@ -376,11 +376,12 @@ SDL_PauseAudioDevice(deviceId, 0);
     int gameover = 1;
     int frameTime=0,FPS=60;
     double count=0;
-    int flag=0;
+    
     
 
     SDL_Event ev;
     while(isRunning){
+        int flag=0;
         
          while (SDL_PollEvent(&ev))
         {
@@ -477,7 +478,7 @@ SDL_PauseAudioDevice(deviceId, 0);
 
              if (count >= 9.5&&count<=12.5){
                 if(flag){
-                    SDL_DestroyTexture(tex);
+                   // SDL_DestroyTexture(tex);
                    //SDL_SetRenderTarget(rend,tex);
                    //SDL_SetRenderDrawColor(rend,255,0,0,255);
                    //SDL_RenderClear(rend);
