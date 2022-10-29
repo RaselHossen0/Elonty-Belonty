@@ -1,31 +1,485 @@
+/*This source code copyrighted by Lazy Foo' Productions (2004-2022)
+and may not be redistributed without written permission.*/
+
+//Using SDL, SDL_image, SDL_ttf, standard IO, strings, and string streams
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
-
+#include <string>
+#include <sstream>
 #define WINDOW_WIDTH (1280)
-#define WINDOW_HEIGHT (700)
+#define WINDOW_HEIGHT (720)
 #define SCROLL_SPEED (900)
 #define RECT_SPEED (5.0)
-void setrects(SDL_Rect* clip)
+//Screen dimension constants
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 480;
 
-float min(float x, float y)
+//Texture wrapper class
+/*class LTexture
 {
-    if (x < y)
-        return x;
-    return y;
+	public:
+		//Initializes variables
+		LTexture();
+
+		//Deallocates memory
+		~LTexture();
+
+		//Loads image at specified path
+		bool loadFromFile( std::string path );
+		
+		#if defined(SDL_TTF_MAJOR_VERSION)
+		//Creates image from font string
+		bool loadFromRenderedText( std::string textureText, SDL_Color textColor );
+		#endif
+
+		//Deallocates texture
+		void free();
+
+		//Set color modulation
+		void setColor( Uint8 red, Uint8 green, Uint8 blue );
+
+		//Set blending
+		void setBlendMode( SDL_BlendMode blending );
+
+		//Set alpha modulation
+		void setAlpha( Uint8 alpha );
+		
+		//Renders texture at given point
+		void render( int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
+
+		//Gets image dimensions
+		int getWidth();
+		int getHeight();
+
+	private:
+		//The actual hardware texture
+		SDL_Texture* mTexture;
+
+		//Image dimensions
+		int mWidth;
+		int mHeight;
+};
+*/
+
+//The application time based timer
+class LTimer
+{
+    public:
+		//Initializes variables
+		LTimer();
+
+		//The various clock actions
+		void start();
+		void stop();
+		void pause();
+		void unpause();
+
+		//Gets the timer's time
+		Uint32 getTicks();
+
+		//Checks the status of the timer
+		bool isStarted();
+		bool isPaused();
+
+    private:
+		//The clock time when the timer started
+		Uint32 mStartTicks;
+
+		//The ticks stored when the timer was paused
+		Uint32 mPausedTicks;
+
+		//The timer status
+		bool mPaused;
+		bool mStarted;
+};
+
+//Starts up SDL and creates window
+///bool init();
+
+//Loads media
+///bool loadMedia();
+
+//Frees media and shuts down SDL
+///void close();
+
+//The window we'll be rendering to
+///SDL_Window* gWindow = NULL;
+
+//The window renderer
+///SDL_Renderer* gRenderer = NULL;
+
+//Globally used font
+TTF_Font* gFont = NULL;
+
+//Scene textures
+/*LTexture gTimeTextTexture;
+LTexture gPausePromptTexture;
+LTexture gStartPromptTexture;
+
+LTexture::LTexture()
+{
+	//Initialize
+	mTexture = NULL;
+	mWidth = 0;
+	mHeight = 0;
 }
-float max(float x, float y)
+
+LTexture::~LTexture()
 {
-    if (x > y)
-        return x;
-    return y;
+	//Deallocate
+	free();
 }
 
-int main(int agr, char *args[])
+bool LTexture::loadFromFile( std::string path )
 {
+	//Get rid of preexisting texture
+	free();
 
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) > 0)
+	//The final texture
+	SDL_Texture* newTexture = NULL;
+
+	//Load image at specified path
+	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
+	if( loadedSurface == NULL )
+	{
+		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+	}
+	else
+	{
+		//Color key image
+		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
+
+		//Create texture from surface pixels
+        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
+		if( newTexture == NULL )
+		{
+			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+		}
+		else
+		{
+			//Get image dimensions
+			mWidth = loadedSurface->w;
+			mHeight = loadedSurface->h;
+		}
+
+		//Get rid of old loaded surface
+		SDL_FreeSurface( loadedSurface );
+	}
+
+	//Return success
+	mTexture = newTexture;
+	return mTexture != NULL;
+}
+
+#if defined(SDL_TTF_MAJOR_VERSION)
+bool LTexture::loadFromRenderedText( std::string textureText, SDL_Color textColor )
+{
+	//Get rid of preexisting texture
+	free();
+
+	//Render text surface
+	SDL_Surface* textSurface = TTF_RenderText_Solid( gFont, textureText.c_str(), textColor );
+	if( textSurface != NULL )
+	{
+		//Create texture from surface pixels
+        mTexture = SDL_CreateTextureFromSurface( gRenderer, textSurface );
+		if( mTexture == NULL )
+		{
+			printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
+		}
+		else
+		{
+			//Get image dimensions
+			mWidth = textSurface->w;
+			mHeight = textSurface->h;
+		}
+
+		//Get rid of old surface
+		SDL_FreeSurface( textSurface );
+	}
+	else
+	{
+		printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
+	}
+
+	
+	//Return success
+	return mTexture != NULL;
+}
+#endif
+
+void LTexture::free()
+{
+	//Free texture if it exists
+	if( mTexture != NULL )
+	{
+		SDL_DestroyTexture( mTexture );
+		mTexture = NULL;
+		mWidth = 0;
+		mHeight = 0;
+	}
+}
+
+void LTexture::setColor( Uint8 red, Uint8 green, Uint8 blue )
+{
+	//Modulate texture rgb
+	SDL_SetTextureColorMod( mTexture, red, green, blue );
+}
+
+void LTexture::setBlendMode( SDL_BlendMode blending )
+{
+	//Set blending function
+	SDL_SetTextureBlendMode( mTexture, blending );
+}
+		
+void LTexture::setAlpha( Uint8 alpha )
+{
+	//Modulate texture alpha
+	SDL_SetTextureAlphaMod( mTexture, alpha );
+}
+
+void LTexture::render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
+{
+	//Set rendering space and render to screen
+	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
+
+	//Set clip rendering dimensions
+	if( clip != NULL )
+	{
+		renderQuad.w = clip->w;
+		renderQuad.h = clip->h;
+	}
+
+	//Render to screen
+	SDL_RenderCopyEx( gRenderer, mTexture, clip, &renderQuad, angle, center, flip );
+}
+
+int LTexture::getWidth()
+{
+	return mWidth;
+}
+
+int LTexture::getHeight()
+{
+	return mHeight;
+}
+*/
+LTimer::LTimer()
+{
+    //Initialize the variables
+    mStartTicks = 0;
+    mPausedTicks = 0;
+
+    mPaused = false;
+    mStarted = false;
+}
+
+void LTimer::start()
+{
+    //Start the timer
+    mStarted = true;
+
+    //Unpause the timer
+    mPaused = false;
+
+    //Get the current clock time
+    mStartTicks = SDL_GetTicks();
+	mPausedTicks = 0;
+}
+
+void LTimer::stop()
+{
+    //Stop the timer
+    mStarted = false;
+
+    //Unpause the timer
+    mPaused = false;
+
+	//Clear tick variables
+	mStartTicks = 0;
+	mPausedTicks = 0;
+}
+
+void LTimer::pause()
+{
+    //If the timer is running and isn't already paused
+    if( mStarted && !mPaused )
+    {
+        //Pause the timer
+        mPaused = true;
+
+        //Calculate the paused ticks
+        mPausedTicks = SDL_GetTicks() - mStartTicks;
+		mStartTicks = 0;
+    }
+}
+
+void LTimer::unpause()
+{
+    //If the timer is running and paused
+    if( mStarted && mPaused )
+    {
+        //Unpause the timer
+        mPaused = false;
+
+        //Reset the starting ticks
+        mStartTicks = SDL_GetTicks() - mPausedTicks;
+
+        //Reset the paused ticks
+        mPausedTicks = 0;
+    }
+}
+
+Uint32 LTimer::getTicks()
+{
+	//The actual timer time
+	Uint32 time = 0;
+
+    //If the timer is running
+    if( mStarted )
+    {
+        //If the timer is paused
+        if( mPaused )
+        {
+            //Return the number of ticks when the timer was paused
+            time = mPausedTicks;
+        }
+        else
+        {
+            //Return the current time minus the start time
+            time = SDL_GetTicks() - mStartTicks;
+        }
+    }
+
+    return time;
+}
+
+bool LTimer::isStarted()
+{
+	//Timer is running and paused or unpaused
+    return mStarted;
+}
+
+bool LTimer::isPaused()
+{
+	//Timer is running and paused
+    return mPaused && mStarted;
+}
+
+/*bool init()
+{
+	//Initialization flag
+	bool success = true;
+
+	//Initialize SDL
+	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	{
+		printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
+		success = false;
+	}
+	else
+	{
+		//Set texture filtering to linear
+		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+		{
+			printf( "Warning: Linear texture filtering not enabled!" );
+		}
+
+		//Create window
+		gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+		if( gWindow == NULL )
+		{
+			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
+			success = false;
+		}
+		else
+		{
+			//Create vsynced renderer for window
+			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+			if( gRenderer == NULL )
+			{
+				printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+				success = false;
+			}
+			else
+			{
+				//Initialize renderer color
+				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+
+				//Initialize PNG loading
+				int imgFlags = IMG_INIT_PNG;
+				if( !( IMG_Init( imgFlags ) & imgFlags ) )
+				{
+					printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+					success = false;
+				}
+
+				 //Initialize SDL_ttf
+				if( TTF_Init() == -1 )
+				{
+					printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+					success = false;
+				}
+			}
+		}
+	}
+
+	return success;
+}
+*/
+
+bool loadMedia()
+{
+	//Loading success flag
+	bool success = true;
+
+	//Open the font
+	gFont = TTF_OpenFont( "res/23_advanced_timers/lazy.ttf", 28 );
+	if( gFont == NULL )
+	{
+		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
+		success = false;
+	}
+	else
+	{
+		//Set text color as black
+		SDL_Color textColor = { 0, 0, 0, 255 };
+		
+		
+	}
+
+	return success;
+}
+
+void close()
+{
+	//Free loaded images
+	///gTimeTextTexture.free();
+	///gStartPromptTexture.free();
+	///                           gPausePromptTexture.free();
+
+	//Free global font
+	TTF_CloseFont( gFont );
+	gFont = NULL;
+
+	//Destroy window	
+	//SDL_DestroyRenderer(std::rend);
+	//SDL_DestroyWindow( gWindow );
+	//gWindow = NULL;
+	//rend = NULL;
+
+	//Quit SDL subsystems
+	TTF_Quit();
+	IMG_Quit();
+	SDL_Quit();
+}
+
+int main( int argc, char* args[] )
+{
+	//Start up SDL and create window
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) > 0)
     {
         printf("video and timer: %s\n", SDL_GetError());
     }
@@ -34,9 +488,9 @@ int main(int agr, char *args[])
 
     printf("Initialization Complete\n");
 
-    SDL_Window *win = SDL_CreateWindow("SDL Demonstration", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+    SDL_Window *gWindow = SDL_CreateWindow("SDL Demonstration", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 
-    if (!win)
+    if (!gWindow)
     {
         printf("window: %s\n", SDL_GetError());
         SDL_Quit();
@@ -44,334 +498,100 @@ int main(int agr, char *args[])
     }
 
     Uint32 render_flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
-    SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
+    SDL_Renderer *rend = SDL_CreateRenderer(gWindow, -1, render_flags);
 
     if (!rend)
     {
         printf("renderer: %s\n", SDL_GetError());
-        SDL_DestroyWindow(win);
+        SDL_DestroyWindow(gWindow);
         SDL_Quit();
         return 1;
     }
-    SDL_Surface *surface = IMG_Load("/home/student/Documents/GitHub/DRM-game/res/dip.jpg");
-    if (!surface)
-    {
-        printf("Redbar Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+		else
+		{	
+			//Main loop flag
+			bool quit = false;
 
-    SDL_Texture *tex0 = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!tex0)
-    {
-        printf("Redline Texture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_RenderClear(rend);
-    SDL_RenderCopy(rend, tex0, NULL, NULL);
-    SDL_RenderPresent(rend);
-    SDL_Delay(1000);
-    
-    
-    surface = IMG_Load("/home/student/Documents/GitHub/DRM-game/res/start.jpg");
-    if (!surface)
-    {
-        printf("Redbar Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+			//Event handler
+			SDL_Event e;
 
-    SDL_Texture *tex3 = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!tex3)
-    {
-        printf("Redline Texture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Rect start_rect;
-    start_rect.w = 300;
-    start_rect.h = 150;
-    start_rect.x = (WINDOW_WIDTH - start_rect.w) / 2;
-    start_rect.y = (WINDOW_HEIGHT - start_rect.h) / 2 - 100;
-    
-   
-   //SDL_SetRenderDrawColor(rend, 0xFF, 0xFF, 0xFF, 0xFF);
+			//Set text color as black
+			SDL_Color textColor = { 0, 0, 0, 255 };
 
-    
+			//The application timer
+			LTimer timer;
 
-    surface = IMG_Load("res/clipart3291119.png");
-    if (!surface)
-    {
-        printf("Redbar Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+			//In memory text stream
+			std::stringstream timeText;
 
-    SDL_Texture *tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!tex)
-    {
-        printf("Redline Texture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+			//While application is running
+			while( !quit )
+			{
+				//Handle events on queue
+				while( SDL_PollEvent( &e ) != 0 )
+				{
+					//User requests quit
+					if( e.type == SDL_QUIT )
+					{
+						quit = true;
+					}
+					//Reset start time on return keypress
+					else if( e.type == SDL_KEYDOWN )
+					{
+						//Start/stop
+						if( e.key.keysym.sym == SDLK_s )
+						{
+							if( timer.isStarted() )
+							{
+								timer.stop();
+							}
+							else
+							{
+								timer.start();
+							}
+						}
+						//Pause/unpause
+						else if( e.key.keysym.sym == SDLK_p )
+						{
+							if( timer.isPaused() )
+							{
+								timer.unpause();
+							}
+							else
+							{
+								timer.pause();
+							}
+						}
+					}
+				}
 
-    SDL_Rect dest;
-    SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h);
-    
-    dest.x = 0;
-    dest.y = (int)WINDOW_HEIGHT - (WINDOW_HEIGHT * 0.6);
-    float x_pos = 0;
-    int direction = 1;
+				//Set text to be rendered
+				timeText.str( "" );
+				timeText << "Seconds since start time " << ( timer.getTicks() / 1000.f ) ; 
 
-    
+				//Render text
+				//if( !gTimeTextTexture.loadFromRenderedText( timeText.str().c_str(), textColor ) )
+				//{
+					//printf( "Unable to render time texture!\n" );
+				//}
 
-    surface = IMG_Load("res/gameover.jpeg");
-    if (!surface)
-    {
-        printf("Green rectangle Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture *gameover_tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!tex)
-    {
-        printf("Green Rectangle Texture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+				//Clear screen
+				SDL_SetRenderDrawColor( rend, 0xFF, 0xFF, 0xFF, 0xFF );
+				SDL_RenderClear(rend);
 
-    SDL_Rect gameover_rect;
-    gameover_rect.w = 400;
-    gameover_rect.h = 300;
-    gameover_rect.x = (WINDOW_WIDTH - gameover_rect.w) / 2;
-    gameover_rect.y = (WINDOW_HEIGHT - gameover_rect.h) / 2 - 150;
+				//Render textures
+				///gStartPromptTexture.render( ( SCREEN_WIDTH - gStartPromptTexture.getWidth() ) / 2, 0 );
+				///gPausePromptTexture.render( ( SCREEN_WIDTH - gPausePromptTexture.getWidth() ) / 2, gStartPromptTexture.getHeight() );
+				///gTimeTextTexture.render( ( SCREEN_WIDTH - gTimeTextTexture.getWidth() ) / 2, ( SCREEN_HEIGHT - gTimeTextTexture.getHeight() ) / 2 );
 
-    surface = IMG_Load("res/replay.png");
-    if (!surface)
-    {
-        printf("replay Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture *replay_tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!tex)
-    {
-        printf("replayTexture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+				//Update screen
+				SDL_RenderPresent( rend );
+			}
+		}
+	
 
-    SDL_Rect replay_rect;
-    replay_rect.w = 300;
-    replay_rect.h = 150;
-    replay_rect.x = (WINDOW_WIDTH - replay_rect.w) / 2;
-    replay_rect.y = (WINDOW_HEIGHT - replay_rect.h) / 2 + 100;
+	//Free resources and close SDL
+	close();
 
-    int close = 0;
-    int gameover = 1;
-
-    while (!close)
-    {
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            switch (event.type)
-            {
-            case SDL_QUIT:
-                close = 1;
-                break;
-            case SDL_KEYDOWN:
-                switch (event.key.keysym.scancode)
-                {
-                case SDL_SCANCODE_LEFT:
-                    x_pos = max(0, x_pos - (SCROLL_SPEED / 60));
-                    break;
-                case SDL_SCANCODE_RIGHT:
-                    x_pos = min(WINDOW_WIDTH - dest.w, x_pos + (SCROLL_SPEED / 60));
-                }
-            }
-        }
-
-      
-    
-    
-       if (gameover == 0)
-        {
-           dest.x = (int)x_pos;
-           
-        
-             surface = IMG_Load("res/man.png");
-    if (!surface)
-    {
-        printf("replay Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture *texx = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!texx)
-    {
-        printf("replayTexture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    
-    SDL_Rect gSpriteClips[6];
-    setrects(rects){
-    gSpriteClips[ 0 ].x =   0;
-    gSpriteClips[ 0 ].y =   0;
-    gSpriteClips[ 0 ].w =  71;
-    gSpriteClips[ 0 ].h =  145;
-
-    gSpriteClips[ 1 ].x =  98;
-    gSpriteClips[ 1 ].y =  0;
-    gSpriteClips[ 1 ].w =  83;
-    gSpriteClips[ 1 ].h =  145;
-
-    gSpriteClips[ 2 ].x = 212;
-    gSpriteClips[ 2 ].y =   0;
-    gSpriteClips[ 2 ].w =  98;
-    gSpriteClips[ 2 ].h = 145;;
-
-    gSpriteClips[ 3 ].x =   329;
-    gSpriteClips[ 3 ].y =  0;
-    gSpriteClips[ 3 ].w =  87;
-    gSpriteClips[ 3 ].h = 145;
-
-    gSpriteClips[ 4 ].x =   440;
-    gSpriteClips[ 4 ].y =  0;
-    gSpriteClips[ 4 ].w = 74;
-    gSpriteClips[ 4 ].h = 145;
-
-    gSpriteClips[ 5 ].x =  540;
-    gSpriteClips[ 5 ].y =  0;
-    gSpriteClips[ 5 ].w =  85;
-    gSpriteClips[ 5 ].h = 145;
-    
-    }
-
-    //SDL_RenderClear(rend);
-    //SDL_RenderCopy(rend, texx, NULL, &gSpriteClips[6]);
-    //SDL_RenderPresent(rend);
-           
-            
-           
-            
-            
-           
-
-          /* 
-            SDL_SetRenderDrawColor(rend,0xFF,0xFF,0xFF,0xFF);
-  
-            SDL_RenderClear(rend);
-            SDL_SetRenderDrawColor(rend,0x00,0x00,0x00,0x00);
-            SDL_RenderDrawLine(rend,1200,1100,900,300);
-
-           
-            SDL_RenderCopy(rend, tex, NULL, &dest);
-            SDL_RenderPresent(rend);
-
-
-            SDL_Delay(1000 / 60);
-            if(dest.x>=WINDOW_WIDTH*0.79)
-            {dest.x=WINDOW_WIDTH*0.79;
-
-            gameover=2;}
-*/
-        }
-        else if(gameover==1)
-    {
-        SDL_RenderClear(rend);
-    SDL_RenderCopy(rend, tex3, NULL, &start_rect);
-    SDL_RenderPresent(rend);
-    //SDL_Delay(3000);
-        int mousx, mousy;
-            int button = SDL_GetMouseState(&mousx, &mousy);
-            printf("%d %d\n", mousx, mousy);
-
-            if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
-            {
-                if (mousx >= start_rect.x && mousx <= (start_rect.x + start_rect.w) && mousy >= start_rect.y && mousy <= (start_rect.y + start_rect.h))
-                {
-                  
-                    gameover = 0;
-                   
-                }
-            }
-    }
-        else if(gameover==2)
-        {
-
-            SDL_RenderClear(rend);
-
-
-            
-
-           
-
-            SDL_RenderCopy(rend, gameover_tex, NULL, &gameover_rect);
-            SDL_RenderCopy(rend, replay_tex, NULL, &replay_rect);
-
-            
-
-          
-
-            SDL_RenderPresent(rend);
-
-            int mousex, mousey;
-            int buttons = SDL_GetMouseState(&mousex, &mousey);
-            printf("%d %d\n", mousex, mousey);
-
-            if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT))
-            {
-                if (mousex >= replay_rect.x && mousex <= (replay_rect.x + replay_rect.w) && mousey >= replay_rect.y && mousey <= (replay_rect.y + replay_rect.h))
-                {
-                    gameover = 0;
-                    x_pos=0;
-                    dest.x=0;
-                    dest.y = (int)WINDOW_HEIGHT - (WINDOW_HEIGHT * 0.6);
-                    
-                   
-                }
-            }
-        }
-    }
-    
-
-    SDL_Delay(1000);
-    SDL_DestroyRenderer(rend);
-    SDL_DestroyWindow(win);
-
-    SDL_Quit();
-    return 0;
+	return 0;
 }

@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 #include <bits/stdc++.h>
 
 #define WINDOW_WIDTH (1280)
@@ -9,7 +11,20 @@
 #define RECT_SPEED (5.0)
 
 
+struct rect{
+    int frmWid,frmHit;
+  
+    
 
+    rect(int fW,int fH){
+
+        frmWid=fW;
+        frmHit=fH;
+    }
+  
+};
+void audio(void);
+            
 
 
 int main(int agr, char *args[])
@@ -67,6 +82,13 @@ int main(int agr, char *args[])
     SDL_RenderCopy(rend, tex0, NULL, NULL);
     SDL_RenderPresent(rend);
     SDL_Delay(1000/3);
+
+    surface = IMG_Load("res/deadman.png");
+    SDL_Texture *deadmanTex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect deadman;
+    deadman.w = 150;
+    deadman.h = 150;
     
     
     surface = IMG_Load("res/start.jpg");
@@ -99,7 +121,7 @@ int main(int agr, char *args[])
 
     
 
-    surface = IMG_Load("res/man1.png");
+    surface = IMG_Load("res/newman.png");
     if (!surface)
     {
         printf("Redbar Surface Error: %s\n", IMG_GetError());
@@ -122,22 +144,22 @@ int main(int agr, char *args[])
 
     SDL_Rect  playerRect;//rect for a single frame of the sprite sheet
     SDL_Rect playerPosition;//rect for the whole sprite sheet
-    playerPosition.x=450;
+    playerPosition.x=350;
     playerPosition.y=550;
     playerPosition.w=150;
     playerPosition.h=150;//ei rec(square) er moddher kothao texture (runman) load hobe
 
     
 
-    int frameWidth,frameHeight;
+   
     int textureWidth,textureHeight;
     SDL_QueryTexture(tex,NULL,NULL,&textureWidth,&textureHeight);
 
-    frameWidth=textureWidth/9;
-    frameHeight=textureHeight;
+    
+    struct rect r4(textureWidth/9,textureHeight);
     playerRect.x=playerRect.y=0;
-    playerRect.w=frameWidth;
-    playerRect.h=frameHeight;
+    playerRect.w=r4.frmWid;
+    playerRect.h=r4.frmHit;
    // SDL_SetRenderDrawColor(rend,0xFF,0,0,0xFF);
 
     
@@ -170,11 +192,10 @@ int main(int agr, char *args[])
     gameover_rect.x = (WINDOW_WIDTH - gameover_rect.w) / 2;
     gameover_rect.y = (WINDOW_HEIGHT - gameover_rect.h) / 2 - 150;
 
+    
+
     surface =IMG_Load("res/3.png");
     SDL_Texture *bg_Tex =SDL_CreateTextureFromSurface(rend,surface);
-    SDL_FreeSurface(surface);
-     surface =IMG_Load("res/fire.png");
-    SDL_Texture *fire_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
 
     surface =IMG_Load("res/putull.png");
@@ -182,54 +203,130 @@ int main(int agr, char *args[])
     SDL_FreeSurface(surface);
     SDL_Rect  playrRect;
     SDL_Rect playrPosition;
+    
     playrPosition.x=568;
     playrPosition.y=30;
     playrPosition.w=75;
     playrPosition.h=75;
 
-    SDL_Rect  plarRect;//rect for a single frame of the sprite sheet
-    SDL_Rect plarPosition;//rect for the whole sprite sheet
-    plarPosition.x=268;
-    plarPosition.y=100;
-    plarPosition.w=130;
-    plarPosition.h=130;//ei rec(square) er moddher kothao texture (runman) load hobe
-    int frmWidth,frmHeight;
-    int txturWidth,txturHeight;
-    SDL_QueryTexture(fire_Tex,NULL,NULL,&txturWidth,&txturHeight);
-
-    frmWidth=txturWidth/10;
-    frmHeight=txturHeight;
-    plarRect.x=plarRect.y=0;
-    plarRect.w=frmWidth;
-    plarRect.h=frmHeight;
-
-    SDL_Rect  plarRect1;//rect for a single frame of the sprite sheet
-    SDL_Rect plarPosition1;//rect for the whole sprite sheet
-    plarPosition1.x=168;
-    plarPosition1.y=100;
-    plarPosition1.w=130;
-    plarPosition1.h=130;//ei rec(square) er moddher kothao texture (runman) load hobe
-    int frmWidth1,frmHeight1;
-    int txturWidth1,txturHeight1;
-    SDL_QueryTexture(fire_Tex,NULL,NULL,&txturWidth1,&txturHeight1);
-
-    frmWidth1=txturWidth1/10;
-    frmHeight1=txturHeight1;
-    plarRect1.x=plarRect1.y=0;
-    plarRect1.w=frmWidth1;
-    plarRect1.h=frmHeight1;
-    
-
-    int framWidth,framHeight;
     int texturWidth,texturHeight;
     SDL_QueryTexture(Putul_Tex,NULL,NULL,&texturWidth,&texturHeight);
 
-    framWidth=texturWidth/4;
-    framHeight=texturHeight/3;
-    playrRect.x=playrRect.y=0;
-    playrRect.w=framWidth;
-    playrRect.h=framHeight;
 
+    struct rect r1(texturWidth/4,texturHeight/3);
+    playrRect.x=playrRect.y=0;
+    playrRect.w=r1.frmWid;
+    playrRect.h=r1.frmHit;
+
+    surface =IMG_Load("res/fire.png");
+    SDL_Texture *fire_Tex =SDL_CreateTextureFromSurface(rend,surface);
+    SDL_FreeSurface(surface);
+
+    SDL_Rect  plarRect;//rect for a single frame of the sprite sheet
+    SDL_Rect plarPosition;//rect for the whole sprite sheet
+    plarPosition.x=390;
+    plarPosition.y=100;
+    plarPosition.w=130;
+    plarPosition.h=130;//ei rec(square) er moddher kothao texture (runman) load hobe
+    
+    int txturWidth,txturHeight;
+    SDL_QueryTexture(fire_Tex,NULL,NULL,&txturWidth,&txturHeight);
+
+  
+    struct rect r3(txturWidth/10,txturHeight);
+    plarRect.x=plarRect.y=0;
+    plarRect.w=r3.frmWid;
+    plarRect.h=r3.frmHit;
+
+    SDL_Rect  plarRect1;//rect for a single frame of the sprite sheet
+    SDL_Rect plarPosition1;//rect for the whole sprite sheet
+    plarPosition1.x=195;
+    plarPosition1.y=100;
+    plarPosition1.w=130;
+    plarPosition1.h=130;//ei rec(square) er moddher kothao texture (runman) load hobe
+    
+    int txturWidth1,txturHeight1;
+    SDL_QueryTexture(fire_Tex,NULL,NULL,&txturWidth1,&txturHeight1);
+
+    
+    struct rect r2(txturWidth1/10,txturHeight1);
+    plarRect1.x=plarRect1.y=0;
+    plarRect1.w=r2.frmWid;
+    plarRect1.h=r2.frmHit;
+
+    SDL_Rect  plarRect2;//rect for a single frame of the sprite sheet
+    SDL_Rect plarPosition2;//rect for the whole sprite sheet
+    plarPosition2.x=20;
+    plarPosition2.y=100;
+    plarPosition2.w=130;
+    plarPosition2.h=130;
+
+    int txturWidth2,txturHeight2;
+    SDL_QueryTexture(fire_Tex,NULL,NULL,&txturWidth2,&txturHeight2);
+
+    
+    struct rect r5(txturWidth2/10,txturHeight2);
+    plarRect2.x=plarRect2.y=0;
+    plarRect2.w=r5.frmWid;
+    plarRect2.h=r5.frmHit;
+    
+    surface =IMG_Load("res/fire2.png");
+    SDL_Texture *fire2_Tex =SDL_CreateTextureFromSurface(rend,surface);
+    SDL_FreeSurface(surface);
+
+    SDL_Rect  plarRect22;//rect for a single frame of the sprite sheet
+    SDL_Rect plarPosition22;//rect for the whole sprite sheet
+    plarPosition22.x=690;
+    plarPosition22.y=100;
+    plarPosition22.w=130;
+    plarPosition22.h=130;//ei rec(square) er moddher kothao texture (runman) load hobe
+    
+    int txturWidth22,txturHeight22;
+    SDL_QueryTexture(fire2_Tex,NULL,NULL,&txturWidth22,&txturHeight22);
+
+  
+    struct rect r6(txturWidth2/10,txturHeight2);
+    plarRect22.x=plarRect22.y=0;
+    plarRect22.w=r6.frmWid;
+    plarRect22.h=r6.frmHit;
+
+    SDL_Rect  plarRect3;//rect for a single frame of the sprite sheet
+    SDL_Rect plarPosition3;//rect for the whole sprite sheet
+    plarPosition3.x=890;
+    plarPosition3.y=100;
+    plarPosition3.w=130;
+    plarPosition3.h=130;//ei rec(square) er moddher kothao texture (runman) load hobe
+    
+    int txturWidth3,txturHeight3;
+    SDL_QueryTexture(fire2_Tex,NULL,NULL,&txturWidth3,&txturHeight3);
+
+    
+    struct rect r7(txturWidth1/10,txturHeight1);
+    plarRect3.x=plarRect3.y=0;
+    plarRect3.w=r7.frmWid;
+    plarRect3.h=r7.frmHit;
+
+    SDL_Rect  plarRect4;//rect for a single frame of the sprite sheet
+    SDL_Rect plarPosition4;//rect for the whole sprite sheet
+    plarPosition4.x=1090;
+    plarPosition4.y=100;
+    plarPosition4.w=130;
+    plarPosition4.h=130;
+
+    int txturWidth4,txturHeight4;
+    SDL_QueryTexture(fire2_Tex,NULL,NULL,&txturWidth4,&txturHeight4);
+
+    
+    struct rect r8(txturWidth4/10,txturHeight4);
+    plarRect4.x=plarRect4.y=0;
+    plarRect4.w=r8.frmWid;
+    plarRect4.h=r8.frmHit;
+    
+
+   
+   
+     
+    
 
     surface = IMG_Load("res/replay.png");
     if (!surface)
@@ -275,6 +372,8 @@ SDL_PauseAudioDevice(deviceId, 0);
     float y_pos = 550.0;
     int gameover = 1;
     int frameTime=0,FPS=60;
+    double count=0;
+    
 
     SDL_Event ev;
     while(isRunning){
@@ -297,13 +396,27 @@ SDL_PauseAudioDevice(deviceId, 0);
                     else
                        {y_pos=0;
                         playerPosition.y=0;}
-                   playerRect.x+=frameWidth;
-                      if(playerRect.x>=textureWidth-frameWidth)
+                   playerRect.x+=r4.frmWid;
+                      if(playerRect.x>=textureWidth-r4.frmWid)
                         playerRect.x=0;
+                     if (count >= 9.5&&count<=12.5){
+                    SDL_DestroyTexture(tex);
+                    deadman.x = 350;
+                    deadman.y = playerPosition.y;
+                    SDL_SetRenderDrawColor(rend, 255,0,0,255);
+            
+                    SDL_RenderDrawLine(rend, 270, 170 , 395, deadman.y+100);
+                        
+                 
+
+                    SDL_RenderCopy(rend, deadmanTex, NULL, &deadman);
+                    SDL_RenderPresent(rend);
+                    SDL_Delay(2000);
+                 
 
                 
                     }
-                    
+                  } 
                     break;
             case SDL_SCANCODE_DOWN:
                  {
@@ -314,10 +427,10 @@ SDL_PauseAudioDevice(deviceId, 0);
                         {y_pos=550;
                          playerPosition.y =550;}
 
-                      playerRect.x-=frameWidth;
+                      playerRect.x-=r4.frmWid;
                       if(playerRect.x<=0)
                         {playerRect.x=0;
-                        playerRect.x=textureWidth-frameWidth;}
+                        playerRect.x=textureWidth-r4.frmWid;}
                  }
                 }
             }
@@ -327,59 +440,62 @@ SDL_PauseAudioDevice(deviceId, 0);
     
        if (gameover == 0)
         {
-              
-                    
-
-          
-           
-            
-
+           count=SDL_GetTicks() / 1000.0;
            frameTime++;
+           
            if(FPS/frameTime==1)//will be repeated 7 times a second
             {
            frameTime=0;//repeat
-           playrRect.x+=framWidth;
-           if(playrRect.x>=texturWidth-framWidth)
+           playrRect.x+=r1.frmWid;
+           if(playrRect.x>=texturWidth-r1.frmWid)
                         {playrRect.x=0;
-                         playrRect.y+=framHeight;}
-            if(playrRect.y>=texturHeight-framHeight)
+                         playrRect.y+=r1.frmHit;}
+            if(playrRect.y>=texturHeight-r1.frmHit)
                          playrRect.y=0;
 
            
-           plarRect.x+=frmWidth;
-           if(plarRect.x>=txturWidth-frmWidth)
+           plarRect.x+=r3.frmWid;
+           if(plarRect.x>=txturWidth-r3.frmWid)
                         plarRect.x=0;
-                        plarRect1.x+=frmWidth1;
-           if(plarRect1.x>=txturWidth1-frmWidth1)
+           plarRect1.x+=r2.frmWid;
+           if(plarRect1.x>=txturWidth1-r2.frmWid)
                         plarRect1.x=0;
-              
+            
+           plarRect2.x+=r5.frmWid;
+           if(plarRect2.x>=txturWidth2-r5.frmWid)
+                        plarRect2.x=0;
+
+          plarRect3.x+=r7.frmWid;
+           if(plarRect3.x>=txturWidth3-r7.frmWid)
+                        plarRect3.x=0;
+           plarRect4.x+=r8.frmWid;
+           if(plarRect4.x>=txturWidth4-r8.frmWid)
+                        plarRect4.x=0;
+            
+           plarRect22.x+=r6.frmWid;
+           if(plarRect22.x>=txturWidth22-r6.frmWid)
+                        plarRect22.x=0;
+            
           
           }
-         // SDL_RenderClear(rend);
-          // SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
-            //SDL_RenderPresent(rend);
-            
-       
 
-             
-              
-          // SDL_SetRenderDrawColor(rend,0xFF,0,0,0xFF);
+
             SDL_RenderClear(rend);
-            SDL_RenderCopy(rend, tex0, NULL, NULL);
-            SDL_SetRenderDrawColor(rend,0x00,0x00,0x00,0x00);
-            for(int i=0;i<5;i++)
-            SDL_RenderDrawLine(rend,135+i,135+i,1200+i,135+i);
-
-            
             SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
             SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
             SDL_RenderCopy(rend,fire_Tex,&plarRect,&plarPosition);
             SDL_RenderCopy(rend,fire_Tex,&plarRect1,&plarPosition1);
-            
+            SDL_RenderCopy(rend,fire_Tex,&plarRect2,&plarPosition2);
+            SDL_RenderCopy(rend,fire2_Tex,&plarRect22,&plarPosition22);
+            SDL_RenderCopy(rend,fire2_Tex,&plarRect3,&plarPosition3);
+            SDL_RenderCopy(rend,fire2_Tex,&plarRect4,&plarPosition4);
+
             SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
+           
              
 
             SDL_RenderPresent(rend);
+           
 
             
             
@@ -456,3 +572,4 @@ SDL_PauseAudioDevice(deviceId, 0);
     SDL_Quit();
     return 0;
 }
+

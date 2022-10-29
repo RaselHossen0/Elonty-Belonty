@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 #include <bits/stdc++.h>
 
 #define WINDOW_WIDTH (1280)
@@ -21,6 +23,7 @@ struct rect{
     }
   
 };
+void audio(void);
             
 
 
@@ -362,6 +365,7 @@ SDL_PauseAudioDevice(deviceId, 0);
     float y_pos = 550.0;
     int gameover = 1;
     int frameTime=0,FPS=60;
+    
 
     SDL_Event ev;
     while(isRunning){
@@ -415,12 +419,6 @@ SDL_PauseAudioDevice(deviceId, 0);
        if (gameover == 0)
         {
               
-                    
-
-          
-           
-            
-
            frameTime++;
            
            if(FPS/frameTime==1)//will be repeated 7 times a second
@@ -458,22 +456,9 @@ SDL_PauseAudioDevice(deviceId, 0);
             
           
           }
-         // SDL_RenderClear(rend);
-          // SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
-            //SDL_RenderPresent(rend);
-            
-       
 
-             
-              
-          // SDL_SetRenderDrawColor(rend,0xFF,0,0,0xFF);
+
             SDL_RenderClear(rend);
-            SDL_RenderCopy(rend, tex0, NULL, NULL);
-            SDL_SetRenderDrawColor(rend,0x00,0x00,0x00,0x00);
-            for(int i=0;i<5;i++)
-            SDL_RenderDrawLine(rend,135+i,135+i,1200+i,135+i);
-
-            
             SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
             SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
             SDL_RenderCopy(rend,fire_Tex,&plarRect,&plarPosition);
@@ -484,9 +469,13 @@ SDL_PauseAudioDevice(deviceId, 0);
             SDL_RenderCopy(rend,fire2_Tex,&plarRect4,&plarPosition4);
 
             SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
+            SDL_SetRenderDrawColor(rend,255,255,255,255);
+            
+            SDL_RenderDrawLine(rend,135,120,450,150);
              
 
             SDL_RenderPresent(rend);
+           
 
             
             
@@ -563,3 +552,4 @@ SDL_PauseAudioDevice(deviceId, 0);
     SDL_Quit();
     return 0;
 }
+
