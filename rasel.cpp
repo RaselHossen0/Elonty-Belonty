@@ -5,6 +5,8 @@
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
 #include <bits/stdc++.h>
+#include <iostream>
+
 
 #define WINDOW_WIDTH (1280)
 #define WINDOW_HEIGHT (720)
@@ -366,12 +368,12 @@ int main(int agr, char *args[])
     float y_pos1 = 450.0;
     int gameover = 0;
     int start = 1;
-    int main_game = 0;
+    int main_game = 0;  int goob=0;
     int next_lvl = 0;
     int frameTime = 0, FPS = 60;
     int scroll = 0;
-
-    SDL_Event ev;
+    int loob=0;
+    SDL_Event ev,e;
     while (isRunning)
     {
 
@@ -396,6 +398,7 @@ int main(int agr, char *args[])
                         y_pos = 0;
                         playerPosition.y = 0;
                     }
+                    goob=1;
                     playerRect.x += frameWidth;
                     if (playerRect.x >= textureWidth - frameWidth)
                         playerRect.x = 0;
@@ -426,33 +429,39 @@ int main(int agr, char *args[])
 
         if (main_game)
         {
-
             double startTime = SDL_GetTicks() / 1000.0;
         
             if (startTime  >= 2&&startTime<=10)
             {
-                Mix_PlayChannel(-1,rand1,0);
+                //Mix_PlayChannel(-1,rand1,0);
             }
-              if (startTime  >= 9.5&&startTime<=12.5)
+              if (startTime  >= 9.5&&startTime<=10.5)
             {
-             if(ev.type==SDL_KEYDOWN&&ev.key.keysym.sym==SDLK_UP)
-                gameover==1;
+                if(goob)
+                loob=1;
             }
+            
             
             if (startTime  >= 12.0&&startTime<=18.0)
             {
-                Mix_PlayChannel(-1,rand2,0);
+               // Mix_PlayChannel(-1,rand2,0);
                 // if(ev.type==SDL_KEYDOWN&&ev.key.keysym.sym==SDLK_UP)
                 // gameover==1;
             }
-              if (startTime  >= 20.0&&startTime<=25)
+              if (startTime  >= 17.5&&startTime<=21.5)
             {
+                if(goob)
+                loob=1;
+            }
+            
+              if (startTime  >= 21.0&&startTime<=25)
+            {
+                
                 Mix_PlayChannel(-1,rand3,0);
-        
             }   
 
-            printf("%lf  *", startTime);
-
+          //  printf("%lf  *", startTime);
+        
            
             cloud_rect.x += 1;
             if (cloud_rect.x >= WINDOW_WIDTH)
@@ -494,12 +503,9 @@ int main(int agr, char *args[])
             }
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend, tex0, NULL, NULL);
-            SDL_SetRenderDrawColor(rend, 0x00, 0x00, 0x00, 0x00);
-            for (int i = 0; i < 5; i++)
-                SDL_RenderDrawLine(rend, 135 + i, 135 + i, 1200 + i, 135 + i);
             SDL_RenderCopy(rend, bg_Tex, NULL, NULL);
             SDL_RenderCopy(rend, cloud, NULL, &cloud_rect);
-            SDL_RenderCopy(rend, tex, &boy2, &boy2_pos);
+           // SDL_RenderCopy(rend, tex, &boy2, &boy2_pos);
             SDL_RenderCopy(rend, Putul_Tex, &playrRect, &playrPosition);
             SDL_RenderCopy(rend, fire_Tex, &plarRect, &plarPosition);
             SDL_RenderCopy(rend, fire_Tex, &plarRect1, &plarPosition1);
@@ -508,7 +514,15 @@ int main(int agr, char *args[])
             SDL_RenderCopy(rend, fire2_Tex, &plarRect3, &plarPosition3);
             SDL_RenderCopy(rend, fire2_Tex, &plarRect4, &plarPosition4);
             SDL_RenderCopy(rend, tex, &playerRect, &playerPosition);
+
+            if(loob)
+            {
+            SDL_DestroyTexture(tex);
+            }
             SDL_RenderPresent(rend);
+          //  SDL_GetRenderTarget(rend);
+           // SDL_SetRenderDrawColor(rend, 255,0,0, 255);
+            SDL_RenderClear(rend);
 
             if (playerPosition.y <= 100)
             {
