@@ -36,10 +36,10 @@ void init()
         printf("video and timer: %s\n", SDL_GetError());
     }
 
-    printf("Initialization Complete\n");
+   // printf("Initialization Complete\n");
     SDL_Init(SDL_INIT_AUDIO);
 
-    win = SDL_CreateWindow("SDL Demonstration", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+    win = SDL_CreateWindow("ELONTI-BELONTI", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 
     if (!win)
     {

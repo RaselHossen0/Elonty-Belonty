@@ -1,78 +1,18 @@
-#include "init.h"
-#include "audio.h"
-// void Destroy(){
-//     surface=IMG_Load("res/fireA.png");
-//     SDL_Texture *fir=SDL_CreateTextureFromSurface(rend,surface);
-//     SDL_FreeSurface(surface);
-//     SDL_Rect src_fir,dest_fir;
-//     int tfW,tfH,fw,fh;
-//     SDL_QueryTexture(fir,NULL,NULL,&tfW,&tfH);
-//     fw=tfW/8;
-//     fh=tfH/4;
-//     src_fir.w=fw;
-//     src_fir.h=fh;
-//     src_fir.x=0;
-//     src_fir.y=0;
-//     dest_fir.w=400;
-//     dest_fir.h=400;
-//     dest_fir.x=dest_fir.y=0;
-// SDL_RenderCopy(rend,fir,&src_fir,&dest_fir);
-// SDL_RenderPresent(rend);
-    
-// }
+#include "header.h"
 
 int main(int agr, char *args[])
 {
 
     init();
-
-    surface = IMG_Load("res/dip.jpg");
-    if (!surface)
-    {
-        printf("Redbar Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture *tex0 = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!tex0)
-    {
-        printf("Redline Texture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    // Mix_PlayChannel(-1,menu,1);
+    loadMedia();
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, tex0, NULL, NULL);
     SDL_RenderPresent(rend);
-    SDL_Delay(1000 / 3);
-
+    SDL_Delay(2000);
+    Mix_PlayChannel(-1,menu,1);
     audio();
 
-    surface = IMG_Load("res/start.jpg");
-    if (!surface)
-    {
-        printf("Redbar Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture *tex3 = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-
-    if (!tex3)
-    {
-        printf("Redline Texture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+   
     TTF_Font *font = TTF_OpenFont("res/font/Oswald-Bold.ttf", 40);
     surface = TTF_RenderText_Solid(font, "Elonti-Belonti", {0, 0, 0});
 
@@ -86,26 +26,7 @@ int main(int agr, char *args[])
     start_rect.x = (WINDOW_WIDTH - start_rect.w) / 2;
     start_rect.y = (WINDOW_HEIGHT - start_rect.h) / 2;
 
-    surface = IMG_Load("res/newman.png");
-    if (!surface)
-    {
-        printf("Redbar Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Texture *tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!tex)
-    {
-        printf("Redline Texture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+   
 
     SDL_Rect playerRect;     // rect for a single frame of the sprite sheet
     SDL_Rect playerPosition; // rect for the whole sprite sheet
@@ -137,25 +58,7 @@ int main(int agr, char *args[])
     boy2.h = frameHeight;
     // SDL_SetRenderDrawColor(rend,0xFF,0,0,0xFF);
 
-    surface = IMG_Load("res/gameover.jpeg");
-    if (!surface)
-    {
-        printf("Green rectangle Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture *gameover_tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!tex)
-    {
-        printf("Green Rectangle Texture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+    
 
     SDL_Rect gameover_rect;
     gameover_rect.w = 400;
@@ -163,13 +66,7 @@ int main(int agr, char *args[])
     gameover_rect.x = (WINDOW_WIDTH - gameover_rect.w) / 2;
     gameover_rect.y = (WINDOW_HEIGHT - gameover_rect.h) / 2 - 250;
 
-    surface = IMG_Load("res/bg.png");
-    SDL_Texture *bg_Tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-
-    surface = IMG_Load("res/putull.png");
-    SDL_Texture *Putul_Tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
+   
 
     SDL_Rect playrRect;     // rect for a single frame of the sprite sheet
     SDL_Rect playrPosition; // rect for the whole sprite sheet
@@ -178,18 +75,14 @@ int main(int agr, char *args[])
     playrPosition.w = 75;
     playrPosition.h = 75; // ei rec(square) er moddher kothao texture (runman) load hobe
 
-    surface = IMG_Load("res/2883482.png");
-    SDL_Texture *next_level = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
+    
     SDL_Rect next;
     // SDL_QueryTexture(next_level,NULL,NULL,&next.w,&next.h);
     next.w = 180;
     next.h = 180;
     next.x = 490;
     next.y = 450;
-    surface = IMG_Load("res/sprite-02.png");
-    SDL_Texture *l2boy = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
+    
 
     int tx1W, tx1H, f1W, f1H;
     SDL_Rect src_l2b, dest_l2b;
@@ -268,9 +161,7 @@ int main(int agr, char *args[])
     plarRect2.w = r5.frmWid;
     plarRect2.h = r5.frmHit;
 
-    surface = IMG_Load("res/fire2.png");
-    SDL_Texture *fire2_Tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
+    
 
     SDL_Rect plarRect22;     // rect for a single frame of the sprite sheet
     SDL_Rect plarPosition22; // rect for the whole sprite sheet
@@ -383,8 +274,7 @@ surface=IMG_Load("res/fireA.png");
     int next_lvl = 0;
     int frameTime = 0, FPS = 60;
     int scroll = 0;
-  //  int loob=0;
-  int var=1;
+    int var=1;
     SDL_Event ev,e;
     while (isRunning)
     {
@@ -663,6 +553,7 @@ surface=IMG_Load("res/fireA.png");
             SDL_SetRenderDrawColor(rend,0,255, 0x00, 0x00);
             SDL_RenderCopy(rend, cloud, NULL, &cloud_rect);
             SDL_RenderCopy(rend, l2boy, &src_l2b, &dest_l2b);
+            SDL_RenderCopy(rend,fontTex,NULL,&textRect);
             SDL_RenderPresent(rend);
         }
     }
