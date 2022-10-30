@@ -1,36 +1,25 @@
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_timer.h>
-#include <SDL2/SDL_ttf.h>
-#include <bits/stdc++.h>
-#include <iostream>
-
-
-#define WINDOW_WIDTH (1280)
-#define WINDOW_HEIGHT (720)
-#define SCROLL_SPEED (900)
-#define RECT_SPEED (5.0)
-
-struct rect
-{
-    int frmWid, frmHit;
-
-    rect(int fW, int fH)
-    {
-
-        frmWid = fW;
-        frmHit = fH;
-    }
-};
-
-SDL_Window *win;
-SDL_Renderer *rend;
-SDL_Surface *surface;
-Mix_Chunk *replay, *replay1, *run1, *run2, *menu, *mouse,*rand1,*rand2,*rand3;
-void init();
-void audio(void);
+#include "init.h"
+#include "audio.h"
+// void Destroy(){
+//     surface=IMG_Load("res/fireA.png");
+//     SDL_Texture *fir=SDL_CreateTextureFromSurface(rend,surface);
+//     SDL_FreeSurface(surface);
+//     SDL_Rect src_fir,dest_fir;
+//     int tfW,tfH,fw,fh;
+//     SDL_QueryTexture(fir,NULL,NULL,&tfW,&tfH);
+//     fw=tfW/8;
+//     fh=tfH/4;
+//     src_fir.w=fw;
+//     src_fir.h=fh;
+//     src_fir.x=0;
+//     src_fir.y=0;
+//     dest_fir.w=400;
+//     dest_fir.h=400;
+//     dest_fir.x=dest_fir.y=0;
+// SDL_RenderCopy(rend,fir,&src_fir,&dest_fir);
+// SDL_RenderPresent(rend);
+    
+// }
 
 int main(int agr, char *args[])
 {
@@ -97,7 +86,7 @@ int main(int agr, char *args[])
     start_rect.x = (WINDOW_WIDTH - start_rect.w) / 2;
     start_rect.y = (WINDOW_HEIGHT - start_rect.h) / 2;
 
-    surface = IMG_Load("res/man1.png");
+    surface = IMG_Load("res/newman.png");
     if (!surface)
     {
         printf("Redbar Surface Error: %s\n", IMG_GetError());
@@ -364,6 +353,27 @@ int main(int agr, char *args[])
     cloud_rect.x = 0;
     cloud_rect.y = 0;
 
+
+surface=IMG_Load("res/fireA.png");
+    SDL_Texture *fir=SDL_CreateTextureFromSurface(rend,surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect src_fir,dest_fir;
+    int tfW,tfH,fw,fh;
+    SDL_QueryTexture(fir,NULL,NULL,&tfW,&tfH);
+    fw=tfW/8;
+    fh=tfH/4;
+    src_fir.w=fw;
+    src_fir.h=fh;
+    src_fir.x=0;
+    src_fir.y=0;
+    dest_fir.w=playerPosition.w*2;
+    dest_fir.h=playerPosition.h*2;
+    dest_fir.x=dest_fir.y=0;
+
+    surface = IMG_Load("res/playAgain.png");
+    SDL_Texture *againTex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+
     bool isRunning = true;
     float y_pos = 550.0;
     float y_pos1 = 450.0;
@@ -374,6 +384,7 @@ int main(int agr, char *args[])
     int frameTime = 0, FPS = 60;
     int scroll = 0;
   //  int loob=0;
+  int var=1;
     SDL_Event ev,e;
     while (isRunning)
     {
@@ -409,6 +420,7 @@ int main(int agr, char *args[])
 
                 case SDL_SCANCODE_DOWN:
                 {
+                    goob=1;
                     y_pos = y_pos + (500 / 60);
                     if (y_pos < 550)
                         playerPosition.y = (int)y_pos;
@@ -434,39 +446,39 @@ int main(int agr, char *args[])
             double initTime=0;
             double startTime = SDL_GetTicks() / 1000.0;
         
-            if (startTime  >= 2&&startTime<=10)
+            if (startTime  >= 2*var&&startTime<=10*var)
             {
                 Mix_PlayChannel(-1,rand1,0);
             }
-              else if (startTime  >= 10.1&&startTime<=12.0)
+              else if (startTime  >= 10.1*var&&startTime<=12.0*var)
             {
                 if(goob)
                 loob=1;
             }
             
             
-          else  if (startTime  >= 12.0&&startTime<=18.0)
+          else  if (startTime  >= 12.0*var&&startTime<=18.0*var)
             {
                 Mix_PlayChannel(-1,rand2,0);
             }
-            else  if (startTime  >= 18&&startTime<=21)
+            else  if (startTime  >= 18*var&&startTime<=21*var)
             {
                 if(goob)
                 loob=1;
             }
             
-            else  if (startTime  >= 21.0&&startTime<=25)
+            else  if (startTime  >= 21.0*var&&startTime<=25*var)
             {
                 
                 Mix_PlayChannel(-1,rand3,0);
             }     
-            else  if (startTime  >= 25&&startTime<=28)
+            else  if (startTime  >= 25*var&&startTime<=28*var)
             {
                 if(goob)
                 loob=1;
             }
             
-            else  if (startTime  >= 28&&startTime<=34)
+            else  if (startTime  >= 28*var&&startTime<=34*var)
             {
                 
                 Mix_PlayChannel(-1,rand3,0);
@@ -474,10 +486,16 @@ int main(int agr, char *args[])
             cloud_rect.x += 1;
             if (cloud_rect.x >= WINDOW_WIDTH)
                 cloud_rect.x = 0;
+
+                src_fir.x+=fw;
+                if(src_fir.x+fw>=tfW){
+                    src_fir.x=0;
             frameTime++;
             if (FPS / frameTime == 1) // will be repeated 7 times a second
             {
                 frameTime = 0; // repeat
+                
+                }
                 playrRect.x += r1.frmWid;
                 if (playrRect.x >= texturWidth - r1.frmWid)
                 {
@@ -524,7 +542,13 @@ int main(int agr, char *args[])
 
             if(loob)
             {
-            SDL_DestroyTexture(tex);
+                dest_fir.y=playerPosition.y;
+                dest_fir.x=350;
+                SDL_RenderCopy(rend,fir,&src_fir,&playerPosition);
+              //  SDL_RenderCopy(rend, tex, &playerRect, &playerPosition);
+                //SDL_RenderPresent(rend);
+                gameover=4;
+                
             }
             SDL_RenderPresent(rend);
             SDL_RenderClear(rend);
@@ -532,13 +556,9 @@ int main(int agr, char *args[])
             if (playerPosition.y <= 100)
             {
                 gameover = 1;
+                var++;
                 main_game = 0;
-                 if(main_game==0)
-                 {
-                    Mix_FreeChunk(rand1);
-                    Mix_FreeChunk(rand2);
-                    Mix_FreeChunk(rand3);
-            }
+                 
               
             }
            
@@ -601,6 +621,31 @@ int main(int agr, char *args[])
                 }
             }
         }
+         else if(gameover==4)
+         {
+            SDL_RenderClear(rend);
+            SDL_RenderCopy(rend,againTex,NULL,NULL);
+             SDL_RenderPresent(rend);
+
+            int mousex, mousey;
+            int buttons = SDL_GetMouseState(&mousex, &mousey);
+           
+
+            if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT))
+            {
+                if (mousex >= WINDOW_WIDTH/2.5 && mousex <= WINDOW_WIDTH/1.5 && mousey >= WINDOW_HEIGHT/2.5&& mousey <= WINDOW_HEIGHT/1.5)
+                {
+                    gameover = 0;
+                    y_pos=550.0;
+                    //count = 0;
+                   playerPosition.x=400;
+                   playerPosition.y=550;
+                   playerRect.x=playerRect.y=0;
+                    
+                   
+                }
+            }
+        }
         else if (next_lvl == 1)
         {
             cloud_rect.x += 1;
@@ -627,51 +672,4 @@ int main(int agr, char *args[])
 
     SDL_Quit();
     return 0;
-}
-
-void init()
-{
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) > 0)
-    {
-        printf("video and timer: %s\n", SDL_GetError());
-    }
-
-    printf("Initialization Complete\n");
-    SDL_Init(SDL_INIT_AUDIO);
-
-    win = SDL_CreateWindow("SDL Demonstration", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-
-    if (!win)
-    {
-        printf("window: %s\n", SDL_GetError());
-        SDL_Quit();
-        //  return 1;
-    }
-    TTF_Init();
-    Uint32 render_flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
-    rend = SDL_CreateRenderer(win, -1, render_flags);
-
-    if (!rend)
-    {
-        printf("renderer: %s\n", SDL_GetError());
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        // return 1;
-    }
-}
-void audio(void)
-{
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-    {
-        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-    }
-    rand1=Mix_LoadWAV("res/home-logo-13486.mp3");
-    rand2=Mix_LoadWAV("res/stomp-logo-3-13783.mp3");
-    rand3=Mix_LoadWAV("res/motivational-ident-main-9923.mp3");
-    replay = Mix_LoadWAV("res/music.wav");
-    replay1 = Mix_LoadWAV("res/game_over.wav");
-    menu = Mix_LoadWAV("res/menusound.mp3");
-    mouse = Mix_LoadWAV("res/mouseclick");
-    run1 = Mix_LoadWAV("");
-    run2 = Mix_LoadWAV("");
 }
