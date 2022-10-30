@@ -376,12 +376,16 @@ SDL_PauseAudioDevice(deviceId, 0);
     int gameover = 1;
     int frameTime=0,FPS=60;
     double count=0;
+    int flag2;
+   
     
     
 
     SDL_Event ev;
     while(isRunning){
         int flag=0;
+         
+        
         
          while (SDL_PollEvent(&ev))
         {
@@ -434,6 +438,7 @@ SDL_PauseAudioDevice(deviceId, 0);
     
        if (gameover == 0)
         {
+             int flag2=1;
            count=SDL_GetTicks() / 1000.0;
            frameTime++;
            
@@ -494,11 +499,11 @@ SDL_PauseAudioDevice(deviceId, 0);
                     SDL_RenderPresent(rend);
                     SDL_Delay(2000);
                     gameover=4;
+                    flag2=0;
                    
                 }
              }
            
-             
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
             SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
@@ -508,9 +513,15 @@ SDL_PauseAudioDevice(deviceId, 0);
             SDL_RenderCopy(rend,fire2_Tex,&plarRect22,&plarPosition22);
             SDL_RenderCopy(rend,fire2_Tex,&plarRect3,&plarPosition3);
             SDL_RenderCopy(rend,fire2_Tex,&plarRect4,&plarPosition4);
-
-            SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
-            SDL_RenderPresent(rend);
+            //SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
+            //SDL_RenderPresent(rend);
+           
+            if(flag2==1){
+                SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
+                SDL_RenderPresent(rend);
+            }  
+             
+             
            
 
             
