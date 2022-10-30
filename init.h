@@ -13,17 +13,7 @@
 #define WINDOW_HEIGHT (720)
 #define SCROLL_SPEED (900)
 #define RECT_SPEED (5.0)
-struct rect
-{
-    int frmWid, frmHit;
 
-    rect(int fW, int fH)
-    {
-
-        frmWid = fW;
-        frmHit = fH;
-    }
-};
 
 SDL_Window *win;
 SDL_Renderer *rend;

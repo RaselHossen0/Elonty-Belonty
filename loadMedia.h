@@ -1,6 +1,7 @@
 #pragma once
 #include "header.h"
 SDL_Texture *tex0,*tex3,*tex,*gameover_tex,*bg_Tex ,*Putul_Tex,*next_level,*l2boy,*fire2_Tex ,*fire_Tex;
+ SDL_Texture *replay_tex,*cloud,*againTex,*fir;
 void loadMedia()
 {
         bool success=1;
@@ -104,6 +105,36 @@ void loadMedia()
 
     surface = IMG_Load("res/fire.png");
     fire_Tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+
+    surface = IMG_Load("res/replay.png");
+    if (!surface)
+    {
+        printf("replay Surface Error: %s\n", IMG_GetError());
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+      //  return 1;
+    }
+    replay_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    if (!replay_tex)
+    {
+        printf("replayTexture %s\n", SDL_GetError());
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+      //  return 1;
+    }
+     surface = IMG_Load("res/cloud.png");
+    cloud = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+      surface = IMG_Load("res/playAgain.png");
+    againTex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+
+    surface=IMG_Load("res/fireA.png");
+    fir=SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
   //  return success;
 }
