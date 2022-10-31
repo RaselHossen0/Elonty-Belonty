@@ -9,7 +9,7 @@ int main(int agr, char *args[])
     SDL_RenderCopy(rend, tex0, NULL, NULL);
     SDL_RenderPresent(rend);
     SDL_Delay(2000);
-    Mix_PlayChannel(-1,menu,1);
+    Mix_PlayChannel(-1,menu,0);
     audio();
 
     TTF_Font *font = TTF_OpenFont("res/font/Oswald-Bold.ttf", 40);

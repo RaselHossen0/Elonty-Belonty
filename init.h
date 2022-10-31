@@ -1,6 +1,6 @@
 #ifndef INIT_H
 #define INIT_H
-#include <iostream>
+#include <bits/stdc++.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
@@ -18,6 +18,17 @@
 SDL_Window *win;
 SDL_Renderer *rend;
 SDL_Surface *surface;
+     struct rect
+{
+    int frmWid, frmHit;
+
+    rect(int fW, int fH)
+    {
+
+        frmWid = fW;
+        frmHit = fH;
+    }
+};
 
 void init()
 {
