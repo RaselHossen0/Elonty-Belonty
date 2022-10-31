@@ -353,8 +353,15 @@ int main(int agr, char *args[])
     cloud_rect.x = 0;
     cloud_rect.y = 0;
 
+    SDL_Rect t_rect;
+    //SDL_QueryTexture(cloud, NULL, NULL, &cloud_rect.w, &cloud_rect.h);
+    t_rect.w =300;
+    t_rect.h = 100;
+    t_rect.x = 0;
+    t_rect.y = 0;
 
-surface=IMG_Load("res/fireA.png");
+
+    surface=IMG_Load("res/fireA.png");
     SDL_Texture *fir=SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
     SDL_Rect src_fir,dest_fir;
@@ -385,6 +392,14 @@ surface=IMG_Load("res/fireA.png");
     int scroll = 0;
   //  int loob=0;
   int var=1;
+    TTF_Font *gFont = TTF_OpenFont( "res/Oswald-DemiBold.ttf", 20);
+	SDL_Color color = { 0,0, 255, 255 };
+
+    // surface=TTF_RenderText_Solid(gFont,"PLAYING",color);
+    // SDL_Texture *text1=SDL_CreateTextureFromSurface(rend,surface);
+    // SDL_FreeSurface(surface);
+    // SDL_RenderCopy(rend,text1,NULL,&t_rect);
+    // SDL_RenderPresent(rend);
     SDL_Event ev,e;
     while (isRunning)
     {
@@ -443,6 +458,13 @@ surface=IMG_Load("res/fireA.png");
 
         if (main_game)
         {
+            int time=SDL_GetTicks()/1000;
+	            std::string i=std::to_string(time);
+	            SDL_Surface *surface1=TTF_RenderText_Solid(gFont,i.c_str(),{0,0,255});
+                SDL_Texture * texture = SDL_CreateTextureFromSurface(rend, surface1);
+                SDL_FreeSurface(surface1);
+             //   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+                SDL_Rect dstrect = { 0, 0,50, 50 };
             double initTime=0;
             double startTime = SDL_GetTicks() / 1000.0;
         
@@ -491,7 +513,7 @@ surface=IMG_Load("res/fireA.png");
                 if(src_fir.x+fw>=tfW){
                     src_fir.x=0;
             frameTime++;
-            if (FPS / frameTime == 1) // will be repeated 7 times a second
+            if (FPS / frameTime == 2) // will be repeated 7 times a second
             {
                 frameTime = 0; // repeat
                 
@@ -527,7 +549,10 @@ surface=IMG_Load("res/fireA.png");
                 if (plarRect22.x >= txturWidth22 - r6.frmWid)
                     plarRect22.x = 0;
             }
+   
+
             SDL_RenderClear(rend);
+              
             SDL_RenderCopy(rend, tex0, NULL, NULL);
             SDL_RenderCopy(rend, bg_Tex, NULL, NULL);
             SDL_RenderCopy(rend, cloud, NULL, &cloud_rect);
@@ -538,21 +563,36 @@ surface=IMG_Load("res/fireA.png");
             SDL_RenderCopy(rend, fire2_Tex, &plarRect22, &plarPosition22);
             SDL_RenderCopy(rend, fire2_Tex, &plarRect3, &plarPosition3);
             SDL_RenderCopy(rend, fire2_Tex, &plarRect4, &plarPosition4);
+            SDL_RenderCopy(rend,texture,NULL,&dstrect);
             SDL_RenderCopy(rend, tex, &playerRect, &playerPosition);
-
+          
+            SDL_RenderPresent(rend);
+            SDL_RenderClear(rend);
             if(loob)
             {
+            SDL_RenderClear(rend);  
+            SDL_RenderCopy(rend, tex0, NULL, NULL);
+            SDL_RenderCopy(rend, bg_Tex, NULL, NULL);
+            SDL_RenderCopy(rend, cloud, NULL, &cloud_rect);
+            SDL_RenderCopy(rend, Putul_Tex, &playrRect, &playrPosition);
+            SDL_RenderCopy(rend, fire_Tex, &plarRect, &plarPosition);
+            SDL_RenderCopy(rend, fire_Tex, &plarRect1, &plarPosition1);
+            SDL_RenderCopy(rend, fire_Tex, &plarRect2, &plarPosition2);
+            SDL_RenderCopy(rend, fire2_Tex, &plarRect22, &plarPosition22);
+            SDL_RenderCopy(rend, fire2_Tex, &plarRect3, &plarPosition3);
+            SDL_RenderCopy(rend, fire2_Tex, &plarRect4, &plarPosition4);
+            SDL_RenderCopy(rend,texture,NULL,&dstrect);
+           // SDL_RenderCopy(rend, tex, &playerRect, &playerPosition);
                 dest_fir.y=playerPosition.y;
                 dest_fir.x=350;
                 SDL_RenderCopy(rend,fir,&src_fir,&playerPosition);
               //  SDL_RenderCopy(rend, tex, &playerRect, &playerPosition);
                 //SDL_RenderPresent(rend);
                 gameover=4;
-                
-            }
+                main_game=0;
             SDL_RenderPresent(rend);
-            SDL_RenderClear(rend);
-
+          //  SDL_RenderClear(rend);
+            }
             if (playerPosition.y <= 100)
             {
                 gameover = 1;
@@ -625,8 +665,7 @@ surface=IMG_Load("res/fireA.png");
          {
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend,againTex,NULL,NULL);
-             SDL_RenderPresent(rend);
-
+            SDL_RenderPresent(rend);
             int mousex, mousey;
             int buttons = SDL_GetMouseState(&mousex, &mousey);
            
@@ -635,36 +674,38 @@ surface=IMG_Load("res/fireA.png");
             {
                 if (mousex >= WINDOW_WIDTH/2.5 && mousex <= WINDOW_WIDTH/1.5 && mousey >= WINDOW_HEIGHT/2.5&& mousey <= WINDOW_HEIGHT/1.5)
                 {
-                    gameover = 0;
+                    main_game=1;
+                    gameover=0;
                     y_pos=550.0;
-                    //count = 0;
                    playerPosition.x=400;
                    playerPosition.y=550;
                    playerRect.x=playerRect.y=0;
-                    
-                   
                 }
             }
         }
         else if (next_lvl == 1)
         {
+               
+                SDL_RenderClear(rend);
             cloud_rect.x += 1;
             if (cloud_rect.x >= WINDOW_WIDTH)
                 cloud_rect.x = 0;
             frameTime++;
-            if (FPS / frameTime == 1)
+            if (frameTime==33)
             {
                 frameTime = 0;
                 src_l2b.x += f1W;
                 if (src_l2b.x+f1W >= tx1W)
                     src_l2b.x = 0;
             }
-            SDL_RenderClear(rend);
+             
             SDL_SetRenderDrawColor(rend,0,255, 0x00, 0x00);
-            SDL_RenderCopy(rend, cloud, NULL, &cloud_rect);
-            SDL_RenderCopy(rend, l2boy, &src_l2b, &dest_l2b);
+           SDL_RenderCopy(rend, cloud, NULL, &cloud_rect);
+          // SDL_RenderCopy(rend,texture,NULL,&dstrect);
+           SDL_RenderCopy(rend, l2boy, &src_l2b, &dest_l2b);
             SDL_RenderPresent(rend);
         }
+        
     }
     Mix_FreeChunk(replay1);
     SDL_DestroyRenderer(rend);

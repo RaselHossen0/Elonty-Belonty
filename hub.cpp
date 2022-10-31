@@ -1,25 +1,409 @@
 #include "init.h"
 #include "audio.h"
-// void Destroy(){
-//     surface=IMG_Load("res/fireA.png");
-//     SDL_Texture *fir=SDL_CreateTextureFromSurface(rend,surface);
-//     SDL_FreeSurface(surface);
-//     SDL_Rect src_fir,dest_fir;
-//     int tfW,tfH,fw,fh;
-//     SDL_QueryTexture(fir,NULL,NULL,&tfW,&tfH);
-//     fw=tfW/8;
-//     fh=tfH/4;
-//     src_fir.w=fw;
-//     src_fir.h=fh;
-//     src_fir.x=0;
-//     src_fir.y=0;
-//     dest_fir.w=400;
-//     dest_fir.h=400;
-//     dest_fir.x=dest_fir.y=0;
-// SDL_RenderCopy(rend,fir,&src_fir,&dest_fir);
-// SDL_RenderPresent(rend);
-    
-// }
+class LTexture
+{
+	public:
+		//Initializes variables
+		LTexture();
+
+		//Deallocates memory
+		~LTexture();
+
+		//Loads image at specified path
+		bool loadFromFile( std::string path );
+		
+		#if defined(SDL_TTF_MAJOR_VERSION)
+		//Creates image from font string
+		bool loadFromRenderedText( std::string textureText, SDL_Color textColor );
+		#endif
+
+		//Deallocates texture
+		void free();
+
+		//Set color modulation
+		void setColor( Uint8 red, Uint8 green, Uint8 blue );
+
+		//Set blending
+		void setBlendMode( SDL_BlendMode blending );
+
+		//Set alpha modulation
+		void setAlpha( Uint8 alpha );
+		
+		//Renders texture at given point
+		void render( int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
+
+		//Gets image dimensions
+		int getWidth();
+		int getHeight();
+
+	private:
+		//The actual hardware texture
+		SDL_Texture* mTexture;
+
+		//Image dimensions
+		int mWidth;
+		int mHeight;
+};
+
+//The application time based timer
+class LTimer
+{
+    public:
+		//Initializes variables
+		LTimer();
+
+		//The various clock actions
+		void start();
+		void stop();
+		void pause();
+		void unpause();
+
+		//Gets the timer's time
+		Uint32 getTicks();
+
+		//Checks the status of the timer
+		bool isStarted();
+		bool isPaused();
+
+    private:
+		//The clock time when the timer started
+		Uint32 mStartTicks;
+
+		//The ticks stored when the timer was paused
+		Uint32 mPausedTicks;
+
+		//The timer status
+		bool mPaused;
+		bool mStarted;
+};
+
+//Starts up SDL and creates window
+bool init1();
+
+//Loads media
+bool loadMedia();
+
+//Frees media and shuts down SDL
+void close();
+
+//The window we'll be rendering to
+// SDL_Window* gWindow = NULL;
+
+// //The window renderer
+// SDL_Renderer* gRenderer = NULL;
+
+//Globally used font
+TTF_Font* gFont = NULL;
+
+//Scene textures
+LTexture gTimeTextTexture;
+LTexture gPausePromptTexture;
+LTexture gStartPromptTexture;
+
+LTexture::LTexture()
+{
+	//Initialize
+	mTexture = NULL;
+	mWidth = 0;
+	mHeight = 0;
+}
+
+LTexture::~LTexture()
+{
+	//Deallocate
+	free();
+}
+
+bool LTexture::loadFromFile( std::string path )
+{
+	//Get rid of preexisting texture
+	free();
+
+	//The final texture
+	SDL_Texture* newTexture = NULL;
+
+	//Load image at specified path
+	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
+	if( loadedSurface == NULL )
+	{
+		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+	}
+	else
+	{
+		//Color key image
+		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
+
+		//Create texture from surface pixels
+        newTexture = SDL_CreateTextureFromSurface( rend, loadedSurface );
+		if( newTexture == NULL )
+		{
+			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+		}
+		else
+		{
+			//Get image dimensions
+			mWidth = loadedSurface->w;
+			mHeight = loadedSurface->h;
+		}
+
+		//Get rid of old loaded surface
+		SDL_FreeSurface( loadedSurface );
+	}
+
+	//Return success
+	mTexture = newTexture;
+	return mTexture != NULL;
+}
+
+#if defined(SDL_TTF_MAJOR_VERSION)
+bool LTexture::loadFromRenderedText( std::string textureText, SDL_Color textColor )
+{
+	//Get rid of preexisting texture
+	free();
+	//Render text surface
+	SDL_Surface* textSurface = TTF_RenderText_Solid( gFont, textureText.c_str(), textColor );
+	if( textSurface != NULL )
+	{
+		//Create texture from surface pixels
+        mTexture = SDL_CreateTextureFromSurface( rend, textSurface );
+		if( mTexture == NULL )
+		{
+			printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
+		}
+		else
+		{
+			//Get image dimensions
+			mWidth = textSurface->w;
+			mHeight = textSurface->h;
+		}
+
+		//Get rid of old surface
+		SDL_FreeSurface( textSurface );
+	}
+	else
+	{
+		printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
+	}
+
+	
+	//Return success
+	return mTexture != NULL;
+}
+#endif
+
+void LTexture::free()
+{
+	//Free texture if it exists
+	if( mTexture != NULL )
+	{
+		SDL_DestroyTexture( mTexture );
+		mTexture = NULL;
+		mWidth = 0;
+		mHeight = 0;
+	}
+}
+
+void LTexture::setColor( Uint8 red, Uint8 green, Uint8 blue )
+{
+	//Modulate texture rgb
+	SDL_SetTextureColorMod( mTexture, red, green, blue );
+}
+
+void LTexture::setBlendMode( SDL_BlendMode blending )
+{
+	//Set blending function
+	SDL_SetTextureBlendMode( mTexture, blending );
+}
+		
+void LTexture::setAlpha( Uint8 alpha )
+{
+	//Modulate texture alpha
+	SDL_SetTextureAlphaMod( mTexture, alpha );
+}
+
+void LTexture::render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
+{
+	//Set rendering space and render to screen
+	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
+
+	//Set clip rendering dimensions
+	if( clip != NULL )
+	{
+		renderQuad.w = clip->w;
+		renderQuad.h = clip->h;
+	}
+
+	//Render to screen
+	SDL_RenderCopyEx( rend, mTexture, clip, &renderQuad, angle, center, flip );
+}
+
+int LTexture::getWidth()
+{
+	return mWidth;
+}
+
+int LTexture::getHeight()
+{
+	return mHeight;
+}
+
+LTimer::LTimer()
+{
+    //Initialize the variables
+    mStartTicks = 0;
+    mPausedTicks = 0;
+
+    mPaused = false;
+    mStarted = false;
+}
+
+void LTimer::start()
+{
+    //Start the timer
+    mStarted = true;
+
+    //Unpause the timer
+    mPaused = false;
+
+    //Get the current clock time
+    mStartTicks = SDL_GetTicks();
+	mPausedTicks = 0;
+}
+
+void LTimer::stop()
+{
+    //Stop the timer
+    mStarted = false;
+
+    //Unpause the timer
+    mPaused = false;
+
+	//Clear tick variables
+	mStartTicks = 0;
+	mPausedTicks = 0;
+}
+
+void LTimer::pause()
+{
+    //If the timer is running and isn't already paused
+    if( mStarted && !mPaused )
+    {
+        //Pause the timer
+        mPaused = true;
+
+        //Calculate the paused ticks
+        mPausedTicks = SDL_GetTicks() - mStartTicks;
+		mStartTicks = 0;
+    }
+}
+
+void LTimer::unpause()
+{
+    //If the timer is running and paused
+    if( mStarted && mPaused )
+    {
+        //Unpause the timer
+        mPaused = false;
+
+        //Reset the starting ticks
+        mStartTicks = SDL_GetTicks() - mPausedTicks;
+
+        //Reset the paused ticks
+        mPausedTicks = 0;
+    }
+}
+
+Uint32 LTimer::getTicks()
+{
+	//The actual timer time
+	Uint32 time = 0;
+
+    //If the timer is running
+    if( mStarted )
+    {
+        //If the timer is paused
+        if( mPaused )
+        {
+            //Return the number of ticks when the timer was paused
+            time = mPausedTicks;
+        }
+        else
+        {
+            //Return the current time minus the start time
+            time = SDL_GetTicks() - mStartTicks;
+        }
+    }
+
+    return time;
+}
+
+bool LTimer::isStarted()
+{
+	//Timer is running and paused or unpaused
+    return mStarted;
+}
+
+bool LTimer::isPaused()
+{
+	//Timer is running and paused
+    return mPaused && mStarted;
+}
+
+bool loadMedia()
+{
+	//Loading success flag
+	bool success = true;
+
+	//Open the font
+	gFont = TTF_OpenFont( "lazy.ttf", 28 );
+	if( gFont == NULL )
+	{
+		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
+		success = false;
+	}
+	else
+	{
+		//Set text color as black
+		SDL_Color textColor = { 0, 0, 0, 255 };
+		
+		//Load stop prompt texture
+		if( !gStartPromptTexture.loadFromRenderedText( "Press S to Start or Stop the Timer", textColor ) )
+		{
+			printf( "Unable to render start/stop prompt texture!\n" );
+			success = false;
+		}
+		
+		//Load pause prompt texture
+		if( !gPausePromptTexture.loadFromRenderedText( "Press P to Pause or Unpause the Timer", textColor ) )
+		{
+			printf( "Unable to render pause/unpause prompt texture!\n" );
+			success = false;
+		}
+	}
+
+	return success;
+}
+
+void close()
+{
+	//Free loaded images
+	gTimeTextTexture.free();
+	gStartPromptTexture.free();
+	gPausePromptTexture.free();
+
+	//Free global font
+	TTF_CloseFont( gFont );
+	gFont = NULL;
+
+	//Destroy window	
+	SDL_DestroyRenderer( rend );
+	SDL_DestroyWindow( win );
+	
+	//Quit SDL subsystems
+	TTF_Quit();
+	IMG_Quit();
+	SDL_Quit();
+}
 
 int main(int agr, char *args[])
 {
@@ -353,15 +737,8 @@ int main(int agr, char *args[])
     cloud_rect.x = 0;
     cloud_rect.y = 0;
 
-    SDL_Rect t_rect;
-    //SDL_QueryTexture(cloud, NULL, NULL, &cloud_rect.w, &cloud_rect.h);
-    t_rect.w =300;
-    t_rect.h = 100;
-    t_rect.x = 0;
-    t_rect.y = 0;
 
-
-    surface=IMG_Load("res/fireA.png");
+surface=IMG_Load("res/fireA.png");
     SDL_Texture *fir=SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
     SDL_Rect src_fir,dest_fir;
@@ -392,15 +769,14 @@ int main(int agr, char *args[])
     int scroll = 0;
   //  int loob=0;
   int var=1;
-    TTF_Font *gFont = TTF_OpenFont( "res/Oswald-DemiBold.ttf", 20);
-	SDL_Color color = { 0,0, 255, 255 };
-
-    // surface=TTF_RenderText_Solid(gFont,"PLAYING",color);
-    // SDL_Texture *text1=SDL_CreateTextureFromSurface(rend,surface);
-    // SDL_FreeSurface(surface);
-    // SDL_RenderCopy(rend,text1,NULL,&t_rect);
-    // SDL_RenderPresent(rend);
     SDL_Event ev,e;
+    SDL_Color textColor = { 0, 0, 0, 255 };
+
+			//The application timer
+			LTimer timer;
+
+			//In memory text stream
+			std::stringstream timeText;
     while (isRunning)
     {
          int goob=0,loob=0;
@@ -452,19 +828,35 @@ int main(int agr, char *args[])
                         playerRect.x = textureWidth - frameWidth;
                     }
                 }
+                if( e.key.keysym.sym == SDLK_s )
+						{
+							if( timer.isStarted() )
+							{
+								timer.stop();
+							}
+							else
+							{
+								timer.start();
+							}
+						}
+						//Pause/unpause
+						else if( e.key.keysym.sym == SDLK_p )
+						{
+							if( timer.isPaused() )
+							{
+								timer.unpause();
+							}
+							else
+							{
+								timer.pause();
+							}
+						}
                 }
             }
         }
 
         if (main_game)
         {
-            int time=SDL_GetTicks()/1000;
-	            std::string i=std::to_string(time);
-	            SDL_Surface *surface1=TTF_RenderText_Solid(gFont,i.c_str(),{0,0,255});
-                SDL_Texture * texture = SDL_CreateTextureFromSurface(rend, surface1);
-                SDL_FreeSurface(surface1);
-             //   SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-                SDL_Rect dstrect = { 0, 0,50, 50 };
             double initTime=0;
             double startTime = SDL_GetTicks() / 1000.0;
         
@@ -513,7 +905,7 @@ int main(int agr, char *args[])
                 if(src_fir.x+fw>=tfW){
                     src_fir.x=0;
             frameTime++;
-            if (FPS / frameTime == 2) // will be repeated 7 times a second
+            if (FPS / frameTime == 1) // will be repeated 7 times a second
             {
                 frameTime = 0; // repeat
                 
@@ -549,10 +941,7 @@ int main(int agr, char *args[])
                 if (plarRect22.x >= txturWidth22 - r6.frmWid)
                     plarRect22.x = 0;
             }
-   
-
             SDL_RenderClear(rend);
-              
             SDL_RenderCopy(rend, tex0, NULL, NULL);
             SDL_RenderCopy(rend, bg_Tex, NULL, NULL);
             SDL_RenderCopy(rend, cloud, NULL, &cloud_rect);
@@ -563,36 +952,21 @@ int main(int agr, char *args[])
             SDL_RenderCopy(rend, fire2_Tex, &plarRect22, &plarPosition22);
             SDL_RenderCopy(rend, fire2_Tex, &plarRect3, &plarPosition3);
             SDL_RenderCopy(rend, fire2_Tex, &plarRect4, &plarPosition4);
-            SDL_RenderCopy(rend,texture,NULL,&dstrect);
             SDL_RenderCopy(rend, tex, &playerRect, &playerPosition);
-          
-            SDL_RenderPresent(rend);
-            SDL_RenderClear(rend);
+
             if(loob)
             {
-            SDL_RenderClear(rend);  
-            SDL_RenderCopy(rend, tex0, NULL, NULL);
-            SDL_RenderCopy(rend, bg_Tex, NULL, NULL);
-            SDL_RenderCopy(rend, cloud, NULL, &cloud_rect);
-            SDL_RenderCopy(rend, Putul_Tex, &playrRect, &playrPosition);
-            SDL_RenderCopy(rend, fire_Tex, &plarRect, &plarPosition);
-            SDL_RenderCopy(rend, fire_Tex, &plarRect1, &plarPosition1);
-            SDL_RenderCopy(rend, fire_Tex, &plarRect2, &plarPosition2);
-            SDL_RenderCopy(rend, fire2_Tex, &plarRect22, &plarPosition22);
-            SDL_RenderCopy(rend, fire2_Tex, &plarRect3, &plarPosition3);
-            SDL_RenderCopy(rend, fire2_Tex, &plarRect4, &plarPosition4);
-            SDL_RenderCopy(rend,texture,NULL,&dstrect);
-           // SDL_RenderCopy(rend, tex, &playerRect, &playerPosition);
                 dest_fir.y=playerPosition.y;
                 dest_fir.x=350;
                 SDL_RenderCopy(rend,fir,&src_fir,&playerPosition);
               //  SDL_RenderCopy(rend, tex, &playerRect, &playerPosition);
                 //SDL_RenderPresent(rend);
                 gameover=4;
-                main_game=0;
-            SDL_RenderPresent(rend);
-          //  SDL_RenderClear(rend);
+                
             }
+            SDL_RenderPresent(rend);
+            SDL_RenderClear(rend);
+
             if (playerPosition.y <= 100)
             {
                 gameover = 1;
@@ -665,7 +1039,8 @@ int main(int agr, char *args[])
          {
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend,againTex,NULL,NULL);
-            SDL_RenderPresent(rend);
+             SDL_RenderPresent(rend);
+
             int mousex, mousey;
             int buttons = SDL_GetMouseState(&mousex, &mousey);
            
@@ -674,19 +1049,36 @@ int main(int agr, char *args[])
             {
                 if (mousex >= WINDOW_WIDTH/2.5 && mousex <= WINDOW_WIDTH/1.5 && mousey >= WINDOW_HEIGHT/2.5&& mousey <= WINDOW_HEIGHT/1.5)
                 {
-                    main_game=1;
-                    gameover=0;
+                    gameover = 0;
                     y_pos=550.0;
+                    //count = 0;
                    playerPosition.x=400;
                    playerPosition.y=550;
                    playerRect.x=playerRect.y=0;
+                    
+                   
                 }
             }
         }
         else if (next_lvl == 1)
         {
-               
-                SDL_RenderClear(rend);
+            timeText.str( "" );
+				timeText << "Seconds since start time " << ( timer.getTicks() / 1000.f ) ; 
+
+				//Render text
+				if( !gTimeTextTexture.loadFromRenderedText( timeText.str().c_str(), textColor ) )
+				{
+					printf( "Unable to render time texture!\n" );
+				}
+
+				//Clear screen
+				SDL_SetRenderDrawColor( rend, 0xFF, 0xFF, 0xFF, 0xFF );
+				//SDL_RenderClear( rend);
+
+				//Render textures
+				gStartPromptTexture.render( ( WINDOW_WIDTH - gStartPromptTexture.getWidth() ) / 2, 0 );
+				gPausePromptTexture.render( ( WINDOW_WIDTH - gPausePromptTexture.getWidth() ) / 2, gStartPromptTexture.getHeight() );
+				gTimeTextTexture.render( ( WINDOW_WIDTH - gTimeTextTexture.getWidth() ) / 2, ( WINDOW_HEIGHT - gTimeTextTexture.getHeight() ) / 2 );
             cloud_rect.x += 1;
             if (cloud_rect.x >= WINDOW_WIDTH)
                 cloud_rect.x = 0;
@@ -698,19 +1090,13 @@ int main(int agr, char *args[])
                 if (src_l2b.x+f1W >= tx1W)
                     src_l2b.x = 0;
             }
-             
+         //   SDL_RenderClear(rend);
             SDL_SetRenderDrawColor(rend,0,255, 0x00, 0x00);
-           // SDL_RenderCopy(rend, cloud, NULL, &cloud_rect);
-          //  SDL_RenderCopy(rend,texture,NULL,&dstrect);
-           // SDL_RenderCopy(rend, l2boy, &src_l2b, &dest_l2b);
+            SDL_RenderCopy(rend, cloud, NULL, &cloud_rect);
+            SDL_RenderCopy(rend, l2boy, &src_l2b, &dest_l2b);
             SDL_RenderPresent(rend);
         }
-        
     }
-    Mix_FreeChunk(replay1);
-    SDL_DestroyRenderer(rend);
-    SDL_DestroyWindow(win);
-
-    SDL_Quit();
+  close();
     return 0;
 }
