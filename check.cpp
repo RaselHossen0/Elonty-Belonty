@@ -36,7 +36,7 @@ int main(int agr, char *args[])
     }
     /*if (!(IMG_Init(IMG_INIT_PNG|IMG_INIT_JPG)))
         printf("image: %s\n",SDL_GetError());*/
-
+    TTF_Init();
     printf("Initialization Complete\n");
 
     SDL_Window *win = SDL_CreateWindow("SDL Demonstration", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
@@ -376,14 +376,15 @@ SDL_PauseAudioDevice(deviceId, 0);
     int gameover = 1;
     int frameTime=0,FPS=60;
     double count=0;
-    int flag2;
+   
    
     
-    
+    TTF_Font* ff=TTF_OpenFont( "res/fonts/Oswald-Bold.ttf", 28 );
 
     SDL_Event ev;
     while(isRunning){
         int flag=0;
+        
          
         
         
@@ -410,6 +411,7 @@ SDL_PauseAudioDevice(deviceId, 0);
                         playerRect.x=0;
                     
                    flag=1;
+                   
 
                 
                     
@@ -438,9 +440,22 @@ SDL_PauseAudioDevice(deviceId, 0);
     
        if (gameover == 0)
         {
-             int flag2=1;
+              
            count=SDL_GetTicks() / 1000.0;
            frameTime++;
+           std::string i=std::to_string(count);
+    SDL_Surface* surface=TTF_RenderText_Solid(ff,i.c_str(),{255,255,255});
+    SDL_Texture* texx=SDL_CreateTextureFromSurface(rend,surface);
+    SDL_FreeSurface(surface);
+    
+    SDL_Rect rectt;
+    rectt.x=10;
+    rectt.y=10;
+    rectt.w=400;
+    rectt.h=100;
+    // SDL_SetRenderDrawColor(rend,0,0,0xFF,SDL_ALPHA_OPAQUE);
+        //SDL_RenderClear(rend);
+        
            
            if(FPS/frameTime==1)//will be repeated 7 times a second
             {
@@ -480,52 +495,54 @@ SDL_PauseAudioDevice(deviceId, 0);
 
 
             
-
-             if (count >= 9.5&&count<=12.5){
-                if(flag){
-                   // SDL_DestroyTexture(tex);
-                   //SDL_SetRenderTarget(rend,tex);
-                   //SDL_SetRenderDrawColor(rend,255,0,0,255);
-                   //SDL_RenderClear(rend);
-                    deadman.x = 350;
-                    deadman.y = playerPosition.y;
-                    SDL_SetRenderDrawColor(rend, 255,0,0,255);
-            
-                    SDL_RenderDrawLine(rend, 270, 170 , 395, deadman.y+50);
-                        
-                 
-
-                    SDL_RenderCopy(rend, deadmanTex, NULL, &deadman);
-                    SDL_RenderPresent(rend);
-                    SDL_Delay(2000);
-                    gameover=4;
-                    flag2=0;
-                   
-                }
-             }
-           
-            SDL_RenderClear(rend);
+          SDL_RenderClear(rend);
             SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
-            SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
+            SDL_RenderCopy(rend,texx,NULL,&rectt);
+
+           SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
+           SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
             SDL_RenderCopy(rend,fire_Tex,&plarRect,&plarPosition);
             SDL_RenderCopy(rend,fire_Tex,&plarRect1,&plarPosition1);
             SDL_RenderCopy(rend,fire_Tex,&plarRect2,&plarPosition2);
             SDL_RenderCopy(rend,fire2_Tex,&plarRect22,&plarPosition22);
             SDL_RenderCopy(rend,fire2_Tex,&plarRect3,&plarPosition3);
             SDL_RenderCopy(rend,fire2_Tex,&plarRect4,&plarPosition4);
-            //SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
-            //SDL_RenderPresent(rend);
-           
-            if(flag2==1){
-                SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
-                SDL_RenderPresent(rend);
-            }  
-             
-             
-           
+            SDL_RenderPresent(rend);
+             if (count >= 9.5&&count<=12.5){
+                
+                if(flag){
+                   
+                   SDL_RenderClear(rend);
+                   SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
+                   SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
+                   SDL_RenderCopy(rend,fire_Tex,&plarRect,&plarPosition);
+                   SDL_RenderCopy(rend,fire_Tex,&plarRect1,&plarPosition1);
+                   SDL_RenderCopy(rend,fire_Tex,&plarRect2,&plarPosition2);
+                   SDL_RenderCopy(rend,fire2_Tex,&plarRect22,&plarPosition22);
+                   SDL_RenderCopy(rend,fire2_Tex,&plarRect3,&plarPosition3);
+                   SDL_RenderCopy(rend,fire2_Tex,&plarRect4,&plarPosition4);
+                    deadman.x = 350;
+                    deadman.y = playerPosition.y;
+                    SDL_SetRenderDrawColor(rend, 255,0,0,255);
+            
+                    SDL_RenderDrawLine(rend, 270, 170 , 395, deadman.y+50);
+                    
+                    SDL_SetRenderDrawColor(rend, 0,0,0,0);
+                        
+                 
 
-            
-            
+                    SDL_RenderCopy(rend, deadmanTex, NULL, &deadman);
+                    SDL_RenderPresent(rend);
+                    SDL_Delay(5000);
+                    gameover=4;
+                    
+                   
+                }
+             }
+           
+           
+           
+           
         
            
             if(playerPosition.y<=100)
