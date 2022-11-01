@@ -1,25 +1,5 @@
-#include "init.h"
-#include "audio.h"
-// void Destroy(){
-//     surface=IMG_Load("res/fireA.png");
-//     SDL_Texture *fir=SDL_CreateTextureFromSurface(rend,surface);
-//     SDL_FreeSurface(surface);
-//     SDL_Rect src_fir,dest_fir;
-//     int tfW,tfH,fw,fh;
-//     SDL_QueryTexture(fir,NULL,NULL,&tfW,&tfH);
-//     fw=tfW/8;
-//     fh=tfH/4;
-//     src_fir.w=fw;
-//     src_fir.h=fh;
-//     src_fir.x=0;
-//     src_fir.y=0;
-//     dest_fir.w=400;
-//     dest_fir.h=400;
-//     dest_fir.x=dest_fir.y=0;
-// SDL_RenderCopy(rend,fir,&src_fir,&dest_fir);
-// SDL_RenderPresent(rend);
-    
-// }
+#include "header.h"
+
 
 int main(int agr, char *args[])
 {
@@ -394,7 +374,7 @@ int main(int agr, char *args[])
   int var=1;
     TTF_Font *gFont = TTF_OpenFont( "res/Oswald-DemiBold.ttf", 20);
 	SDL_Color color = { 0,0, 255, 255 };
-
+    texCreate();
     // surface=TTF_RenderText_Solid(gFont,"PLAYING",color);
     // SDL_Texture *text1=SDL_CreateTextureFromSurface(rend,surface);
     // SDL_FreeSurface(surface);
@@ -513,7 +493,7 @@ int main(int agr, char *args[])
                 if(src_fir.x+fw>=tfW){
                     src_fir.x=0;
             frameTime++;
-            if (FPS / frameTime == 2) // will be repeated 7 times a second
+            if (FPS / frameTime == 1) // will be repeated 7 times a second
             {
                 frameTime = 0; // repeat
                 
@@ -686,20 +666,23 @@ int main(int agr, char *args[])
         else if (next_lvl == 1)
         {
                
-                SDL_RenderClear(rend);
             cloud_rect.x += 1;
             if (cloud_rect.x >= WINDOW_WIDTH)
                 cloud_rect.x = 0;
             frameTime++;
-            if (frameTime==33)
+            if (FPS/frameTime==1)
             {
                 frameTime = 0;
                 src_l2b.x += f1W;
                 if (src_l2b.x+f1W >= tx1W)
                     src_l2b.x = 0;
             }
+          
+
              
+                SDL_RenderClear(rend);
             SDL_SetRenderDrawColor(rend,0,255, 0x00, 0x00);
+            SDL_RenderCopy(rend,bg222,NULL,NULL);
            SDL_RenderCopy(rend, cloud, NULL, &cloud_rect);
           // SDL_RenderCopy(rend,texture,NULL,&dstrect);
            SDL_RenderCopy(rend, l2boy, &src_l2b, &dest_l2b);
@@ -710,7 +693,8 @@ int main(int agr, char *args[])
     Mix_FreeChunk(replay1);
     SDL_DestroyRenderer(rend);
     SDL_DestroyWindow(win);
-
+  TTF_Quit();
     SDL_Quit();
+  
     return 0;
 }

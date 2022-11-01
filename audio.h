@@ -1,5 +1,5 @@
 #pragma once
-#include "init.h"
+#include "header.h"
 Mix_Chunk *replay, *replay1, *run1, *run2, *menu, *mouse,*rand1,*rand2,*rand3;
 void audio(void)
 {
@@ -14,6 +14,6 @@ void audio(void)
     replay1 = Mix_LoadWAV("res/game_over.wav");
     menu = Mix_LoadWAV("res/menusound.mp3");
     mouse = Mix_LoadWAV("res/mouseclick");
-    run1 = Mix_LoadWAV("");
-    run2 = Mix_LoadWAV("");
+    // run1 = Mix_LoadWAV("");
+    // run2 = Mix_LoadWAV("");
 }
