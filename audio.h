@@ -13,7 +13,7 @@ void audio(void)
     replay = Mix_LoadWAV("res/music.wav");
     replay1 = Mix_LoadWAV("res/game_over.wav");
     menu = Mix_LoadWAV("res/menusound.mp3");
-    mouse = Mix_LoadWAV("res/mouseclick");
+    mouse = Mix_LoadWAV("res/mouseclick.mp3");
     // run1 = Mix_LoadWAV("");
     // run2 = Mix_LoadWAV("");
 }

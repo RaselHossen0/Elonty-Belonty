@@ -4,3 +4,4 @@
 // #include "loadMedia.h"
 // #include "allRect.h"
 #include "loadTex.h"
+#include "loadRect.h"
