@@ -3,89 +3,19 @@
 
 int main(int agr, char *args[])
 {
-
     init();
+    audio();
+    texCreate();
+    loadRect();
 
-    surface = IMG_Load("res/dip.jpg");
-    if (!surface)
-    {
-        printf("Redbar Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture *tex0 = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!tex0)
-    {
-        printf("Redline Texture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    // Mix_PlayChannel(-1,menu,1);
-    SDL_RenderClear(rend);
+     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, tex0, NULL, NULL);
     SDL_RenderPresent(rend);
-    SDL_Delay(1000 / 3);
+   SDL_Delay(1000 );
+   
+    // Mix_PlayChannel(-1,menu,1);
 
-    audio();
-
-    surface = IMG_Load("res/start.jpg");
-    if (!surface)
-    {
-        printf("Redbar Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture *tex3 = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-
-    if (!tex3)
-    {
-        printf("Redline Texture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    TTF_Font *font = TTF_OpenFont("res/font/Oswald-Bold.ttf", 40);
-    surface = TTF_RenderText_Solid(font, "Elonti-Belonti", {0, 0, 0});
-
-    SDL_Texture *fontTex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_Rect textRect = {40, 40, 500, 50};
-    SDL_FreeSurface(surface);
-
-    SDL_Rect start_rect;
-    start_rect.w = 300;
-    start_rect.h = 150;
-    start_rect.x = (WINDOW_WIDTH - start_rect.w) / 2;
-    start_rect.y = (WINDOW_HEIGHT - start_rect.h) / 2;
-
-    surface = IMG_Load("res/newman.png");
-    if (!surface)
-    {
-        printf("Redbar Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Texture *tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!tex)
-    {
-        printf("Redline Texture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+   
 
     SDL_Rect playerRect;     // rect for a single frame of the sprite sheet
     SDL_Rect playerPosition; // rect for the whole sprite sheet
@@ -117,25 +47,7 @@ int main(int agr, char *args[])
     boy2.h = frameHeight;
     // SDL_SetRenderDrawColor(rend,0xFF,0,0,0xFF);
 
-    surface = IMG_Load("res/gameover.jpeg");
-    if (!surface)
-    {
-        printf("Green rectangle Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture *gameover_tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!tex)
-    {
-        printf("Green Rectangle Texture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+  
 
     SDL_Rect gameover_rect;
     gameover_rect.w = 400;
@@ -143,9 +55,7 @@ int main(int agr, char *args[])
     gameover_rect.x = (WINDOW_WIDTH - gameover_rect.w) / 2;
     gameover_rect.y = (WINDOW_HEIGHT - gameover_rect.h) / 2 - 250;
 
-    surface = IMG_Load("res/bg.png");
-    SDL_Texture *bg_Tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
+    
 
     surface = IMG_Load("res/putull.png");
     SDL_Texture *Putul_Tex = SDL_CreateTextureFromSurface(rend, surface);
@@ -297,35 +207,6 @@ int main(int agr, char *args[])
     plarRect4.w = r8.frmWid;
     plarRect4.h = r8.frmHit;
 
-    surface = IMG_Load("res/replay.png");
-    if (!surface)
-    {
-        printf("replay Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture *replay_tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!replay_tex)
-    {
-        printf("replayTexture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Rect replay_rect;
-    replay_rect.w = 200;
-    replay_rect.h = 100;
-    replay_rect.x = (WINDOW_WIDTH - replay_rect.w) / 2;
-    replay_rect.y = (WINDOW_HEIGHT - replay_rect.h) / 2;
-
-    surface = IMG_Load("res/cloud.png");
-    SDL_Texture *cloud = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-
     SDL_Rect cloud_rect;
     SDL_QueryTexture(cloud, NULL, NULL, &cloud_rect.w, &cloud_rect.h);
     cloud_rect.w /= 8;
@@ -344,6 +225,7 @@ int main(int agr, char *args[])
     surface=IMG_Load("res/fireA.png");
     SDL_Texture *fir=SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
+    
     SDL_Rect src_fir,dest_fir;
     int tfW,tfH,fw,fh;
     SDL_QueryTexture(fir,NULL,NULL,&tfW,&tfH);
@@ -357,9 +239,7 @@ int main(int agr, char *args[])
     dest_fir.h=playerPosition.h*2;
     dest_fir.x=dest_fir.y=0;
 
-    surface = IMG_Load("res/playAgain.png");
-    SDL_Texture *againTex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
+   
 
     bool isRunning = true;
     float y_pos = 550.0;
@@ -374,7 +254,7 @@ int main(int agr, char *args[])
   int var=1;
     TTF_Font *gFont = TTF_OpenFont( "res/Oswald-DemiBold.ttf", 20);
 	SDL_Color color = { 0,0, 255, 255 };
-    texCreate();
+    
     // surface=TTF_RenderText_Solid(gFont,"PLAYING",color);
     // SDL_Texture *text1=SDL_CreateTextureFromSurface(rend,surface);
     // SDL_FreeSurface(surface);
@@ -589,7 +469,7 @@ int main(int agr, char *args[])
             // Mix_PlayChannel( -1, replay, 0 );
             // Mix_PlayChannel(-1,menu,0);
             SDL_RenderClear(rend);
-            SDL_RenderCopy(rend, fontTex, NULL, &textRect);
+          //  SDL_RenderCopy(rend, fontTex, NULL, &textRect);
             SDL_RenderCopy(rend, tex3, NULL, &start_rect);
             SDL_RenderPresent(rend);
 
@@ -601,7 +481,7 @@ int main(int agr, char *args[])
             {
                 if (mousx >= start_rect.x && mousx <= (start_rect.x + start_rect.w) && mousy >= start_rect.y && mousy <= (start_rect.y + start_rect.h))
                 {
-                    Mix_PlayChannel(-1, mouse, 4);
+                    Mix_PlayChannel(-1, mouse, 0);
                     // SDL_Delay(2000);
                     main_game = 1;
                 }
@@ -624,7 +504,7 @@ int main(int agr, char *args[])
             {
                 if (mousex >= replay_rect.x && mousex <= (replay_rect.x + replay_rect.w) && mousey >= replay_rect.y && mousey <= (replay_rect.y + replay_rect.h))
                 {
-                    Mix_PlayChannel(-1, mouse, 0);
+                    Mix_PlayChannel(-1, mouse, 2);
                     y_pos = 550.0;
                     playerPosition.x = 400;
                     playerPosition.y = 550;
@@ -654,6 +534,7 @@ int main(int agr, char *args[])
             {
                 if (mousex >= WINDOW_WIDTH/2.5 && mousex <= WINDOW_WIDTH/1.5 && mousey >= WINDOW_HEIGHT/2.5&& mousey <= WINDOW_HEIGHT/1.5)
                 {
+                    Mix_PlayChannel(-1,mouse,0);
                     main_game=1;
                     gameover=0;
                     y_pos=550.0;
@@ -691,9 +572,14 @@ int main(int agr, char *args[])
         
     }
     Mix_FreeChunk(replay1);
+    Mix_FreeChunk(rand1);
+    Mix_FreeChunk(rand2);
+    Mix_FreeChunk(rand3);
+    Mix_FreeChunk(replay1);
+     TTF_Quit();
     SDL_DestroyRenderer(rend);
     SDL_DestroyWindow(win);
-  TTF_Quit();
+ 
     SDL_Quit();
   
     return 0;
