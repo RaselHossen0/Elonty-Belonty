@@ -253,6 +253,22 @@ int main(int agr, char *args[])
     obsRect.y=500;
     obsRect.w=230;
     obsRect.h=120;
+
+    surface =IMG_Load("res/bomb.png");
+    //SDL_Texture *obs_Tex =SDL_CreateTexture(rend,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,150,150);
+    SDL_Texture *bomb_Tex =SDL_CreateTextureFromSurface(rend,surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect  bombRect;
+    bombRect.x=0;
+    bombRect.y=600;
+    bombRect.w=230;
+    bombRect.h=120;
+
+    SDL_Rect  bombRect2;
+    bombRect2.x=1200;
+    bombRect2.y=600;
+    bombRect2.w=230;
+    bombRect2.h=120;
     
     
     surface =IMG_Load("res/putull.png");
@@ -296,7 +312,7 @@ int main(int agr, char *args[])
     plarRect1.w=r2.frmWid;
     plarRect1.h=r2.frmHit;
 
-    SDL_Rect  plarRect2;//rect for a single frame of the sprite sheet
+    SDL_Rect plarRect2;//rect for a single frame of the sprite sheet
     SDL_Rect plarPosition2;//rect for the whole sprite sheet
     plarPosition2.x=430;
     plarPosition2.y=100;
@@ -434,7 +450,8 @@ main=Mix_LoadWAV("res/aud.mp3");
            }
            
     
-
+int bx=0,by=0;
+int b2x=0,b2y=0;
    
    int lastTime=SDL_GetTicks()/1000;
     
@@ -501,6 +518,8 @@ main=Mix_LoadWAV("res/aud.mp3");
 
         {
              SDL_RenderClear(rend);
+            
+
                cloudx =cloudx+0.5;
                cloud.x=(int)cloudx;
             if (cloud.x >= WINDOW_WIDTH)
@@ -563,10 +582,10 @@ main=Mix_LoadWAV("res/aud.mp3");
             
         
             
-             if (timee >=t1&&timee<=t1+3||timee >=t2&&timee<=t2+4||timee>=50){
+             if (timee >=t1&&timee<=t1+3||timee >=t2&&timee<=t2+4||timee>=30){
 
             Mix_HaltChannel(-1);
-            SDL_RenderClear(rend);
+            //SDL_RenderClear(rend);
             SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
             SDL_RenderCopy(rend,texx,NULL,&rectt);
             SDL_RenderCopy(rend,cloud_Tex,NULL,&cloud);
@@ -584,7 +603,7 @@ main=Mix_LoadWAV("res/aud.mp3");
             
 
             //SDL_RenderPresent(rend);
-                if(flag||timee>=20){
+                if(flag||timee>=30){
                    
                   //SDL_RenderClear(rend);
                    SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
@@ -609,7 +628,7 @@ main=Mix_LoadWAV("res/aud.mp3");
                     SDL_SetRenderDrawColor(rend, 0,0,0,0);
                         
                  
-
+                    //for(int t= timee;t<timee+3;t++)
                     SDL_RenderCopy(rend, deadmanTex, NULL, &deadman);
                     //SDL_RenderPresent(rend);
                     SDL_Delay(3000);
@@ -645,14 +664,52 @@ main=Mix_LoadWAV("res/aud.mp3");
             
             }
            if(timee>3){
-          
+           bx++;
+             by++;
+             if(bombRect.x<400){
+           
+             bombRect.x+=bx;
+             bombRect.y-=by;
+           }
+           else
+           {
+           
+             bombRect.x+=bx;
+             bombRect.y+=by;
+           }
+            
+            if(!(bombRect.x>=300&&bombRect.y>=400)){
+           
+             SDL_RenderCopy(rend, bomb_Tex, NULL,&bombRect);
+           }
+
            SDL_RenderCopy(rend, obs_Tex, NULL,&obsRect);
+           
 
            }
-           if(timee>9){
+           if(timee>7){
           
-           SDL_RenderCopy(rend, obs2_Tex, NULL,&obs2Rect);
+           b2x++;
+             b2y++;
+             if(bombRect2.x>600){
+           
+             bombRect2.x-=b2x;
+             bombRect2.y-=b2y;
+           }
+           else
+           {
+           
+             bombRect2.x-=b2x;
+             bombRect2.y+=b2y;
+           }
+            
+            if(!(bombRect2.x<=300&bombRect2.y>=300)){
+           
+             SDL_RenderCopy(rend, bomb_Tex, NULL,&bombRect2);
+           }
 
+           SDL_RenderCopy(rend, obs2_Tex, NULL,&obs2Rect);
+           
            }
            
            

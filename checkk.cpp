@@ -259,14 +259,14 @@ int main(int agr, char *args[])
     SDL_Texture *bomb_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
     SDL_Rect  bombRect;
-    bombRect.x=500;
-    bombRect.y=500;
+    bombRect.x=0;
+    bombRect.y=600;
     bombRect.w=230;
     bombRect.h=120;
 
     SDL_Rect  bombRect2;
-    bombRect2.x=300;
-    bombRect2.y=300;
+    bombRect2.x=1200;
+    bombRect2.y=600;
     bombRect2.w=230;
     bombRect2.h=120;
     
@@ -450,7 +450,8 @@ main=Mix_LoadWAV("res/aud.mp3");
            }
            
     
-
+int bx=0,by=0;
+int b2x=0,b2y=0;
    
    int lastTime=SDL_GetTicks()/1000;
     
@@ -517,6 +518,8 @@ main=Mix_LoadWAV("res/aud.mp3");
 
         {
              SDL_RenderClear(rend);
+            
+
                cloudx =cloudx+0.5;
                cloud.x=(int)cloudx;
             if (cloud.x >= WINDOW_WIDTH)
@@ -661,16 +664,52 @@ main=Mix_LoadWAV("res/aud.mp3");
             
             }
            if(timee>3){
-          
+           bx++;
+             by++;
+             if(bombRect.x<400){
+           
+             bombRect.x+=bx;
+             bombRect.y-=by;
+           }
+           else
+           {
+           
+             bombRect.x+=bx;
+             bombRect.y+=by;
+           }
+            
+            if(!(bombRect.x>=300&&bombRect.y>=400)){
+           
+             SDL_RenderCopy(rend, bomb_Tex, NULL,&bombRect);
+           }
+
            SDL_RenderCopy(rend, obs_Tex, NULL,&obsRect);
-           SDL_RenderCopy(rend, bomb_Tex, NULL,&bombRect);
+           
 
            }
-           if(timee>9){
+           if(timee>7){
           
-           SDL_RenderCopy(rend, obs2_Tex, NULL,&obs2Rect);
-           SDL_RenderCopy(rend, bomb_Tex, NULL,&bombRect2);
+           b2x++;
+             b2y++;
+             if(bombRect2.x>600){
+           
+             bombRect2.x-=b2x;
+             bombRect2.y-=b2y;
+           }
+           else
+           {
+           
+             bombRect2.x-=b2x;
+             bombRect2.y+=b2y;
+           }
+            
+            if(!(bombRect2.x<=300&bombRect2.y>=300)){
+           
+             SDL_RenderCopy(rend, bomb_Tex, NULL,&bombRect2);
+           }
 
+           SDL_RenderCopy(rend, obs2_Tex, NULL,&obs2Rect);
+           
            }
            
            
