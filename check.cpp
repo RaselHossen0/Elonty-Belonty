@@ -540,7 +540,7 @@ main=Mix_LoadWAV("res/aud.mp3");
             
         
             
-             if (timee >=t1&&timee<=t1+3||timee >=t2&&timee<=t2+4||timee>=50){
+             if (timee >=t1&&timee<=t1+3||timee >=t2&&timee<=t2+4||timee>=22){
 
             Mix_HaltChannel(-1);
             SDL_RenderClear(rend);
@@ -561,7 +561,7 @@ main=Mix_LoadWAV("res/aud.mp3");
             
 
             SDL_RenderPresent(rend);
-                if(flag||timee>=20){
+                if(flag||timee>=22){
                    
                    SDL_RenderClear(rend);
                    SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
