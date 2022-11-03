@@ -23,7 +23,8 @@ struct rect{
     }
   
 };
-void audio(void);
+//void audio(void);
+
             
 
 
@@ -36,8 +37,11 @@ int main(int agr, char *args[])
     }
     /*if (!(IMG_Init(IMG_INIT_PNG|IMG_INIT_JPG)))
         printf("image: %s\n",SDL_GetError());*/
+    if(Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048)<0)
+    printf("successful");
     TTF_Init();
     printf("Initialization Complete\n");
+
 
     SDL_Window *win = SDL_CreateWindow("SDL Demonstration", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 
@@ -212,23 +216,23 @@ int main(int agr, char *args[])
     SDL_Texture *bg_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
 
-    surface =IMG_Load("res/g.png");
+    surface =IMG_Load("res/green.png");
     SDL_Texture *g_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
     SDL_Rect  gRect;
-    gRect.x=1190;
-    gRect.y=138;
-    gRect.w=75;
-    gRect.h=75;
+    gRect.x=1090;
+    gRect.y=109;
+    gRect.w=220;
+    gRect.h=130;
 
-    surface =IMG_Load("res/r.png");
+    surface =IMG_Load("res/red.png");
     SDL_Texture *r_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
     SDL_Rect  rRect;
-    rRect.x=1190;
-    rRect.y=66;
-    rRect.w=75;
-    rRect.h=75;
+    rRect.x=1090;
+    rRect.y=28;
+    rRect.w=230;
+    rRect.h=120;
     
     surface =IMG_Load("res/putull.png");
     SDL_Texture *Putul_Tex =SDL_CreateTextureFromSurface(rend,surface);
@@ -236,10 +240,10 @@ int main(int agr, char *args[])
     SDL_Rect  playrRect;
     SDL_Rect playrPosition;
     
-    playrPosition.x=595;
-    playrPosition.y=30;
-    playrPosition.w=75;
-    playrPosition.h=75;
+    playrPosition.x=614;
+    playrPosition.y=2;
+    playrPosition.w=50;
+    playrPosition.h=50;
 
     int texturWidth,texturHeight;
     SDL_QueryTexture(Putul_Tex,NULL,NULL,&texturWidth,&texturHeight);
@@ -350,17 +354,21 @@ int main(int agr, char *args[])
         SDL_Quit();
         return 1;
     }
- SDL_Init(SDL_INIT_AUDIO);
-SDL_AudioSpec wavSpec;
-Uint32 wavLength;
-Uint8 *wavBuffer;
+ //SDL_Init(SDL_INIT_AUDIO);
+//SDL_AudioSpec wavSpec;
+//Uint32 wavLength;
+//Uint8 *wavBuffer;
+
  
-SDL_LoadWAV("res/background.wav", &wavSpec, &wavBuffer, &wavLength);
-SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
+//SDL_LoadWAV("res/background.wav", &wavSpec, &wavBuffer, &wavLength);
+//SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
+
+Mix_Chunk *main;
+main=Mix_LoadWAV("res/aud.mp3");
 
 
-int success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
-SDL_PauseAudioDevice(deviceId, 0);
+//int success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
+//SDL_PauseAudioDevice(deviceId, 0);
 
 
 
@@ -376,7 +384,34 @@ SDL_PauseAudioDevice(deviceId, 0);
     float y_pos = 550.0,cloudx=0.0;
     int gameover = 1;
     int frameTime=0,FPS=60;
-    int count=0,count2=0,time=0,last=0;
+    int count=0,count2=0,timee=0,last=0;
+    int t1,t2;
+    srand(time(NULL));
+           int c=rand()%5;
+           switch(c){
+            case 0:
+            t1=4;
+            t2=13;
+            break;
+            case 1:
+            t1=4;
+            t2=14;
+            break;
+            case 2:
+            t1=5;
+            t2=14;
+            break;
+            case 3:
+            t1=3;
+            t2=12;
+            break;
+            case 4:
+            t1=5;
+            t2=17;
+            break;
+
+           }
+           
     
 
    
@@ -454,8 +489,8 @@ SDL_PauseAudioDevice(deviceId, 0);
            count=SDL_GetTicks() / 1000.0;
            //int passedTime=count-lastTime;
            //lastTime=count;
-           time=count-count2-last;
-    std::string i=std::to_string(time);
+           timee=count-count2-last;
+    std::string i=std::to_string(timee);
     SDL_Surface* surface=TTF_RenderText_Solid(ff,i.c_str(),{255,255,255});
     SDL_Texture* texx=SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
@@ -500,12 +535,14 @@ SDL_PauseAudioDevice(deviceId, 0);
             
           
           }
-
+           
 
             
         
             
-             if (time >= 3&&time<=7||time >= 12&&time<=16||time >= 21&&time<=25||time>=30){
+             if (timee >=t1&&timee<=t1+3||timee >=t2&&timee<=t2+4||timee>=50){
+
+            Mix_HaltChannel(-1);
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
             SDL_RenderCopy(rend,texx,NULL,&rectt);
@@ -524,7 +561,7 @@ SDL_PauseAudioDevice(deviceId, 0);
             
 
             SDL_RenderPresent(rend);
-                if(flag||time>=20){
+                if(flag||timee>=20){
                    
                    SDL_RenderClear(rend);
                    SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
@@ -536,7 +573,7 @@ SDL_PauseAudioDevice(deviceId, 0);
                    SDL_RenderCopy(rend,fire_Tex,&plarRect2,&plarPosition2);
                    SDL_RenderCopy(rend,fire2_Tex,&plarRect22,&plarPosition22);
                    SDL_RenderCopy(rend,fire2_Tex,&plarRect3,&plarPosition3);
-                    SDL_RenderCopy(rend,r_Tex,NULL,&rRect);
+                   SDL_RenderCopy(rend,r_Tex,NULL,&rRect);
                    
 
                     
@@ -559,6 +596,7 @@ SDL_PauseAudioDevice(deviceId, 0);
                 }
              
                 SDL_RenderClear(rend);
+                
                
              }
              else
@@ -579,7 +617,10 @@ SDL_PauseAudioDevice(deviceId, 0);
 
             
 
-            SDL_RenderPresent(rend);}
+            SDL_RenderPresent(rend);
+            Mix_PlayChannel(-1,main,0);
+            
+            }
            
            
            
@@ -683,8 +724,9 @@ SDL_PauseAudioDevice(deviceId, 0);
     
 
     SDL_Delay(100);
-    SDL_CloseAudioDevice(deviceId);
-    SDL_FreeWAV(wavBuffer);
+    Mix_FreeChunk(main);
+    //SDL_CloseAudioDevice(deviceId);
+    //SDL_FreeWAV(wavBuffer);
     SDL_DestroyRenderer(rend);
     SDL_DestroyWindow(win);
 
