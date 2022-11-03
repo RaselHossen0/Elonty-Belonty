@@ -306,21 +306,7 @@ int main(int agr, char *args[])
         SDL_Quit();
         return 1;
     }
-    SDL_Texture *replay_tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface);
-    if (!replay_tex)
-    {
-        printf("replayTexture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Rect replay_rect;
-    replay_rect.w = 200;
-    replay_rect.h = 100;
-    replay_rect.x = (WINDOW_WIDTH - replay_rect.w) / 2;
-    replay_rect.y = (WINDOW_HEIGHT - replay_rect.h) / 2;
+   
 
     surface = IMG_Load("res/cloud.png");
     SDL_Texture *cloud = SDL_CreateTextureFromSurface(rend, surface);

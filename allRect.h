@@ -30,17 +30,7 @@ SDL_Rect start_rect;
 
      SDL_Rect src_fir,dest_fir;
 
-     struct rect
-{
-    int frmWid, frmHit;
-
-    rect(int fW, int fH)
-    {
-
-        frmWid = fW;
-        frmHit = fH;
-    }
-};
+     
   int frameWidth, frameHeight;
     int textureWidth, textureHeight;
 
