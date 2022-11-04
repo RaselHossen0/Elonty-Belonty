@@ -631,7 +631,7 @@ int b2x=0,b2y=0;
                     //for(int t= timee;t<timee+3;t++)
                     SDL_RenderCopy(rend, deadmanTex, NULL, &deadman);
                     //SDL_RenderPresent(rend);
-                    SDL_Delay(3000);
+                    //SDL_Delay(3000);
                     gameover=4;
                     
                    
@@ -726,6 +726,7 @@ int b2x=0,b2y=0;
             SDL_RenderPresent(rend);
         }
         else if(gameover==4){
+            SDL_Delay(2000);
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend,againTex,NULL,NULL);
              SDL_RenderPresent(rend);
