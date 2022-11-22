@@ -145,8 +145,8 @@ int main(int agr, char *args[])
     SDL_Rect playerPosition;//rect for the whole sprite sheet
     playerPosition.x=0;
     playerPosition.y=400;
-    playerPosition.w=150;
-    playerPosition.h=150;//ei rec(square) er moddher kothao texture (runman) load hobe
+    playerPosition.w=100;
+    playerPosition.h=100;//ei rec(square) er moddher kothao texture (runman) load hobe
 
     int textureWidth,textureHeight;
     SDL_QueryTexture(tex,NULL,NULL,&textureWidth,&textureHeight);
@@ -236,24 +236,24 @@ int main(int agr, char *args[])
     SDL_Rect  obsRect;
     obsRect.x=500;
     obsRect.y=500;
-    obsRect.w=230;
-    obsRect.h=120;
+    obsRect.w=180;
+    obsRect.h=100;
 
     surface =IMG_Load("res/bomb.png");
     //SDL_Texture *obs_Tex =SDL_CreateTexture(rend,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,150,150);
     SDL_Texture *bomb_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
     SDL_Rect  bombRect;
-    bombRect.x=98;
-    bombRect.y=505;
-    bombRect.w=120;
-    bombRect.h=70;
+    bombRect.x=198;
+    bombRect.y=100;
+    bombRect.w=90;
+    bombRect.h=50;
 
     SDL_Rect  bombRect2;
-    bombRect2.x=1120;
+    bombRect2.x=1200;
     bombRect2.y=520;
-    bombRect2.w=550;
-    bombRect2.h=400;
+    bombRect2.w=90;
+    bombRect2.h=50;
     
     
     surface =IMG_Load("res/putulh.png");
@@ -596,6 +596,10 @@ while(isRunning){
                    }         
                          }
                         if(f==1){
+                            
+                             if(temp2==5)
+                           f=0;
+                            
                             x_pos = x_pos + (1400/ 60);
                             if(playerPosition.x<1180)
                                 playerPosition.x= (int)x_pos;
@@ -603,8 +607,10 @@ while(isRunning){
                                {x_pos=1180;
                                 playerPosition.x =1180;}
                       
-                    
-                                playerRect.x+=r4.frmWid;
+                           
+                            playerRect.x+=r4.frmWid;
+                           
+
                              if(playerRect.x>=textureWidth-2*r4.frmWid)
                             { playerRect.x=textureWidth-r4.frmWid;
                             playerPosition.x= (int)x_pos-600/60;
@@ -709,17 +715,17 @@ while(isRunning){
             
         
            
-           if (timee>=4){
+           if (timee >=t1&&timee<=t1+3||timee >=t2&&timee<=t2+4||timee>=22){
 
             Mix_HaltChannel(-1);
             SDL_RenderCopy(rend,r_Tex,NULL,&rRect);
-                if(flag||timee>=5){
+                if(flag||timee>=22){
                    
                     deadman.x = 350;
                     deadman.y = playerPosition.y;
                     SDL_SetRenderDrawColor(rend, 0,0,0,0);
                     for(int i=0;i<7;i++)
-                    SDL_RenderDrawLine(rend, 308, 170 , 420+i,playerPosition.y+120+i);
+                    SDL_RenderDrawLine(rend, 1200, 600 , playerPosition.x+i+100,playerPosition.y+i+50);
                     
                     SDL_SetRenderDrawColor(rend, 0,0,0,0);
                         
@@ -728,7 +734,7 @@ while(isRunning){
 
 
                    
-                    SDL_RenderCopy(rend, deadmanTex, NULL, &deadman);
+                    //SDL_RenderCopy(rend, deadmanTex, NULL, &deadman);
                     
                    //gameover=4;
                    //playerRect.x=0;
@@ -776,7 +782,7 @@ while(isRunning){
             SDL_Delay(2000);
            SDL_RenderClear(rend);
             //temp2=11;
-            //gameover=4;
+             Mix_HaltChannel(-1);
             temp2=22;
             printf("hello");
             }

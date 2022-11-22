@@ -119,7 +119,7 @@ int main(int agr, char *args[])
     start_rect.x = (WINDOW_WIDTH - start_rect.w) / 2;
     start_rect.y = (WINDOW_HEIGHT - start_rect.h) / 2 - 100;
     
-    surface = IMG_Load("res/newman.png");
+    surface = IMG_Load("res/char.png");
     if (!surface)
     {
         printf("Redbar Surface Error: %s\n", IMG_GetError());
@@ -143,8 +143,8 @@ int main(int agr, char *args[])
 
     SDL_Rect  playerRect;//rect for a single frame of the sprite sheet
     SDL_Rect playerPosition;//rect for the whole sprite sheet
-    playerPosition.x=350;
-    playerPosition.y=580;
+    playerPosition.x=0;
+    playerPosition.y=400;
     playerPosition.w=150;
     playerPosition.h=150;//ei rec(square) er moddher kothao texture (runman) load hobe
 
@@ -152,7 +152,7 @@ int main(int agr, char *args[])
     SDL_QueryTexture(tex,NULL,NULL,&textureWidth,&textureHeight);
 
     
-    struct rect r4(textureWidth/9,textureHeight);
+    struct rect r4(textureWidth/6,textureHeight/5);
     playerRect.x=playerRect.y=0;
     playerRect.w=r4.frmWid;
     playerRect.h=r4.frmHit;
@@ -197,7 +197,7 @@ int main(int agr, char *args[])
     cloud.h=50;
     
 
-    surface =IMG_Load("res/bgg.png");
+    surface =IMG_Load("res/bggh.png");
     SDL_Texture *bg_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
 
@@ -411,8 +411,8 @@ main=Mix_LoadWAV("res/aud.mp3");
     replay_rect.y = (WINDOW_HEIGHT - replay_rect.h) / 2 + 100;
     
 
-   bool isRunning =true;
-    float y_pos = 550.0,cloudx=0.0;
+    bool isRunning =true;
+    float x_pos =0.0,cloudx=0.0;
     int gameover = 1;
     int frameTime=0,FPS=60;
     double count=0,count2=0,tim=0,last=0;
@@ -470,17 +470,25 @@ while(isRunning){
             case SDL_KEYDOWN:
                 switch (ev.key.keysym.scancode)
                 {
-            case SDL_SCANCODE_UP:
+            case SDL_SCANCODE_RIGHT:
                   {
-                    y_pos =  y_pos - (200 / 60);
-                    if(y_pos>0)
-                     playerPosition.y= (int)y_pos;
-                    else
-                       {y_pos=0;
-                        playerPosition.y=0;}
-                   playerRect.x+=r4.frmWid;
+                      x_pos = x_pos + (61/ 60);
+                      if(playerPosition.x<1180)
+                         playerPosition.x+= (int)x_pos;
+                      else
+                        {x_pos=1180;
+                         playerPosition.x =1180;}
+
+                      playerRect.x+=r4.frmWid;
                       if(playerRect.x>=textureWidth-r4.frmWid)
-                        playerRect.x=0;
+                        {playerRect.x=0;
+                        playerRect.y+=r4.frmHit;}
+                      if(playerRect.y>=textureHeight-r4.frmHit)
+                      {
+                        
+                        playerRect.y=0;
+                      }
+                    
                     
                    flag=1;
                    
@@ -489,19 +497,24 @@ while(isRunning){
                     
                   } 
                     break;
-            case SDL_SCANCODE_DOWN:
+            case SDL_SCANCODE_LEFT:
                  {
-                         y_pos = y_pos + (200 / 60);
-                      if(y_pos<580)
-                         playerPosition.y= (int)y_pos;
-                      else
-                        {y_pos=580;
-                         playerPosition.y =580;}
-
+                     x_pos =  x_pos + (61 / 60);
+                    if(x_pos>0)
+                     playerPosition.x -= (int)x_pos;
+                     else
+                     {x_pos=0;
+                     playerPosition.x =0;}
+                     
                       playerRect.x-=r4.frmWid;
                       if(playerRect.x<=0)
-                        {playerRect.x=0;
-                        playerRect.x=textureWidth-r4.frmWid;}
+                        playerRect.x=0;
+                      if(playerRect.y>0&&playerRect.x==0)
+                         {playerRect.y-=r4.frmHit;
+                         playerRect.x=textureWidth-r4.frmWid;}
+                      if(playerRect.y<=0&&playerRect.x<=0)
+                       {playerRect.x=textureWidth-r4.frmWid;
+                       playerRect.y=textureHeight-r4.frmHit;}
                     flag=1;    
                  }
                 }
@@ -658,7 +671,7 @@ while(isRunning){
            }
             
         
-            
+           
            if (timee >=t1&&timee<=t1+3||timee >=t2&&timee<=t2+4||timee>=30){
 
             Mix_HaltChannel(-1);
@@ -688,6 +701,8 @@ while(isRunning){
                   }
              
             }
+            
+            
             else
             {
                SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
@@ -727,10 +742,10 @@ while(isRunning){
                 if (mousex >= WINDOW_WIDTH/3.5 && mousex <= WINDOW_WIDTH/1.5 && mousey >= WINDOW_HEIGHT/3.5&& mousey <= WINDOW_HEIGHT/1.5)
                 {
                     gameover = 0;
-                    y_pos=580.0;
+                    x_pos=580.0;
                     count2=SDL_GetTicks() / 1000-last;
-                   playerPosition.x=350;
-                   playerPosition.y=580;
+                   playerPosition.x=0;
+                   playerPosition.y=400;
                    playerRect.x=playerRect.y=0;
                    bx=0;
                    by=0;
@@ -791,10 +806,10 @@ while(isRunning){
 
                   count2=SDL_GetTicks() / 1000-last;
                     gameover = 0;
-                    y_pos=580.0;
+                    x_pos=580.0;
                    
-                   playerPosition.x=350;
-                   playerPosition.y=580;
+                   playerPosition.x=0;
+                   playerPosition.y=400;
                    playerRect.x=playerRect.y=0;
                    bx=0;
                    by=0;
