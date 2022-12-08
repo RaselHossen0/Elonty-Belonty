@@ -354,6 +354,58 @@ int main(int agr, char *args[])
     SDL_Texture *replay_tex = SDL_CreateTextureFromSurface(rend, surface);
     SDL_FreeSurface(surface);
 
+    surface = IMG_Load("res/b111.png");
+    
+    SDL_Texture *b1_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect b1;
+    b1.x=0;
+    b1.y=0;
+    b1.w=WINDOW_WIDTH;
+    b1.h=WINDOW_HEIGHT;
+
+    surface = IMG_Load("res/b2.png");
+    
+    SDL_Texture *b2_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect b2;
+    b2.x=WINDOW_WIDTH;
+    b2.y=-29;
+    b2.w=WINDOW_WIDTH;
+    b2.h=WINDOW_HEIGHT+55;
+
+    surface = IMG_Load("res/b12.png");
+    
+    SDL_Texture *b3_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect b3;
+    b3.x=WINDOW_WIDTH;
+    b3.y=0;
+    b3.w=WINDOW_WIDTH;
+    b3.h=WINDOW_HEIGHT;
+
+    surface = IMG_Load("res/b444.png");
+    
+    SDL_Texture *b4_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect b4;
+    b4.x=WINDOW_WIDTH;
+    b4.y=0;
+    b4.w=WINDOW_WIDTH;
+    b4.h=WINDOW_HEIGHT;
+
+     surface = IMG_Load("res/last.png");
+    
+    SDL_Texture *lst_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect lst;
+    lst.x=WINDOW_WIDTH;
+    lst.y=0;
+    lst.w=WINDOW_WIDTH;
+    lst.h=WINDOW_HEIGHT;
+    
+
+
     surface =IMG_Load("res/f.png");
     SDL_Texture *f_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
@@ -444,7 +496,9 @@ main=Mix_LoadWAV("res/aud.mp3");
 
            }
            
-    
+    bool b[2]={0,0};
+    //int camx=0,camy=0;
+    int bcnt=0;
 double bx=0,by=0;
 double b2x=0,b2y=0;
 int temp=0,f=0,temp2=0;
@@ -472,6 +526,8 @@ while(isRunning){
                 {
                   case SDL_SCANCODE_RIGHT:
                   {
+                     // b[0]=1;
+                     b[1]=1;
                       playerRect.y=0;
                       x_pos = x_pos + (250/ 60);
                       if(playerPosition.x<1180)
@@ -493,7 +549,8 @@ while(isRunning){
                   } 
                     break;
                  case SDL_SCANCODE_LEFT:
-                 {
+                 {  //b[1]=1;
+                   // b[0]=1;
                     playerRect.y=0;
                      x_pos =  x_pos-(250 / 60);
                     if(x_pos>0)
@@ -531,9 +588,20 @@ while(isRunning){
                       f=1;
                       flag=1; 
                       break;
-                   
+            }
+            break;
+            case SDL_KEYUP:
+                   switch (ev.key.keysym.scancode){
+                    case SDL_SCANCODE_RIGHT:
+                    b[1]=0;
+                    break;
+                   // case SDL_SCANCODE_LEFT:
+                    //b[1]=0;
+                    //break;
+                   }
+                break;
 
-                }
+                
             }
         }
       
@@ -543,6 +611,7 @@ while(isRunning){
        if (gameover == 0)
 
         {
+           
              SDL_RenderClear(rend);
             
 
@@ -786,6 +855,65 @@ while(isRunning){
             temp2=22;
             printf("hello");
             }
+        else if(gameover==10){
+            SDL_RenderClear(rend);
+             SDL_RenderCopy(rend,b1_tex,NULL,&b1);
+             SDL_RenderCopy(rend,b2_tex,NULL,&b2);
+             SDL_RenderCopy(rend,b3_tex,NULL,&b3);
+             SDL_RenderCopy(rend,b4_tex,NULL,&b4);
+             SDL_RenderCopy(rend,lst_tex,NULL,&lst);
+             SDL_RenderPresent(rend);
+            
+                 // if(b[0]){
+                //camx+=5;
+                //b1.x+=5;
+                //if(b1.x>=1500)
+                //b1.x=0;
+           // }
+           // else
+             if(b[1]){
+                //camx-=5;
+                //int bcnt=0;
+                b1.x-=5;
+                if(b1.x<=0)
+                b2.x-=5;
+                if(b2.x<=0)
+                b3.x-=5;
+
+                if(b3.x==5)
+                {
+                 
+                 b2.x=WINDOW_WIDTH;
+                 b2.y=-27;
+                 b3.x-=5;
+                 
+                // if(b2.x<=5)
+                //b3.x-=5;
+               
+                 
+                }
+                else if(b3.x<5)
+                b3.x-=5;
+                if(b2.x==0&&b1.x<0)
+                {   bcnt++;
+                if(bcnt<3)
+                    b3.x=WINDOW_WIDTH;
+                    
+                    //b2.x-=5;
+                }
+                if(bcnt>=3)
+                b4.x-=5;
+                if(b4.x<=0){
+                    lst.x-=5;
+                    if(lst.x<=0)
+                    {
+                        lst.x=0;
+                    }
+                }
+             
+            }
+           
+            }
         else if(gameover==4&&temp2==22){
             //SDL_Delay(2000);
             SDL_RenderClear(rend);
@@ -837,7 +965,7 @@ while(isRunning){
                 if (mousx >= start_rect.x && mousx <= (start_rect.x + start_rect.w) && mousy >= start_rect.y && mousy <= (start_rect.y + start_rect.h))
                 {
                   
-                    gameover = 0;
+                    gameover = 10;
                     last=SDL_GetTicks()/1000;                   
                 }
             }

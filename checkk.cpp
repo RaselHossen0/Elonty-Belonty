@@ -23,10 +23,6 @@ struct rect{
     }
   
 };
-//void audio(void);
-
-            
-
 
 int main(int agr, char *args[])
 {
@@ -123,11 +119,7 @@ int main(int agr, char *args[])
     start_rect.x = (WINDOW_WIDTH - start_rect.w) / 2;
     start_rect.y = (WINDOW_HEIGHT - start_rect.h) / 2 - 100;
     
-   
-
-    
-
-    surface = IMG_Load("res/newman.png");
+    surface = IMG_Load("res/char.png");
     if (!surface)
     {
         printf("Redbar Surface Error: %s\n", IMG_GetError());
@@ -151,27 +143,20 @@ int main(int agr, char *args[])
 
     SDL_Rect  playerRect;//rect for a single frame of the sprite sheet
     SDL_Rect playerPosition;//rect for the whole sprite sheet
-    playerPosition.x=350;
-    playerPosition.y=580;
-    playerPosition.w=150;
-    playerPosition.h=150;//ei rec(square) er moddher kothao texture (runman) load hobe
+    playerPosition.x=0;
+    playerPosition.y=400;
+    playerPosition.w=100;
+    playerPosition.h=100;//ei rec(square) er moddher kothao texture (runman) load hobe
 
-    
-
-   
     int textureWidth,textureHeight;
     SDL_QueryTexture(tex,NULL,NULL,&textureWidth,&textureHeight);
 
     
-    struct rect r4(textureWidth/9,textureHeight);
+    struct rect r4(textureWidth/6,textureHeight/5);
     playerRect.x=playerRect.y=0;
     playerRect.w=r4.frmWid;
     playerRect.h=r4.frmHit;
-   // SDL_SetRenderDrawColor(rend,0xFF,0,0,0xFF);
-
-    
-
-    
+   
 
     surface = IMG_Load("res/gameover.jpeg");
     if (!surface)
@@ -199,7 +184,7 @@ int main(int agr, char *args[])
     gameover_rect.x = (WINDOW_WIDTH - gameover_rect.w) / 2;
     gameover_rect.y = (WINDOW_HEIGHT - gameover_rect.h) / 2 - 150;
 
-    surface =IMG_Load("res/cloud.png");
+    surface =IMG_Load("res/cloudh.png");
     SDL_Texture *cloud_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
 
@@ -212,27 +197,27 @@ int main(int agr, char *args[])
     cloud.h=50;
     
 
-    surface =IMG_Load("res/3.png");
+    surface =IMG_Load("res/bggh.png");
     SDL_Texture *bg_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
 
-    surface =IMG_Load("res/green.png");
+    surface =IMG_Load("res/gh.png");
     SDL_Texture *g_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
     SDL_Rect  gRect;
-    gRect.x=1090;
-    gRect.y=109;
-    gRect.w=220;
-    gRect.h=130;
+    gRect.x=1118;
+    gRect.y=125;
+    gRect.w=190;
+    gRect.h=90;
 
-    surface =IMG_Load("res/red.png");
+    surface =IMG_Load("res/rh.png");
     SDL_Texture *r_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
     SDL_Rect  rRect;
-    rRect.x=1090;
-    rRect.y=28;
-    rRect.w=230;
-    rRect.h=120;
+    rRect.x=1120;
+    rRect.y=60;
+    rRect.w=190;
+    rRect.h=80;
 
     surface =IMG_Load("res/obs2.png");
     //SDL_Texture *obs_Tex =SDL_CreateTexture(rend,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,150,150);
@@ -251,42 +236,42 @@ int main(int agr, char *args[])
     SDL_Rect  obsRect;
     obsRect.x=500;
     obsRect.y=500;
-    obsRect.w=230;
-    obsRect.h=120;
+    obsRect.w=180;
+    obsRect.h=100;
 
     surface =IMG_Load("res/bomb.png");
     //SDL_Texture *obs_Tex =SDL_CreateTexture(rend,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,150,150);
     SDL_Texture *bomb_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
     SDL_Rect  bombRect;
-    bombRect.x=0;
-    bombRect.y=600;
-    bombRect.w=230;
-    bombRect.h=120;
+    bombRect.x=198;
+    bombRect.y=100;
+    bombRect.w=90;
+    bombRect.h=50;
 
     SDL_Rect  bombRect2;
     bombRect2.x=1200;
-    bombRect2.y=600;
-    bombRect2.w=230;
-    bombRect2.h=120;
+    bombRect2.y=520;
+    bombRect2.w=90;
+    bombRect2.h=50;
     
     
-    surface =IMG_Load("res/putull.png");
+    surface =IMG_Load("res/putulh.png");
     SDL_Texture *Putul_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
     SDL_Rect  playrRect;
     SDL_Rect playrPosition;
     
-    playrPosition.x=614;
-    playrPosition.y=2;
-    playrPosition.w=50;
-    playrPosition.h=50;
+    playrPosition.x=1150;
+    playrPosition.y=287;
+    playrPosition.w=130;
+    playrPosition.h=100;
 
     int texturWidth,texturHeight;
     SDL_QueryTexture(Putul_Tex,NULL,NULL,&texturWidth,&texturHeight);
 
 
-    struct rect r1(texturWidth/4,texturHeight/3);
+    struct rect r1(texturWidth/3,texturHeight);
     playrRect.x=playrRect.y=0;
     playrRect.w=r1.frmWid;
     playrRect.h=r1.frmHit;
@@ -299,7 +284,7 @@ int main(int agr, char *args[])
     SDL_Rect  plarRect1;//rect for a single frame of the sprite sheet
     SDL_Rect plarPosition1;//rect for the whole sprite sheet
     plarPosition1.x=250;
-    plarPosition1.y=100;
+    plarPosition1.y=110;
     plarPosition1.w=130;
     plarPosition1.h=130;//ei rec(square) er moddher kothao texture (runman) load hobe
     
@@ -315,7 +300,7 @@ int main(int agr, char *args[])
     SDL_Rect plarRect2;//rect for a single frame of the sprite sheet
     SDL_Rect plarPosition2;//rect for the whole sprite sheet
     plarPosition2.x=430;
-    plarPosition2.y=100;
+    plarPosition2.y=110;
     plarPosition2.w=130;
     plarPosition2.h=130;
 
@@ -335,7 +320,7 @@ int main(int agr, char *args[])
     SDL_Rect  plarRect22;//rect for a single frame of the sprite sheet
     SDL_Rect plarPosition22;//rect for the whole sprite sheet
     plarPosition22.x=790;
-    plarPosition22.y=100;
+    plarPosition22.y=110;
     plarPosition22.w=130;
     plarPosition22.h=130;//ei rec(square) er moddher kothao texture (runman) load hobe
     
@@ -350,8 +335,8 @@ int main(int agr, char *args[])
 
     SDL_Rect  plarRect3;//rect for a single frame of the sprite sheet
     SDL_Rect plarPosition3;//rect for the whole sprite sheet
-    plarPosition3.x=990;
-    plarPosition3.y=100;
+    plarPosition3.x=600;
+    plarPosition3.y=110;
     plarPosition3.w=130;
     plarPosition3.h=130;//ei rec(square) er moddher kothao texture (runman) load hobe
     
@@ -364,51 +349,112 @@ int main(int agr, char *args[])
     plarRect3.w=r7.frmWid;
     plarRect3.h=r7.frmHit;
 
-  
-    
-
-   
-   
-     
-    
-
     surface = IMG_Load("res/replay.png");
-    if (!surface)
-    {
-        printf("replay Surface Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+    
     SDL_Texture *replay_tex = SDL_CreateTextureFromSurface(rend, surface);
     SDL_FreeSurface(surface);
-    if (!replay_tex)
-    {
-        printf("replayTexture %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
- //SDL_Init(SDL_INIT_AUDIO);
-//SDL_AudioSpec wavSpec;
-//Uint32 wavLength;
-//Uint8 *wavBuffer;
 
- 
-//SDL_LoadWAV("res/background.wav", &wavSpec, &wavBuffer, &wavLength);
-//SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
+    surface = IMG_Load("res/b111.png");
+    
+    SDL_Texture *b1_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect b1;
+    b1.x=0;
+    b1.y=0;
+    b1.w=WINDOW_WIDTH;
+    b1.h=WINDOW_HEIGHT;
+
+    surface = IMG_Load("res/b2.png");
+    
+    SDL_Texture *b2_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect b2;
+    b2.x=WINDOW_WIDTH;
+    b2.y=-29;
+    b2.w=WINDOW_WIDTH;
+    b2.h=WINDOW_HEIGHT+55;
+
+    surface = IMG_Load("res/b12.png");
+    
+    SDL_Texture *b3_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect b3;
+    b3.x=WINDOW_WIDTH;
+    b3.y=0;
+    b3.w=WINDOW_WIDTH;
+    b3.h=WINDOW_HEIGHT;
+
+    surface = IMG_Load("res/b444.png");
+    
+    SDL_Texture *b4_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect b4;
+    b4.x=WINDOW_WIDTH;
+    b4.y=0;
+    b4.w=WINDOW_WIDTH;
+    b4.h=WINDOW_HEIGHT;
+
+     surface = IMG_Load("res/last.png");
+    
+    SDL_Texture *lst_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect lst;
+    lst.x=WINDOW_WIDTH;
+    lst.y=0;
+    lst.w=WINDOW_WIDTH;
+    lst.h=WINDOW_HEIGHT;
+    
+
+
+    surface =IMG_Load("res/f.png");
+    SDL_Texture *f_Tex =SDL_CreateTextureFromSurface(rend,surface);
+    SDL_FreeSurface(surface);
+
+    SDL_Rect  fRect;//rect for a single frame of the sprite sheet
+    SDL_Rect fPosition;//rect for the whole sprite sheet
+    fPosition.x=500;
+    fPosition.y=350;
+    fPosition.w=300;
+    fPosition.h=300;//ei rec(square) er moddher kothao texture (runman) load hobe
+    
+    SDL_Rect fPosition2;//rect for the whole sprite sheet
+    fPosition2.x=250;
+    fPosition2.y=150;
+    fPosition2.w=300;
+    fPosition2.h=300;
+
+    int txturWidthf,txturHeightf;
+    SDL_QueryTexture(f_Tex,NULL,NULL,&txturWidthf,&txturHeightf);
+
+  
+    struct rect rf(txturWidthf/4,txturHeightf/2);
+    fRect.x=fRect.y=0;
+    fRect.w=rf.frmWid;
+    fRect.h=rf.frmHit;
+
+    surface =IMG_Load("res/vanish.png");
+    SDL_Texture *v_Tex =SDL_CreateTextureFromSurface(rend,surface);
+    SDL_FreeSurface(surface);
+
+    SDL_Rect  vRect;//rect for a single frame of the sprite sheet
+    SDL_Rect  vRectp;
+    vRectp.x=0;
+    vRectp.y=0;
+    vRectp.w=100;
+    vRectp.h=100;
+    int vtxturWidth,vtxturHeight;
+    SDL_QueryTexture(v_Tex,NULL,NULL,&vtxturWidth,&vtxturHeight);
+
+    
+    struct rect rv(vtxturWidth/4,vtxturHeight);
+    vRect.x=vRect.y=0;
+    vRect.w=rv.frmWid;
+    vRect.h=rv.frmHit;
+    
+
 
 Mix_Chunk *main;
 main=Mix_LoadWAV("res/aud.mp3");
-
-
-//int success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
-//SDL_PauseAudioDevice(deviceId, 0);
-
-
-
 
     SDL_Rect replay_rect;
     replay_rect.w = 300;
@@ -417,11 +463,12 @@ main=Mix_LoadWAV("res/aud.mp3");
     replay_rect.y = (WINDOW_HEIGHT - replay_rect.h) / 2 + 100;
     
 
-   bool isRunning =true;
-    float y_pos = 550.0,cloudx=0.0;
+    bool isRunning =true;
+    float x_pos =0.0,cloudx=0.0;
     int gameover = 1;
     int frameTime=0,FPS=60;
-    int count=0,count2=0,timee=0,last=0;
+    double count=0,count2=0,tim=0,last=0;
+    int timee=0;
     int t1,t2;
     srand(time(NULL));
            int c=rand()%5;
@@ -449,16 +496,19 @@ main=Mix_LoadWAV("res/aud.mp3");
 
            }
            
-    
-int bx=0,by=0;
-int b2x=0,b2y=0;
+    bool b[2]={0,0};
+    //int camx=0,camy=0;
+    int bcnt=0;
+double bx=0,by=0;
+double b2x=0,b2y=0;
+int temp=0,f=0,temp2=0;
    
    int lastTime=SDL_GetTicks()/1000;
     
     TTF_Font* ff=TTF_OpenFont( "res/fonts/Oswald-Bold.ttf", 28 );
 
     SDL_Event ev;
-    while(isRunning){
+while(isRunning){
         int flag=0;
         
          
@@ -474,17 +524,22 @@ int b2x=0,b2y=0;
             case SDL_KEYDOWN:
                 switch (ev.key.keysym.scancode)
                 {
-            case SDL_SCANCODE_UP:
+                  case SDL_SCANCODE_RIGHT:
                   {
-                    y_pos =  y_pos - (200 / 60);
-                    if(y_pos>0)
-                     playerPosition.y= (int)y_pos;
-                    else
-                       {y_pos=0;
-                        playerPosition.y=0;}
-                   playerRect.x+=r4.frmWid;
+                     // b[0]=1;
+                     b[1]=1;
+                      playerRect.y=0;
+                      x_pos = x_pos + (250/ 60);
+                      if(playerPosition.x<1180)
+                         playerPosition.x= (int)x_pos;
+                      else
+                        {x_pos=1180;
+                         playerPosition.x =1180;}
+
+                      playerRect.x+=r4.frmWid;
                       if(playerRect.x>=textureWidth-r4.frmWid)
                         playerRect.x=0;
+                    
                     
                    flag=1;
                    
@@ -493,30 +548,70 @@ int b2x=0,b2y=0;
                     
                   } 
                     break;
-            case SDL_SCANCODE_DOWN:
-                 {
-                         y_pos = y_pos + (200 / 60);
-                      if(y_pos<580)
-                         playerPosition.y= (int)y_pos;
-                      else
-                        {y_pos=580;
-                         playerPosition.y =580;}
-
+                 case SDL_SCANCODE_LEFT:
+                 {  //b[1]=1;
+                   // b[0]=1;
+                    playerRect.y=0;
+                     x_pos =  x_pos-(250 / 60);
+                    if(x_pos>0)
+                     playerPosition.x = (int)x_pos;
+                     else
+                     {x_pos=0;
+                     playerPosition.x =0;}
+                       
                       playerRect.x-=r4.frmWid;
                       if(playerRect.x<=0)
-                        {playerRect.x=0;
-                        playerRect.x=textureWidth-r4.frmWid;}
+                         playerRect.x=textureWidth- r4.frmWid;
+                     
                     flag=1;    
                  }
-                }
+                 break;
+                 case SDL_SCANCODE_R:
+                    
+                      x_pos = x_pos + (280/ 60);
+                      if(playerPosition.x<1180)
+                         playerPosition.x= (int)x_pos;
+                      else
+                        {x_pos=1180;
+                         playerPosition.x =1180;}
+                      playerRect.y=r4.frmHit;
+                      playerRect.x+=r4.frmWid;
+                      if(playerRect.x>=textureWidth-r4.frmWid)
+                        playerRect.x=0;
+                    
+                    
+                   flag=1;  
+                   break;
+                 case SDL_SCANCODE_J:
+                      playerRect.y=2*r4.frmHit;
+                       playerRect.x=0;
+                      f=1;
+                      flag=1; 
+                      break;
+            }
+            break;
+            case SDL_KEYUP:
+                   switch (ev.key.keysym.scancode){
+                    case SDL_SCANCODE_RIGHT:
+                    b[1]=0;
+                    break;
+                   // case SDL_SCANCODE_LEFT:
+                    //b[1]=0;
+                    //break;
+                   }
+                break;
+
+                
             }
         }
       
-        
+         vRectp.x=playerPosition.x;
+        vRectp.y=playerPosition.y+55;
     
        if (gameover == 0)
 
         {
+           
              SDL_RenderClear(rend);
             
 
@@ -529,204 +624,298 @@ int b2x=0,b2y=0;
 
            
            count=SDL_GetTicks() / 1000.0;
-           //int passedTime=count-lastTime;
-           //lastTime=count;
-           timee=count-count2-last;
-    std::string i=std::to_string(timee);
-    SDL_Surface* surface=TTF_RenderText_Solid(ff,i.c_str(),{255,255,255});
-    SDL_Texture* texx=SDL_CreateTextureFromSurface(rend,surface);
-    SDL_FreeSurface(surface);
+          
+            tim=count-count2-last;
+            timee=tim;
+            std::string i=std::to_string(timee);
+            SDL_Surface* surface=TTF_RenderText_Solid(ff,i.c_str(),{255,255,255});
+            SDL_Texture* texx=SDL_CreateTextureFromSurface(rend,surface);
+            SDL_FreeSurface(surface);
     
-    SDL_Rect rectt;//for font
-    rectt.x=58;
-    rectt.y=95;
-    rectt.w=90;
-    rectt.h=90;
-    // SDL_SetRenderDrawColor(rend,0,0,0xFF,SDL_ALPHA_OPAQUE);
-        //SDL_RenderClear(rend);
+            SDL_Rect rectt;//for font
+            rectt.x=1123;
+            rectt.y=225;
+            rectt.w=60;
+            rectt.h=60;
+    
         
            
            if(FPS/frameTime==1)//will be repeated 7 times a second
-            {
-           frameTime=0;//repeat
-           
-           playrRect.x+=r1.frmWid;
-           if(playrRect.x>=texturWidth-r1.frmWid)
-                        {playrRect.x=0;
-                         playrRect.y+=r1.frmHit;}
-            if(playrRect.y>=texturHeight-r1.frmHit)
-                         playrRect.y=0;
+           {
+                        frameTime=0;//repeat
+                        fRect.x+=rf.frmWid;
+                        if(fRect.x>=txturWidthf-rf.frmWid)
+                                        {fRect.x=0;
+                                        fRect.y+=rf.frmHit;}
+                        if(fRect.y>=txturHeightf-rf.frmHit)
+                                        fRect.y=0;
 
-           
+                        playrRect.x+=r1.frmWid;
+                        if(playrRect.x>=texturWidth)
+                                        {playrRect.x=0;}
+                         if(temp2==5){
+                         
+                    playerRect.y=3*r4.frmHit;
+                    playerRect.x+=r4.frmWid;
+                    if(playerRect.x>=2*r4.frmWid)
+                    {playerRect.x=2*r4.frmWid;  
+                   gameover=4; 
+                   temp2=6;
+                   printf("t%d",temp2);
+                   }         
+                         }
+                        if(f==1){
+                            
+                             if(temp2==5)
+                           f=0;
+                            
+                            x_pos = x_pos + (1400/ 60);
+                            if(playerPosition.x<1180)
+                                playerPosition.x= (int)x_pos;
+                            else
+                               {x_pos=1180;
+                                playerPosition.x =1180;}
+                      
+                           
+                            playerRect.x+=r4.frmWid;
+                           
+
+                             if(playerRect.x>=textureWidth-2*r4.frmWid)
+                            { playerRect.x=textureWidth-r4.frmWid;
+                            playerPosition.x= (int)x_pos-600/60;
+                             f=0;
+                             }
+                        }
          
-           plarRect1.x+=r2.frmWid;
-           if(plarRect1.x>=txturWidth1-r2.frmWid)
-                        plarRect1.x=0;
-            
-           plarRect2.x+=r5.frmWid;
-           if(plarRect2.x>=txturWidth2-r5.frmWid)
-                        plarRect2.x=0;
+                        plarRect1.x+=r2.frmWid;
+                        if(plarRect1.x>=txturWidth1-r2.frmWid)
+                                        plarRect1.x=0;
+                        
+                         vRect.x+=rv.frmWid;
+                        if(vRect.x>=vtxturWidth-rv.frmWid)
+                                        vRect.x=0;
+                            
+                        plarRect2.x+=r5.frmWid;
+                        if(plarRect2.x>=txturWidth2-r5.frmWid)
+                                        plarRect2.x=0;
 
-          plarRect3.x+=r7.frmWid;
-           if(plarRect3.x>=txturWidth3-r7.frmWid)
-                        plarRect3.x=0;
-          
-           plarRect22.x+=r6.frmWid;
-           if(plarRect22.x>=txturWidth22-r6.frmWid)
-                        plarRect22.x=0;
-            
+                        plarRect3.x+=r7.frmWid;
+                        if(plarRect3.x>=txturWidth3-r7.frmWid)
+                                        plarRect3.x=0;
+                        
+                        plarRect22.x+=r6.frmWid;
+                        if(plarRect22.x>=txturWidth22-r6.frmWid)
+                                        plarRect22.x=0;
+                            
           
           }
            
-
-            
-        
-            
-             if (timee >=t1&&timee<=t1+3||timee >=t2&&timee<=t2+4||timee>=30){
-
-            Mix_HaltChannel(-1);
-            //SDL_RenderClear(rend);
             SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
-            SDL_RenderCopy(rend,texx,NULL,&rectt);
+            
             SDL_RenderCopy(rend,cloud_Tex,NULL,&cloud);
 
             SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
             SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
-           // SDL_RenderCopy(rend,fire_Tex,&plarRect,&plarPosition);
+            SDL_RenderCopy(rend,texx,NULL,&rectt);
             SDL_RenderCopy(rend,fire_Tex,&plarRect1,&plarPosition1);
             SDL_RenderCopy(rend,fire_Tex,&plarRect2,&plarPosition2);
             SDL_RenderCopy(rend,fire2_Tex,&plarRect22,&plarPosition22);
             SDL_RenderCopy(rend,fire2_Tex,&plarRect3,&plarPosition3);
-           // SDL_RenderCopy(rend,g_Tex,NULL,&gRect);
-            SDL_RenderCopy(rend,r_Tex,NULL,&rRect);
-
+           
+            if(((playerPosition.x-350)*(playerPosition.x-350)+(playerPosition.y-200)*(playerPosition.y-245))<1)
+            {SDL_RenderCopy(rend,v_Tex,&vRect,&vRectp);
+            gameover=4;
+            temp=1;
             
+            }
+            if(tim>3){
+              bx+=0.1;
+              by+=0.1;
+                 if(bombRect.x<350){
+           
+                    bombRect.x+=(int)bx;
+                    bombRect.y-=(int)by;
+                 }
+                 else
+                {
+           
+                  bombRect.x+=(int)bx;
+                  bombRect.y+=(int)by;
+                }
+            
+                
+                if(!(bombRect.x>=500&&bombRect.y>=500)){
+           
+                 SDL_RenderCopy(rend, bomb_Tex, NULL,&bombRect);
+                }
+                 if(tim>5&&tim<7)
+                SDL_RenderCopy(rend,f_Tex,&fRect,&fPosition);
+                if(tim>6.5)
+                SDL_RenderCopy(rend, obs_Tex, NULL,&obsRect);
+           
 
-            //SDL_RenderPresent(rend);
-                if(flag||timee>=30){
+           }
+           if(tim>7){
+          
+             b2x+=0.1;
+              b2y+=0.1;
+              if(bombRect2.x>650){
+           
+                bombRect2.x-=(int)b2x;
+                bombRect2.y-=(int)b2y;
+              }
+              else
+              {
+           
+                bombRect2.x-=(int)b2x;
+                bombRect2.y+=(int)(b2y-0.05);
+              }
+            
+              if(!(bombRect2.x<=300&&bombRect2.y>=180)){
+           
+               SDL_RenderCopy(rend, bomb_Tex, NULL,&bombRect2);
+               }
+              if(tim>9&&tim<11)
+              SDL_RenderCopy(rend,f_Tex,&fRect,&fPosition2);
+              if(tim>10.5)
+              SDL_RenderCopy(rend, obs2_Tex, NULL,&obs2Rect);
+           
+           }
+            
+        
+           
+           if (timee >=t1&&timee<=t1+3||timee >=t2&&timee<=t2+4||timee>=22){
+
+            Mix_HaltChannel(-1);
+            SDL_RenderCopy(rend,r_Tex,NULL,&rRect);
+                if(flag||timee>=22){
                    
-                  //SDL_RenderClear(rend);
-                   SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
-                   SDL_RenderCopy(rend,cloud_Tex,NULL,&cloud);
-
-                   SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
-                   //SDL_RenderCopy(rend,fire_Tex,&plarRect,&plarPosition);
-                   SDL_RenderCopy(rend,fire_Tex,&plarRect1,&plarPosition1);
-                   SDL_RenderCopy(rend,fire_Tex,&plarRect2,&plarPosition2);
-                   SDL_RenderCopy(rend,fire2_Tex,&plarRect22,&plarPosition22);
-                   SDL_RenderCopy(rend,fire2_Tex,&plarRect3,&plarPosition3);
-                   SDL_RenderCopy(rend,r_Tex,NULL,&rRect);
-                   
-
-                    
                     deadman.x = 350;
                     deadman.y = playerPosition.y;
                     SDL_SetRenderDrawColor(rend, 0,0,0,0);
                     for(int i=0;i<7;i++)
-                    SDL_RenderDrawLine(rend, 308, 170 , 420+i, deadman.y+120+i);
+                    SDL_RenderDrawLine(rend, 1200, 600 , playerPosition.x+i+100,playerPosition.y+i+50);
                     
                     SDL_SetRenderDrawColor(rend, 0,0,0,0);
                         
-                 
-                    //for(int t= timee;t<timee+3;t++)
-                    SDL_RenderCopy(rend, deadmanTex, NULL, &deadman);
-                    //SDL_RenderPresent(rend);
-                    //SDL_Delay(3000);
-                    gameover=4;
                     
+
+
+
                    
-                }
-             
-               // SDL_RenderClear(rend);
-                
+                    //SDL_RenderCopy(rend, deadmanTex, NULL, &deadman);
+                    
+                   //gameover=4;
+                   //playerRect.x=0;
+                    temp++;
+                    //temp=1;
+                    
                
-             }
-             else
-              {// SDL_RenderClear(rend);
-            SDL_RenderCopy(rend,bg_Tex,NULL,NULL);
-            SDL_RenderCopy(rend,texx,NULL,&rectt);
-            SDL_RenderCopy(rend,cloud_Tex,NULL,&cloud);
+                }
+                //else
+                 // { SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
+               
+                 // }
+                 if(temp==1){
+                    playerRect.x=0;
+                    temp2=5;
+                    //temp=0;
 
-           SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
-           SDL_RenderCopy(rend,Putul_Tex,&playrRect,&playrPosition);
-           // SDL_RenderCopy(rend,fire_Tex,&plarRect,&plarPosition);
-            SDL_RenderCopy(rend,fire_Tex,&plarRect1,&plarPosition1);
-            SDL_RenderCopy(rend,fire_Tex,&plarRect2,&plarPosition2);
-            SDL_RenderCopy(rend,fire2_Tex,&plarRect22,&plarPosition22);
-            SDL_RenderCopy(rend,fire2_Tex,&plarRect3,&plarPosition3);
-            SDL_RenderCopy(rend,g_Tex,NULL,&gRect);
-            //SDL_RenderCopy(rend,r_Tex,NULL,&rRect);
-
+                 }
+             
+            }
             
-
-           // SDL_RenderPresent(rend);
-            Mix_PlayChannel(-1,main,0);
+            
+            else
+            {
+               //SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
+               SDL_RenderCopy(rend,g_Tex,NULL,&gRect);
+            
+               Mix_PlayChannel(-1,main,0);
             
             }
-           if(timee>3){
-           bx++;
-             by++;
-             if(bombRect.x<400){
-           
-             bombRect.x+=bx;
-             bombRect.y-=by;
-           }
-           else
-           {
-           
-             bombRect.x+=bx;
-             bombRect.y+=by;
-           }
-            
-            if(!(bombRect.x>=300&&bombRect.y>=400)){
-           
-             SDL_RenderCopy(rend, bomb_Tex, NULL,&bombRect);
-           }
-
-           SDL_RenderCopy(rend, obs_Tex, NULL,&obsRect);
-           
-
-           }
-           if(timee>7){
-          
-           b2x++;
-             b2y++;
-             if(bombRect2.x>600){
-           
-             bombRect2.x-=b2x;
-             bombRect2.y-=b2y;
-           }
-           else
-           {
-           
-             bombRect2.x-=b2x;
-             bombRect2.y+=b2y;
-           }
-            
-            if(!(bombRect2.x<=300&bombRect2.y>=300)){
-           
-             SDL_RenderCopy(rend, bomb_Tex, NULL,&bombRect2);
-           }
-
-           SDL_RenderCopy(rend, obs2_Tex, NULL,&obs2Rect);
-           
-           }
-           
-           
-           
+       
         
-           
-            if(playerPosition.y<=100)
+           if(playerPosition.y<=100)
             {
                 SDL_Delay(1500);
 
-            playerPosition.y=100;
-            gameover=2;
+                playerPosition.y=100;
+                gameover=2;
+                Mix_HaltChannel(-1);
             }
-            SDL_RenderPresent(rend);
+        SDL_RenderPresent(rend);
         }
-        else if(gameover==4){
+       else if(temp2==6)
+           {
             SDL_Delay(2000);
+           SDL_RenderClear(rend);
+            //temp2=11;
+             Mix_HaltChannel(-1);
+            temp2=22;
+            printf("hello");
+            }
+        else if(gameover==10){
+            SDL_RenderClear(rend);
+             SDL_RenderCopy(rend,b1_tex,NULL,&b1);
+             SDL_RenderCopy(rend,b2_tex,NULL,&b2);
+             SDL_RenderCopy(rend,b3_tex,NULL,&b3);
+             SDL_RenderCopy(rend,b4_tex,NULL,&b4);
+             SDL_RenderCopy(rend,lst_tex,NULL,&lst);
+             SDL_RenderPresent(rend);
+            
+                 // if(b[0]){
+                //camx+=5;
+                //b1.x+=5;
+                //if(b1.x>=1500)
+                //b1.x=0;
+           // }
+           // else
+             if(b[1]){
+                //camx-=5;
+                //int bcnt=0;
+                b1.x-=5;
+                if(b1.x<=0)
+                b2.x-=5;
+                if(b2.x<=0)
+                b3.x-=5;
+
+                if(b3.x==5)
+                {
+                 
+                 b2.x=WINDOW_WIDTH;
+                 b2.y=-27;
+                 b3.x-=5;
+                 
+                // if(b2.x<=5)
+                //b3.x-=5;
+               
+                 
+                }
+                else if(b3.x<5)
+                b3.x-=5;
+                if(b2.x==0&&b1.x<0)
+                {   bcnt++;
+                if(bcnt<3)
+                    b3.x=WINDOW_WIDTH;
+                    
+                    //b2.x-=5;
+                }
+                if(bcnt>=3)
+                b4.x-=5;
+                if(b4.x<=0){
+                    lst.x-=5;
+                    if(lst.x<=0)
+                    {
+                        lst.x=0;
+                    }
+                }
+             
+            }
+           
+            }
+        else if(gameover==4&&temp2==22){
+            //SDL_Delay(2000);
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend,againTex,NULL,NULL);
              SDL_RenderPresent(rend);
@@ -740,11 +929,20 @@ int b2x=0,b2y=0;
                 if (mousex >= WINDOW_WIDTH/3.5 && mousex <= WINDOW_WIDTH/1.5 && mousey >= WINDOW_HEIGHT/3.5&& mousey <= WINDOW_HEIGHT/1.5)
                 {
                     gameover = 0;
-                    y_pos=580.0;
+                    x_pos=0.0;
                     count2=SDL_GetTicks() / 1000-last;
-                   playerPosition.x=400;
-                   playerPosition.y=580;
+                   playerPosition.x=0;
+                   playerPosition.y=400;
                    playerRect.x=playerRect.y=0;
+                   bx=0;
+                   by=0;
+                   b2x=0;
+                   b2y=0;
+                    bombRect.x=98;
+                    bombRect.y=505;
+                     bombRect2.x=1120;
+                     bombRect2.y=520;
+                     temp=0;
                     
                    
                 }
@@ -752,7 +950,7 @@ int b2x=0,b2y=0;
 
 
         }
-        else if(gameover==1)
+    else if(gameover==1)
     {
         SDL_RenderClear(rend);
         SDL_RenderCopy(rend, tex3, NULL, &start_rect);
@@ -767,18 +965,13 @@ int b2x=0,b2y=0;
                 if (mousx >= start_rect.x && mousx <= (start_rect.x + start_rect.w) && mousy >= start_rect.y && mousy <= (start_rect.y + start_rect.h))
                 {
                   
-                    gameover = 0;
-                    last=SDL_GetTicks()/1000;
-                    
-                    
-                    
-                    
-                   
+                    gameover = 10;
+                    last=SDL_GetTicks()/1000;                   
                 }
             }
     }
-        else if(gameover==2)
-        {
+    else if(gameover==2)
+    {
 
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend, gameover_tex, NULL, &gameover_rect);
@@ -801,17 +994,26 @@ int b2x=0,b2y=0;
 
                   count2=SDL_GetTicks() / 1000-last;
                     gameover = 0;
-                    y_pos=580.0;
+                    x_pos=0.0;
                    
-                   playerPosition.x=400;
-                   playerPosition.y=580;
+                   playerPosition.x=0;
+                   playerPosition.y=400;
                    playerRect.x=playerRect.y=0;
+                   bx=0;
+                   by=0;
+                    b2x=0;
+                   b2y=0;
+                     bombRect.x=98;
+                     bombRect.y=505;
+                     bombRect2.x=1120;
+                     bombRect2.y=520;
+                     temp=0;
                     
                    
                 }
             }
-        }
-    }
+     }
+}
     
 
     SDL_Delay(100);
