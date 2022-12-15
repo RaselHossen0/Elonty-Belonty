@@ -661,8 +661,6 @@ while(isRunning){
                 SDL_RenderCopy(rend,f_Tex,&fRect,&fPosition);
                 if(tim>6.5)
                 SDL_RenderCopy(rend, obs_Tex, NULL,&obsRect);
-           
-
            }
            if(tim>7){
           
