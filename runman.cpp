@@ -595,7 +595,7 @@ main=Mix_LoadWAV("res/aud.mp3");
     //int camx=0,camy=0;
     int bcnt=0;
     int var=2;
-    int bf=0;
+    int bf=0,bf2=0;
 double bx=0,by=0;
 double b2x=0,b2y=0;
 int temp=0,f=0,temp2=0;
@@ -683,7 +683,7 @@ while(isRunning){
                    flag=1;  
                    break;
                  case SDL_SCANCODE_J:
-                      var=14;
+                      var=10;
                       b[1]=1;
                       playerRect.y=2*r4.frmHit;
                        playerRect.x=0;
@@ -698,7 +698,7 @@ while(isRunning){
                     b[1]=0;
                     break;
                     case SDL_SCANCODE_J:
-                    var=2;
+                   var=2;
                     b[1]=0;
                     f=0;
                     break;
@@ -1037,13 +1037,17 @@ while(isRunning){
                 {b3.x-=var;
                 if(b3.x<-20)
                 bf=0;}
-                if(b2.x==0&&b1.x<0)
-                {   bcnt++;
+                
+                if(b2.x<=0&&b2.x>=-20&&b1.x<0&&bf2==0)
+                {  
+                     bcnt++;
                     if(bcnt<3)
-                    b3.x=WINDOW_WIDTH;
-                    
+                    b3.x=WINDOW_WIDTH-8;
+                    bf2=1;
                     //b2.x-=5;
                 }
+                if(b2.x<-20)
+                bf2=0;
                 if(bcnt>=3)
                 b4.x-=var;
                 if(b4.x<=0){

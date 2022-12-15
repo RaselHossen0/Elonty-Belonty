@@ -594,7 +594,8 @@ main=Mix_LoadWAV("res/aud.mp3");
     bool b[2]={0,0};
     //int camx=0,camy=0;
     int bcnt=0;
-    int var=14;
+    int var=2;
+    int bf=0;
 double bx=0,by=0;
 double b2x=0,b2y=0;
 int temp=0,f=0,temp2=0;
@@ -664,7 +665,7 @@ while(isRunning){
                  }
                  break;
                  case SDL_SCANCODE_R:
-                     //var=3;
+                     var=5;
                       b[1]=1;
                       if(gameover==0)
                      { x_pos = x_pos + (280/ 60);
@@ -682,7 +683,7 @@ while(isRunning){
                    flag=1;  
                    break;
                  case SDL_SCANCODE_J:
-                      //var=14;
+                      var=14;
                       b[1]=1;
                       playerRect.y=2*r4.frmHit;
                        playerRect.x=0;
@@ -697,12 +698,12 @@ while(isRunning){
                     b[1]=0;
                     break;
                     case SDL_SCANCODE_J:
-                    //var=2;
+                    var=2;
                     b[1]=0;
                     f=0;
                     break;
                      case SDL_SCANCODE_R:
-                     //var=2;
+                     var=2;
                     b[1]=0;
                     break;
                    // case SDL_SCANCODE_LEFT:
@@ -1006,7 +1007,7 @@ while(isRunning){
                 }
              
                 //camx-=5;
-                //int bcnt=0;
+                
                 b1.x-=var;
                 o2.x-=var;
                 o3.x-=var;
@@ -1019,12 +1020,13 @@ while(isRunning){
                 if(b2.x<=0)
                 b3.x-=var;
 
-                if(b3.x==2)
+                if(b3.x<=2&&b3.x>=-20&&bf==0)
                 {
                  
                  b2.x=WINDOW_WIDTH;
                  b2.y=-27;
-                 b3.x-=var;
+                 b3.x=0;
+                 bf=1;
                  
                 // if(b2.x<=5)
                 //b3.x-=5;
@@ -1032,10 +1034,12 @@ while(isRunning){
                  
                 }
                 else if(b3.x<2)
-                b3.x-=var;
+                {b3.x-=var;
+                if(b3.x<-20)
+                bf=0;}
                 if(b2.x==0&&b1.x<0)
                 {   bcnt++;
-                if(bcnt<3)
+                    if(bcnt<3)
                     b3.x=WINDOW_WIDTH;
                     
                     //b2.x-=5;
@@ -1052,7 +1056,7 @@ while(isRunning){
              
             }
            // printf("%d\n",var);
-            //printf("%d\n",b3.x);
+           // printf("%d\n",b3.x);
            
             }
         else if(gameover==4&&temp2==22){
