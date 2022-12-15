@@ -58,7 +58,7 @@ int main(int agr, char *args[])
         SDL_Quit();
         return 1;
     }
-    SDL_Surface *surface = IMG_Load("res/dip.jpg");
+    SDL_Surface *surface = IMG_Load("res/dip.png");
     if (!surface)
     {
         printf("Redbar Surface Error: %s\n", IMG_GetError());
@@ -93,7 +93,7 @@ int main(int agr, char *args[])
     SDL_Texture *againTex = SDL_CreateTextureFromSurface(rend, surface);
     SDL_FreeSurface(surface);
     
-    surface = IMG_Load("res/start.jpg");
+    surface = IMG_Load("res/start.png");
     if (!surface)
     {
         printf("Redbar Surface Error: %s\n", IMG_GetError());

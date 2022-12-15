@@ -58,7 +58,7 @@ int main(int agr, char *args[])
         SDL_Quit();
         return 1;
     }
-    SDL_Surface *surface = IMG_Load("res/dip.jpg");
+    SDL_Surface *surface = IMG_Load("res/dip.png");
     if (!surface)
     {
         printf("Redbar Surface Error: %s\n", IMG_GetError());
@@ -93,7 +93,7 @@ int main(int agr, char *args[])
     SDL_Texture *againTex = SDL_CreateTextureFromSurface(rend, surface);
     SDL_FreeSurface(surface);
     
-    surface = IMG_Load("res/start.jpg");
+    surface = IMG_Load("res/start.png");
     if (!surface)
     {
         printf("Redbar Surface Error: %s\n", IMG_GetError());
@@ -527,7 +527,13 @@ while(isRunning){
                    break;
                  case SDL_SCANCODE_J:
                       playerRect.y=2*r4.frmHit;
+
                        playerRect.x=0;
+                    //playerRect.y=3*r4.frmHit;
+                    playerRect.x+=r4.frmWid;
+                    if(playerRect.x>=2*r4.frmWid)
+                    playerRect.x=2*r4.frmWid;  
+                   
                       f=1;
                       flag=1; 
                       break;
@@ -586,37 +592,9 @@ while(isRunning){
                                         {playrRect.x=0;}
                          if(temp2==5){
                          
-                    playerRect.y=3*r4.frmHit;
-                    playerRect.x+=r4.frmWid;
-                    if(playerRect.x>=2*r4.frmWid)
-                    {playerRect.x=2*r4.frmWid;  
-                   gameover=4; 
-                   temp2=6;
-                   printf("t%d",temp2);
-                   }         
+                         
                          }
-                        if(f==1){
-                            
-                             if(temp2==5)
-                           f=0;
-                            
-                            x_pos = x_pos + (1400/ 60);
-                            if(playerPosition.x<1180)
-                                playerPosition.x= (int)x_pos;
-                            else
-                               {x_pos=1180;
-                                playerPosition.x =1180;}
-                      
-                           
-                            playerRect.x+=r4.frmWid;
-                           
-
-                             if(playerRect.x>=textureWidth-2*r4.frmWid)
-                            { playerRect.x=textureWidth-r4.frmWid;
-                            playerPosition.x= (int)x_pos-600/60;
-                             f=0;
-                             }
-                        }
+                     
          
                         plarRect1.x+=r2.frmWid;
                         if(plarRect1.x>=txturWidth1-r2.frmWid)
@@ -736,23 +714,16 @@ while(isRunning){
                    
                     //SDL_RenderCopy(rend, deadmanTex, NULL, &deadman);
                     
-                   //gameover=4;
+                  // gameover=4;
                    //playerRect.x=0;
-                    temp++;
-                    //temp=1;
+                    //temp++;
+                    temp=1;
+                    
                     
                
                 }
-                //else
-                 // { SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
-               
-                 // }
-                 if(temp==1){
-                    playerRect.x=0;
-                    temp2=5;
-                    //temp=0;
-
-                 }
+                
+              
              
             }
             
@@ -776,17 +747,24 @@ while(isRunning){
                 Mix_HaltChannel(-1);
             }
         SDL_RenderPresent(rend);
+        if(temp==1)
+        {
+                 playerRect.y=3*r4.frmHit;
+                    playerRect.x+=r4.frmWid;
+                    if(playerRect.x>=2*r4.frmWid)
+                    {playerRect.x=2*r4.frmWid;  
+                   gameover=4; 
+                   //temp2=6;
+                   //printf("t%d",temp2);
+                   } 
+                   SDL_Delay(2000);
         }
-       else if(temp2==6)
-           {
-            SDL_Delay(2000);
-           SDL_RenderClear(rend);
-            //temp2=11;
-             Mix_HaltChannel(-1);
-            temp2=22;
-            printf("hello");
-            }
-        else if(gameover==4&&temp2==22){
+        
+      
+        }
+        
+       
+        else if(gameover==4){
             //SDL_Delay(2000);
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend,againTex,NULL,NULL);
