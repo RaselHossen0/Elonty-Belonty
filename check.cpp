@@ -759,7 +759,7 @@ while(isRunning){
                    flag=1;  
                    break;
                  case SDL_SCANCODE_J:
-                      var=10;
+                      var=2;
                       b[1]=1;
                       playerRect.y=2*r4.frmHit;
                        playerRect.x=0;
@@ -780,7 +780,7 @@ while(isRunning){
                     break;
                     case SDL_SCANCODE_J:
                     var=2;
-                    b[1]=0;
+                   // b[1]=0;
                     ///f=0;
                     break;
                      case SDL_SCANCODE_R:
@@ -1050,7 +1050,7 @@ while(isRunning){
             }
         else if(gameover==10){
             //gameover=0;
-            //frameTime++;
+            frameTime++;
             //playerPosition.x=100;
              SDL_RenderClear(rend);
              
@@ -1085,25 +1085,33 @@ while(isRunning){
                 //b1.x=0;
            // }
            // else
-           
+           //frameTime++;
+           //if(frameTime==60)
+          printf("%d",b[1]);
+
              if(b[1]){
-                
-                   if(f==1)
-           frameTime++;
-           //printf("%d",frameTime);
-                        //frameTime=0;
-                if(f==1&&frameTime==2){
+                 if(60/frameTime==1){
                     frameTime=0;
+                   if(f==1)
+           
+           //printf("A%d",frameTime);
+                        //frameTime=0;
+                
+                   // frameTime=0;
                     
                     
                      //playerPosition.y=342;
-                    playerRect.x+=r4.frmWid;
+                   { playerRect.x+=r4.frmWid;
+                   //playerPosition.x+=10;
                     if(playerRect.x>=textureWidth-2*r4.frmWid)
                             {playerRect.x=textureWidth-r4.frmWid;
                             //playerPosition.y=340;
+                            b[1]=0;
+                            f=0;
                             }
+                            }
+               
                 }
-                
                 b1.x-=var;
                 o2.x-=var;
                 o3.x-=var;
@@ -1284,6 +1292,7 @@ while(isRunning){
                     playerRect.x=playerRect.y=0;
                     f=0;
                     flag=0;
+                    frameTime=0;
                     }
 
                     last=SDL_GetTicks()/1000;                   
@@ -1291,6 +1300,7 @@ while(isRunning){
               
             }
            
+            
             }
         else if(gameover==4&&temp2==22){
             //SDL_Delay(2000);
