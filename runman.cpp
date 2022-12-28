@@ -160,6 +160,26 @@ int main(int agr, char *args[])
     playerRect.x=playerRect.y=0;
     playerRect.w=r4.frmWid;
     playerRect.h=r4.frmHit;
+
+    surface = IMG_Load("res/thela.png");
+    
+    SDL_Texture *thela_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect thelap;
+    thelap.x=300;
+    thelap.y=355;
+    thelap.w=70;
+    thelap.h=70;
+
+     SDL_Rect thela;
+     int twthela,ththela;
+    SDL_QueryTexture(thela_tex ,NULL,NULL,&twthela,&ththela);
+
+    
+    struct rect thr(twthela/6,ththela);
+    thela.x=thela.y=0;
+    thela.w=thr.frmWid;
+    thela.h=thr.frmHit;
    
 
     surface = IMG_Load("res/gameover.jpeg");
@@ -408,6 +428,16 @@ int main(int agr, char *args[])
     o5.w=250;
     o5.h=250;
 
+     surface = IMG_Load("res/6down.png");
+    
+    SDL_Texture *ed_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect o5d;
+    o5d.x=360;
+    o5d.y=310;
+    o5d.w=220;
+    o5d.h=220;
+
      surface = IMG_Load("res/7.png");
     
     SDL_Texture *f_tex = SDL_CreateTextureFromSurface(rend, surface);
@@ -574,6 +604,8 @@ int main(int agr, char *args[])
     failedr.w=WINDOW_WIDTH;
     failedr.h=WINDOW_HEIGHT;
 
+    
+
 
     surface =IMG_Load("res/f.png");
     SDL_Texture *f_Tex =SDL_CreateTextureFromSurface(rend,surface);
@@ -675,6 +707,7 @@ double b2x=0,b2y=0;
 int temp=0,f=0,temp2=0;
 int money=0;
 int failed=0;
+int thl=0;
    
    int lastTime=SDL_GetTicks()/1000;
     
@@ -758,6 +791,19 @@ while(isRunning){
                     
                    flag=1;  
                    break;
+                   case SDL_SCANCODE_T:
+                   playerPosition.x =-180;
+                     var=5;
+                      b[1]=1;
+                      
+                      
+                      thela.x+=thr.frmWid;
+                      if(thela.x>twthela-thr.frmWid)
+                        thela.x=0;
+                    
+                    
+                     thl=1;  
+                   break;
                  case SDL_SCANCODE_J:
                       var=2;
                       b[1]=1;
@@ -787,9 +833,11 @@ while(isRunning){
                      var=2;
                     b[1]=0;
                     break;
-                   // case SDL_SCANCODE_LEFT:
-                    //b[1]=0;
-                    //break;
+                    case SDL_SCANCODE_T:
+                    thl=0;
+                    b[1]=0;
+                     playerPosition.x =300;
+                    break;
                    }
                 break;
 
@@ -1075,7 +1123,7 @@ while(isRunning){
                  SDL_RenderCopy(rend,h_tex,NULL,&o8);
                   SDL_RenderCopy(rend,i_tex,NULL,&o9);
                   SDL_RenderCopy(rend,oc_tex,NULL,&oc);
-            SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
+            
              
             
                  // if(b[0]){
@@ -1118,6 +1166,7 @@ while(isRunning){
                 o3.x-=var;
                 o4.x-=var;
                 o5.x-=var;
+                
                 o6.x-=var;
                 o7.x-=var;
                 o8.x-=var;
@@ -1210,11 +1259,21 @@ while(isRunning){
                 o8.y=250;
             }
 
+            //if((o5.x<=330&&o5.x>=173)&&(thl!=1))f=0,b[1]=0;
+            if(o5.x<=330&&o5.x>=173)
+            {if(thl!=1)
+            f=0,b[1]=0;
+            else
+            f=1;}
+            else
+            if(thl==1)
+            f=0;
+            
             
             if(o3.x<=330&&o3.x>=214||o4.x<=330&&o4.x>=208||o5.x<=330&&o5.x>=173||o6.x<=330&&o6.x>=214||o7.x<=290&&o7.x>=210||o8.x<=290&&o8.x>=160||o9.x<=340&&o9.x>=208){
                 if(f==0){
                     SDL_SetTextureColorMod(tex,255,0,0);
-                    SDL_SetTextureColorMod(life_tex,0,0,0);
+                   // SDL_SetTextureColorMod(life_tex,0,0,0);
                     if((o3.x==330||o4.x==330||o5.x==330||o6.x==330||o7.x==330||o8.x==330||o9.x==330)&&ox==0)
                     ox=1,lifecount++;
                     if(lifecount==1)
@@ -1231,6 +1290,15 @@ while(isRunning){
             }
             else
                 SDL_SetTextureColorMod(tex,255,255,255),ox=0;
+            if(o5.y==-323)
+            SDL_RenderCopy(rend,ed_tex,NULL,&o5d);
+            if(thl==1)
+            {
+               if(o5.x<=323)
+               o5.y=-323, SDL_RenderCopy(rend,ed_tex,NULL,&o5d),o5d.x-=var;
+               SDL_RenderCopy(rend,thela_tex,&thela,&thelap);
+            }
+            
 
 
              if(o2.x<=330&&o2.x>=208){
@@ -1273,6 +1341,7 @@ while(isRunning){
                 SDL_RenderClear(rend);
                 SDL_RenderCopy(rend,failed_tex,NULL,&failedr);
                }  
+               SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
              SDL_RenderPresent(rend);
 
             //printf("p%d\n",playerPosition.y);
