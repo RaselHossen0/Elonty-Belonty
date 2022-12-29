@@ -1789,11 +1789,11 @@ while(isRunning){
                 if (mousx >= start_rect.x && mousx <= (start_rect.x + start_rect.w) && mousy >= start_rect.y && mousy <= (start_rect.y + start_rect.h))
                 {
                     
-                    gameover=100-100;
-                    ///playerPosition.x=300;
-                   /// fPosition.x=-500;
-                  ///fPosition.y=-350;
-                   /// flast=SDL_GetTicks()/1000;                   
+                    gameover=100;
+                    playerPosition.x=300;
+                   fPosition.x=-500;
+                  fPosition.y=-350;
+                    flast=SDL_GetTicks()/1000;                   
                 }
               
             }
