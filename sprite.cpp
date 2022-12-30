@@ -749,10 +749,13 @@ int main(int agr, char *args[])
     vRect.x=vRect.y=0;
     vRect.w=rv.frmWid;
     vRect.h=rv.frmHit;
-    SDL_Texture *i76,*i77,*i78,*i79,*i80,*i86,*i81,*i82,*i83,*i85,*i87,*i88,*i89,*i90,*i91,*i92,*i93;
+    SDL_Texture *i76,*i94,*i77,*i78,*i79,*i80,*i86,*i81,*i82,*i83,*i85,*i87,*i88,*i89,*i90,*i91,*i92,*i93;
    
     surface =IMG_Load("res/76.png");
      i76=SDL_CreateTextureFromSurface(rend,surface);
+     SDL_FreeSurface(surface);
+    surface =IMG_Load("res/94.png");
+    i94=SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
     surface =IMG_Load("res/77.png");
      i77=SDL_CreateTextureFromSurface(rend,surface);
@@ -805,7 +808,7 @@ int main(int agr, char *args[])
     i93=SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
 
-    SDL_Rect r76,r77,r78,r79,r80,r81,r82,r83,r85,r86,r87,r88,r89,r90,r91,r92,r93;
+    SDL_Rect r76,r77,r78,r79,r80,r81,r82,r83,r85,r86,r87,r88,r89,r90,r91,r92,r93,r94;
 
     r76.x=0;
     r76.y=0;
@@ -823,6 +826,31 @@ int main(int agr, char *args[])
     r86.y=350;
     r86.w=280;
     r86.h=250;
+
+    r89.x=1130;
+    r89.y=10;
+    r89.w=180;
+    r89.h=100;
+
+    r93.x=0;
+    r93.y=0;
+    r93.w=100;
+    r93.h=100;
+
+    r94.x=-1100;
+    r94.y=0;
+    r94.w=500;
+    r94.h=900;
+
+    r87.x=70;
+    r87.y=250;
+    r87.w=280;
+    r87.h=150;
+
+    r88.x=70;
+    r88.y=450;
+    r88.w=280;
+    r88.h=150;
     
 
 
@@ -902,6 +930,7 @@ int failed=0;
 int ftham=0;
 int ftime;
 int ihp=0,ihp2=0;
+int temtim1;
    
    int lastTime=SDL_GetTicks()/1000;
     
@@ -1872,7 +1901,9 @@ while(isRunning){
     {
         SDL_RenderClear(rend);
         if(ihp==0)
-         {SDL_RenderCopy(rend,sTex,NULL,NULL);
+         {   temtim1=SDL_GetTicks()/1000;
+         //printf("%d",temtim1);
+            SDL_RenderCopy(rend,sTex,NULL,NULL);
         SDL_RenderCopy(rend, tex3, NULL, &start_rect);
         SDL_RenderCopy(rend, helptex, NULL, &help_rect);
         SDL_RenderCopy(rend, exittex, NULL, &e_rect); }
@@ -1910,26 +1941,25 @@ while(isRunning){
             SDL_SetTextureColorMod(exittex,100,100,200);
             else
             SDL_SetTextureColorMod(tex3,255,255,255),SDL_SetTextureColorMod(helptex,255,255,255),SDL_SetTextureColorMod(exittex,255,255,255);
-       
-         
         
-        SDL_RenderPresent(rend);
-    }
-     if(ihp==1)
+         
+          if(ihp==1)
         {  //r85.x=0;
-        SDL_RenderClear(rend);
-        SDL_RenderCopy(rend,i76, NULL, &r76);
+            SDL_RenderCopy(rend,i76, NULL, &r76);
         
         SDL_RenderCopy(rend,i85, NULL, &r85);
         SDL_RenderCopy(rend,i86, NULL, &r86);
-        SDL_RenderPresent(rend);
+        int temtim=SDL_GetTicks()/1000-temtim1;
+
+        //printf("%d",temtim);
+        if(temtim>1)
         
         
           
-        }
+        
         //printf("%d",ihp);
          ///if(ihp==2)
-    if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
+         if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
             {
                  if(mousx >=r85.x && mousx <= (r85.x + r85.w) && mousy >= r85.y && mousy <= (r85.y + r85.h)){
                 ihp2=1;
@@ -1937,7 +1967,7 @@ while(isRunning){
                 
                 }
                 else if(mousx >=r86.x && mousx <= (r86.x + r86.w) && mousy >= r86.y && mousy <= (r86.y + r86.h)){
-                ihp2=3;
+                ihp2=2;
             }
            }
             else 
@@ -1952,13 +1982,107 @@ while(isRunning){
             else
             SDL_SetTextureColorMod(i86,255,255,255);
         }
+        }
        
-    if(ihp2==1){
+        if(ihp2==1){
             SDL_RenderClear(rend);
-            SDL_RenderCopy(rend,i83, NULL,NULL);
-            //SDL_RenderCopy(rend,i85, NULL, &r85);
+            SDL_RenderCopy(rend,i82, NULL,NULL);
+            SDL_RenderCopy(rend,i89, NULL, &r89);
+            SDL_RenderCopy(rend,i93, NULL, &r93);
+         if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
+            {
+                 if(mousx >=r89.x && mousx <= (r89.x + r89.w) && mousy >= r89.y && mousy <= (r89.y + r89.h)){
+                ihp2=3;
+
+                
+                }
+                else if(mousx >=r93.x && mousx <= (r93.x + r93.w) && mousy >= r93.y && mousy <= (r93.y + r93.h)){
+                ihp2=4;
+            }
+           }
+            else 
+            {
+           
+             if(mousx >=r89.x && mousx <= (r89.x + r89.w) && mousy >= r89.y && mousy <= (r89.y + r89.h))
+            SDL_SetTextureColorMod(i89,255,100,200);
+            else
+            SDL_SetTextureColorMod(i89,255,255,255);
+             if(mousx >=r93.x && mousx <= (r93.x + r93.w) && mousy >= r93.y && mousy <= (r93.y + r93.h))
+            SDL_SetTextureColorMod(i93,255,100,200);
+            else
+            SDL_SetTextureColorMod(i93,255,255,255);
+        }
+
 
         }
+        if(ihp2==3){
+            SDL_RenderClear(rend);
+            
+            
+            SDL_RenderCopy(rend,i83, NULL,NULL);
+            SDL_RenderCopy(rend,i93, NULL, &r93);
+            if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
+            {
+                 if(mousx >=r93.x && mousx <= (r93.x + r93.w) && mousy >= r93.y && mousy <= (r93.y + r93.h)){
+                ihp2=4,ihp=44;
+
+                
+                }
+            
+           }
+            else 
+            {
+           
+             if(mousx >=r93.x && mousx <= (r93.x + r93.w) && mousy >= r93.y && mousy <= (r93.y + r93.h))
+            SDL_SetTextureColorMod(i93,255,100,200);
+            else
+            SDL_SetTextureColorMod(i93,255,255,255);
+           
+        }
+        }
+         if(ihp2==4){
+            SDL_RenderClear(rend);
+            if(ihp==44)
+            SDL_RenderCopy(rend,i83, NULL,NULL);
+            else
+            SDL_RenderCopy(rend,i82, NULL,NULL);
+            SDL_RenderCopy(rend,i94, NULL, &r94);
+            r94.x+=15;
+            if(r94.x>0)
+            {r94.x=0;
+            SDL_RenderCopy(rend,i87, NULL, &r87);
+            SDL_RenderCopy(rend,i88, NULL, &r88);
+            if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
+            {
+                 if(mousx >=r87.x && mousx <= (r87.x + r87.w) && mousy >= r87.y && mousy <= (r87.y + r87.h)){
+                ihp2=0,ihp=0;
+
+                
+                }
+                else if(mousx >=r88.x && mousx <= (r88.x + r88.w) && mousy >= r88.y && mousy <= (r88.y + r88.h)){
+                SDL_Quit();
+            }
+           }
+            else 
+            {
+           
+             if(mousx >=r87.x && mousx <= (r87.x + r87.w) && mousy >= r87.y && mousy <= (r87.y + r87.h))
+            SDL_SetTextureColorMod(i87,255,100,200);
+            else
+            SDL_SetTextureColorMod(i87,255,255,255);
+             if(mousx >=r88.x && mousx <= (r88.x + r88.w) && mousy >= r88.y && mousy <= (r88.y + r88.h))
+            SDL_SetTextureColorMod(i88,255,100,200);
+            else
+            SDL_SetTextureColorMod(i88,255,255,255);
+        }
+
+
+            
+            }
+            
+        }
+        SDL_RenderPresent(rend);
+    }
     else if(gameover==2)
     {
 
