@@ -757,7 +757,10 @@ int main(int agr, char *args[])
     vRect.x=vRect.y=0;
     vRect.w=rv.frmWid;
     vRect.h=rv.frmHit;
-    SDL_Texture *cross,*i76,*i75,*i94,*i77,*i78,*i79,*i80,*i86,*i81,*i82,*i83,*i85,*i87,*i88,*i89,*i90,*i91,*i92,*i93;
+    SDL_Texture *pas, *cross,*i76,*i75,*i94,*i77,*i78,*i79,*i80,*i86,*i81,*i82,*i83,*i85,*i87,*i88,*i89,*i90,*i91,*i92,*i93;
+   surface =IMG_Load("res/pas.png");
+     pas=SDL_CreateTextureFromSurface(rend,surface);
+     SDL_FreeSurface(surface);
    surface =IMG_Load("res/cross.png");
      cross=SDL_CreateTextureFromSurface(rend,surface);
      SDL_FreeSurface(surface);
@@ -924,6 +927,7 @@ orena3=Mix_LoadWAV("res/orena3.mp3");
     int t1,t2;
     int ore=0,frameTime3=0;
     int cros=0;
+    int ami=0;
     srand(time(NULL));
            int c=rand()%5;
            switch(c){
@@ -963,7 +967,7 @@ int failed=0;
 int ftham=0;
 int ftime;
 int ihp=0,ihp2=0;
-int temtim1,temtim3;
+int temtim1,temtim3,pastimx,lastx;
    
    int lastTime=SDL_GetTicks()/1000;
     
@@ -1164,8 +1168,8 @@ while(isRunning){
             SDL_FreeSurface(surface);
     
             SDL_Rect rectt;//for font
-            rectt.x=1123;
-            rectt.y=225;
+            rectt.x=1080;
+            rectt.y=255;
             rectt.w=60;
             rectt.h=60;
     
@@ -1688,20 +1692,9 @@ while(isRunning){
             if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
             {
                 if (mousx >= nl.x && mousx <= (nl.x +nl.w) && mousy >=nl.y && mousy <= (nl.y +nl.h))
-                {
-                    if(lst.x==0)
-                    {gameover =0;
-                    fPosition.x=500;
-                    fPosition.y=350;
-                    playerPosition.x=0;
-                    playerPosition.y=400;
-                    playerRect.x=playerRect.y=0;
-                    f=0;
-                    flag=0;
-                    frameTime=0;
-                    }
-
-                    last=SDL_GetTicks()/1000;                   
+                {   ami=1;
+                lastx=SDL_GetTicks()/1000;
+                                  
                 }
                // if(o1.y==250)
                 
@@ -1720,6 +1713,7 @@ while(isRunning){
                          
                
             }
+          
              SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
                  if(failed==1){
                 SDL_RenderClear(rend);
@@ -1727,6 +1721,44 @@ while(isRunning){
                }  
                if(lst.x==0)
                 SDL_RenderClear(rend), SDL_RenderCopy(rend,lst_tex,NULL,&lst), SDL_RenderCopy(rend,nl_tex,NULL,&nl);
+
+                   if(ami==1){
+                SDL_RenderClear(rend);
+                SDL_RenderCopy(rend,pas,NULL,NULL);
+                int timpas;
+                pastimx=SDL_GetTicks()/1000-lastx;
+                if(pastimx==0)timpas=3;
+                if(pastimx==1)timpas=2;
+                if(pastimx==2)timpas=1;
+                if(pastimx==3)timpas=0;
+                 if(lst.x==0&&pastimx>3)
+                    {gameover =0;
+                    fPosition.x=500;
+                    fPosition.y=350;
+                    playerPosition.x=0;
+                    playerPosition.y=400;
+                    playerRect.x=playerRect.y=0;
+                    f=0;
+                    flag=0;
+                    frameTime=0;
+                    }
+                    last=SDL_GetTicks()/1000;
+                     std::string i=std::to_string(timpas);
+            SDL_Surface* surfacex=TTF_RenderText_Solid(ff,i.c_str(),{255,165,0});
+            SDL_Texture* timtex=SDL_CreateTextureFromSurface(rend,surfacex);
+            SDL_FreeSurface(surfacex);
+    
+            SDL_Rect timr;//for font
+            timr.x=458;
+            timr.y=89;
+            timr.w=260;
+            timr.h=260;
+            
+             SDL_RenderCopy(rend,timtex,NULL,&timr);
+
+                      
+                
+            }
                 SDL_RenderPresent(rend);
            
             
