@@ -937,11 +937,12 @@ Mix_Chunk *orena2;
 orena2=Mix_LoadWAV("res/orena2.mp3");
 Mix_Chunk *orena3;
 orena3=Mix_LoadWAV("res/orena3.mp3");
-Mix_Chunk *collide,*coin,*click,*level2;
+Mix_Chunk *collide,*coin,*click,*level2,*cdn;
 collide=Mix_LoadWAV("res/collide.mp3");
 click=Mix_LoadWAV("res/click.mp3");
 coin=Mix_LoadWAV("res/coin.mp3");
 level2=Mix_LoadWAV("res/level2.mp3");
+cdn=Mix_LoadWAV("res/cdwn.mp3");
 
 
     SDL_Rect replay_rect;
@@ -1241,7 +1242,7 @@ while(isRunning){
                              if(temp2==5)
                            f=0;
                             
-                            x_pos = x_pos + (1400/ 60);
+                            x_pos = x_pos + (2400/ 60);
                             if(playerPosition.x<1180)
                                 playerPosition.x= (int)x_pos;
                             else
@@ -1781,6 +1782,7 @@ while(isRunning){
                    if(ami==1){
                 SDL_RenderClear(rend);
                 SDL_RenderCopy(rend,pas,NULL,NULL);
+               
                 int timpas;
                 pastimx=SDL_GetTicks()/1000-lastx;
                 if(pastimx==0)timpas=3;
@@ -1871,6 +1873,7 @@ while(isRunning){
 
         }
     else if(gameover==100){
+        
         SDL_RenderCopy(rend,fb_tex,NULL,&fb);
          SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
         frameTime3++;
@@ -2414,13 +2417,18 @@ while(isRunning){
      }
 }
     
-
+*collide,*coin,*click,*level2,*cdn;
     SDL_Delay(100);
     Mix_FreeChunk(main);
     Mix_FreeChunk(ore1);
     Mix_FreeChunk(ore2);
     Mix_FreeChunk(ore3);
     Mix_FreeChunk(ore4);
+    Mix_FreeChunk(collide);
+    Mix_FreeChunk(coin);
+    Mix_FreeChunk(click);
+    Mix_FreeChunk(level2);
+    
     //SDL_CloseAudioDevice(deviceId);
     //SDL_FreeWAV(wavBuffer);
     SDL_DestroyRenderer(rend);
