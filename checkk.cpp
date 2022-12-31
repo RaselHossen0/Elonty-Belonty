@@ -94,9 +94,31 @@ int main(int agr, char *args[])
     SDL_Rect deadman;
     deadman.w = 150;
     deadman.h = 150;
-    surface = IMG_Load("res/playAgain.png");
+    surface = IMG_Load("res/black.png");
     SDL_Texture *againTex = SDL_CreateTextureFromSurface(rend, surface);
     SDL_FreeSurface(surface);
+    surface = IMG_Load("res/again.png");
+    SDL_Texture *agnTex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect agnPosition;//rect for the whole sprite sheet
+    agnPosition.x=290;
+    agnPosition.y=-50;
+    agnPosition.w=WINDOW_WIDTH-600;
+    agnPosition.h=WINDOW_HEIGHT+100;
+    int agntextureWidth,agntextureHeight;
+    SDL_QueryTexture(agnTex,NULL,NULL,&agntextureWidth,&agntextureHeight);
+    struct rect r4a(agntextureWidth/4,agntextureHeight);
+    SDL_Rect agn;
+    agn.x = 0;
+    agn.y = 0;
+    agn.w = r4a.frmWid;
+    agn.h = r4a.frmHit;
+   
+    
+
+    
+    
+    
     
     surface = IMG_Load("res/start.png");
     if (!surface)
@@ -179,7 +201,7 @@ int main(int agr, char *args[])
     playerRect.h=r4.frmHit;
    
 
-    surface = IMG_Load("res/gameover.jpeg");
+    surface = IMG_Load("res/over.png");
     if (!surface)
     {
         printf("Green rectangle Surface Error: %s\n", IMG_GetError());
@@ -200,10 +222,10 @@ int main(int agr, char *args[])
     }
 
     SDL_Rect gameover_rect;
-    gameover_rect.w = 400;
-    gameover_rect.h = 300;
-    gameover_rect.x = (WINDOW_WIDTH - gameover_rect.w) / 2;
-    gameover_rect.y = (WINDOW_HEIGHT - gameover_rect.h) / 2 - 150;
+    gameover_rect.w =WINDOW_WIDTH;
+    gameover_rect.h =WINDOW_HEIGHT;
+    gameover_rect.x =0;
+    gameover_rect.y = 0;
 
     surface =IMG_Load("res/cloudh.png");
     SDL_Texture *cloud_Tex =SDL_CreateTextureFromSurface(rend,surface);
@@ -246,19 +268,19 @@ int main(int agr, char *args[])
     SDL_FreeSurface(surface);
     SDL_Rect  obs2Rect;
     obs2Rect.x=300;
-    obs2Rect.y=300;
-    obs2Rect.w=230;
-    obs2Rect.h=120;
+    obs2Rect.y=475;
+    obs2Rect.w=70;
+    obs2Rect.h=70;
 
     surface =IMG_Load("res/obs.png");
     //SDL_Texture *obs_Tex =SDL_CreateTexture(rend,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,150,150);
     SDL_Texture *obs_Tex =SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
     SDL_Rect  obsRect;
-    obsRect.x=500;
-    obsRect.y=500;
-    obsRect.w=180;
-    obsRect.h=100;
+    obsRect.x=750;
+    obsRect.y=480;
+    obsRect.w=70;
+    obsRect.h=70;
 
     surface =IMG_Load("res/bomb.png");
     //SDL_Texture *obs_Tex =SDL_CreateTexture(rend,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,150,150);
@@ -370,7 +392,7 @@ int main(int agr, char *args[])
     plarRect3.w=r7.frmWid;
     plarRect3.h=r7.frmHit;
 
-    surface = IMG_Load("res/replay.png");
+    surface = IMG_Load("res/repf.png");
     
     SDL_Texture *replay_tex = SDL_CreateTextureFromSurface(rend, surface);
     SDL_FreeSurface(surface);
@@ -703,7 +725,15 @@ int main(int agr, char *args[])
     fup.y=0;
     fup.w=WINDOW_WIDTH;
     fup.h=WINDOW_HEIGHT;
-
+    surface = IMG_Load("res/fbt.png");
+    
+    SDL_Texture *fbt_tex = SDL_CreateTextureFromSurface(rend, surface);
+    SDL_FreeSurface(surface);
+    SDL_Rect fbt;
+    fbt.x=1150;
+    fbt.y=10;
+    fbt.w=100;
+    fbt.h=100;
 
     surface =IMG_Load("res/f.png");
     SDL_Texture *f_Tex =SDL_CreateTextureFromSurface(rend,surface);
@@ -718,7 +748,7 @@ int main(int agr, char *args[])
     
     SDL_Rect fPosition2;//rect for the whole sprite sheet
     fPosition2.x=250;
-    fPosition2.y=150;
+    fPosition2.y=350;
     fPosition2.w=300;
     fPosition2.h=300;
 
@@ -749,7 +779,16 @@ int main(int agr, char *args[])
     vRect.x=vRect.y=0;
     vRect.w=rv.frmWid;
     vRect.h=rv.frmHit;
-    SDL_Texture *i76,*i75,*i94,*i77,*i78,*i79,*i80,*i86,*i81,*i82,*i83,*i85,*i87,*i88,*i89,*i90,*i91,*i92,*i93;
+    SDL_Texture *rpl,*pas, *cross,*i76,*i75,*i94,*i77,*i78,*i79,*i80,*i86,*i81,*i82,*i83,*i85,*i87,*i88,*i89,*i90,*i91,*i92,*i93;
+   surface =IMG_Load("res/rply.png");
+     rpl=SDL_CreateTextureFromSurface(rend,surface);
+     SDL_FreeSurface(surface);
+   surface =IMG_Load("res/pas.png");
+     pas=SDL_CreateTextureFromSurface(rend,surface);
+     SDL_FreeSurface(surface);
+   surface =IMG_Load("res/cross.png");
+     cross=SDL_CreateTextureFromSurface(rend,surface);
+     SDL_FreeSurface(surface);
    surface =IMG_Load("res/75.png");
      i75=SDL_CreateTextureFromSurface(rend,surface);
      SDL_FreeSurface(surface);
@@ -810,7 +849,15 @@ int main(int agr, char *args[])
     i93=SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
 
-    SDL_Rect r75,r76,r77,r78,r79,r80,r81,r82,r83,r85,r86,r87,r88,r89,r90,r91,r92,r93,r94;
+    SDL_Rect rplr,crossr,r75,r76,r77,r78,r79,r80,r81,r82,r83,r85,r86,r87,r88,r89,r90,r91,r92,r93,r94;
+     rplr.x=410;
+    rplr.y=480;
+    rplr.w=450;
+    rplr.h=200;
+    crossr.x=1150;
+    crossr.y=8;
+    crossr.w=100;
+    crossr.h=100;
 
     r76.x=0;
     r76.y=0;
@@ -830,7 +877,7 @@ int main(int agr, char *args[])
     r86.h=250;
 
     r89.x=1130;
-    r89.y=10;
+    r89.y=600;
     r89.w=180;
     r89.h=100;
 
@@ -890,6 +937,11 @@ Mix_Chunk *orena2;
 orena2=Mix_LoadWAV("res/orena2.mp3");
 Mix_Chunk *orena3;
 orena3=Mix_LoadWAV("res/orena3.mp3");
+Mix_Chunk *collide,*coin,*click,*level2;
+collide=Mix_LoadWAV("res/collide.mp3");
+click=Mix_LoadWAV("res/click.mp3");
+coin=Mix_LoadWAV("res/coin.mp3");
+level2=Mix_LoadWAV("res/level2.mp3");
 
 
     SDL_Rect replay_rect;
@@ -908,6 +960,8 @@ orena3=Mix_LoadWAV("res/orena3.mp3");
     int flast=0;
     int t1,t2;
     int ore=0,frameTime3=0;
+    int cros=0;
+    int ami=0;
     srand(time(NULL));
            int c=rand()%5;
            switch(c){
@@ -947,7 +1001,8 @@ int failed=0;
 int ftham=0;
 int ftime;
 int ihp=0,ihp2=0;
-int temtim1,temtim3;
+int temtim1,temtim3,pastimx,lastx;
+int agnt=0,frameTime4=0;
    
    int lastTime=SDL_GetTicks()/1000;
     
@@ -1006,8 +1061,7 @@ while(isRunning){
                     
                     
                    flag=1;
-                   if(ftime>=34)
-                        ore=10;
+                  
                    
 
                 
@@ -1149,8 +1203,8 @@ while(isRunning){
             SDL_FreeSurface(surface);
     
             SDL_Rect rectt;//for font
-            rectt.x=1123;
-            rectt.y=225;
+            rectt.x=1080;
+            rectt.y=255;
             rectt.w=60;
             rectt.h=60;
     
@@ -1239,40 +1293,43 @@ while(isRunning){
             SDL_RenderCopy(rend,fire2_Tex,&plarRect22,&plarPosition22);
             SDL_RenderCopy(rend,fire2_Tex,&plarRect3,&plarPosition3);
            
-            if(((playerPosition.x-350)*(playerPosition.x-350)+(playerPosition.y-200)*(playerPosition.y-245))<1)
-            {SDL_RenderCopy(rend,v_Tex,&vRect,&vRectp);
-            gameover=4;
-            temp=1;
+           // /if(((playerPosition.x-350)*(playerPosition.x-350)+(playerPosition.y-200)*(playerPosition.y-245))<1)
+            // /{SDL_RenderCopy(rend,v_Tex,&vRect,&vRectp);
+           //  /gameover=4;
+           // / temp=1;
             
-            }
-            if(tim>3){
+           // / }
+            if(tim>7){
               bx+=0.1;
               by+=0.1;
-                 if(bombRect.x<350){
+                 if(bombRect.x>870){
            
-                    bombRect.x+=(int)bx;
+                    bombRect.x-=(int)bx;
                     bombRect.y-=(int)by;
                  }
                  else
                 {
            
-                  bombRect.x+=(int)bx;
-                  bombRect.y+=(int)by;
+                  bombRect.x-=(int)bx;
+                bombRect.y+=(int)(by);
                 }
             
                 
-                if(!(bombRect.x>=500&&bombRect.y>=500)){
+               if(!(bombRect.x>=400&&bombRect.x<=800&&bombRect.y>=480)){
            
                  SDL_RenderCopy(rend, bomb_Tex, NULL,&bombRect);
                 }
-                 if(tim>5&&tim<7)
-                SDL_RenderCopy(rend,f_Tex,&fRect,&fPosition);
-                if(tim>6.5)
+                 if(tim>10.5)
                 SDL_RenderCopy(rend, obs_Tex, NULL,&obsRect);
+                 if(tim>9&&tim<11)
+                {fPosition2.x=640;
+                    fPosition2.y=272;
+              SDL_RenderCopy(rend,f_Tex,&fRect,&fPosition2);}
+               
            
 
            }
-           if(tim>7){
+           if(tim>3){
           
              b2x+=0.1;
               b2y+=0.1;
@@ -1292,10 +1349,13 @@ while(isRunning){
            
                SDL_RenderCopy(rend, bomb_Tex, NULL,&bombRect2);
                }
-              if(tim>9&&tim<11)
-              SDL_RenderCopy(rend,f_Tex,&fRect,&fPosition2);
-              if(tim>10.5)
+               if(tim>5.5)
               SDL_RenderCopy(rend, obs2_Tex, NULL,&obs2Rect);
+              if(tim>5&&tim<7)
+              {fPosition2.x=200;
+                    fPosition2.y=280;
+              SDL_RenderCopy(rend,f_Tex,&fRect,&fPosition2);}
+              
            
            }
             
@@ -1305,13 +1365,13 @@ while(isRunning){
 
             Mix_HaltChannel(-1);
             SDL_RenderCopy(rend,r_Tex,NULL,&rRect);
-                if(flag||timee>=22){
+                if(flag||timee>=25){
                    
                     deadman.x = 350;
                     deadman.y = playerPosition.y;
                     SDL_SetRenderDrawColor(rend, 0,0,0,0);
                     for(int i=0;i<7;i++)
-                    SDL_RenderDrawLine(rend, 1200, 600 , playerPosition.x+i+100,playerPosition.y+i+50);
+                    SDL_RenderDrawLine(rend, 1063, 422, playerPosition.x+i+100,playerPosition.y+i+50);
                     
                     SDL_SetRenderDrawColor(rend, 0,0,0,0);
                         
@@ -1373,6 +1433,7 @@ while(isRunning){
             printf("hello");
             }
         else if(gameover==10){
+            Mix_PlayChannel(-1,level2,0);
             //gameover=0;
             frameTime++;
             //playerPosition.x=100;
@@ -1591,11 +1652,11 @@ while(isRunning){
                     if((o3.x==330||o4.x==330||o5.x==330||o6.x==330||o7.x==330||o8.x==330||o9.x==330)&&ox==0)
                     ox=1,lifecount++;
                     if(lifecount==1)
-                    SDL_SetTextureColorMod(life_tex,0,0,0);
+                    SDL_SetTextureColorMod(life_tex,0,0,0),Mix_PlayChannel(-1,collide,0);
                     if(lifecount==2)
-                    SDL_SetTextureColorMod(life2_tex,0,0,0);
+                    SDL_SetTextureColorMod(life2_tex,0,0,0),Mix_PlayChannel(-1,collide,0);
                     if(lifecount==3)
-                    SDL_SetTextureColorMod(life3_tex,0,0,0), failed=1;
+                    SDL_SetTextureColorMod(life3_tex,0,0,0), failed=1,Mix_PlayChannel(-1,collide,0);
                     
                 }
                  else
@@ -1612,7 +1673,7 @@ while(isRunning){
                     
                     o2.y-=10;
                     if(o2.y==200)
-                    money=money+70;
+                    money=money+70,Mix_PlayChannel(-1,coin,0);
                     // printf("%d",ox);
                     
                     ///if(o2.x==330&&ox==0)
@@ -1626,10 +1687,11 @@ while(isRunning){
                if(oc.x<=330&&oc.x>=214){
                 //if(f==0){
                     oc.y-=10;
+                    
                  
                     
                     if(oc.x==330&&ox==0)
-                    money=money+10,ox=1;
+                    money=money+10,ox=1,Mix_PlayChannel(-1,coin,0);
                     else 
                     ox=0;
                // }
@@ -1673,26 +1735,20 @@ while(isRunning){
             if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
             {
                 if (mousx >= nl.x && mousx <= (nl.x +nl.w) && mousy >=nl.y && mousy <= (nl.y +nl.h))
-                {
-                    if(lst.x==0)
-                    {gameover =0;
-                    fPosition.x=500;
-                    fPosition.y=350;
-                    playerPosition.x=0;
-                    playerPosition.y=400;
-                    playerRect.x=playerRect.y=0;
-                    f=0;
-                    flag=0;
-                    frameTime=0;
-                    }
-
-                    last=SDL_GetTicks()/1000;                   
+                {   ami=1;
+                 bombRect.x=1070;
+                    bombRect.y=540;
+                     bombRect2.x=1070;
+                     bombRect2.y=540;
+                lastx=SDL_GetTicks()/1000;
+                Mix_PlayChannel(-1,click,0);
+                                  
                 }
                // if(o1.y==250)
                 
                     if (mousx >= o1.x && mousx <= (o1.x +o1.w) && mousy >=o1.y && mousy <= (o1.y +o1.h))
                         //o1.x=330;
-                         o1f=1,o1.y=-400,playerRect.x=0, o1n.x=340,o1n.y=365;
+                         o1f=1,o1.y=-400,playerRect.x=0, o1n.x=340,o1n.y=365,Mix_PlayChannel(-1,click,0);
     
                    // }
                     //if(o1.y==251){  
@@ -1705,23 +1761,71 @@ while(isRunning){
                          
                
             }
+          
              SDL_RenderCopy(rend,tex,&playerRect,&playerPosition);
                  if(failed==1){
                 SDL_RenderClear(rend);
                 SDL_RenderCopy(rend,failed_tex,NULL,&failedr);
                }  
                if(lst.x==0)
-                SDL_RenderClear(rend), SDL_RenderCopy(rend,lst_tex,NULL,&lst), SDL_RenderCopy(rend,nl_tex,NULL,&nl);
+                SDL_RenderClear(rend), SDL_RenderCopy(rend,lst_tex,NULL,&lst), SDL_RenderCopy(rend,nl_tex,NULL,&nl),Mix_HaltChannel(-1);
+
+                   if(ami==1){
+                SDL_RenderClear(rend);
+                SDL_RenderCopy(rend,pas,NULL,NULL);
+                int timpas;
+                pastimx=SDL_GetTicks()/1000-lastx;
+                if(pastimx==0)timpas=3;
+                if(pastimx==1)timpas=2;
+                if(pastimx==2)timpas=1;
+                if(pastimx==3)timpas=0;
+                 if(lst.x==0&&pastimx>3)
+                    {gameover =0;
+                    
+                    playerPosition.x=0;
+                    playerPosition.y=500;
+                    playerRect.x=playerRect.y=0;
+                    f=0;
+                    flag=0;
+                    frameTime=0;
+                    }
+                    last=SDL_GetTicks()/1000;
+                     std::string i=std::to_string(timpas);
+            SDL_Surface* surfacex=TTF_RenderText_Solid(ff,i.c_str(),{255,165,0});
+            SDL_Texture* timtex=SDL_CreateTextureFromSurface(rend,surfacex);
+            SDL_FreeSurface(surfacex);
+    
+            SDL_Rect timr;//for font
+            timr.x=458;
+            timr.y=89;
+            timr.w=260;
+            timr.h=260;
+            
+             SDL_RenderCopy(rend,timtex,NULL,&timr);
+
+                      
+                
+            }
                 SDL_RenderPresent(rend);
            
             
             }
         else if(gameover==4&&temp2==22){
+            frameTime4++;
             //SDL_Delay(2000);
             SDL_RenderClear(rend);
+             SDL_RenderCopy(rend,againTex,NULL,NULL);
+            SDL_RenderCopy(rend,agnTex,&agn,&agnPosition);
+             SDL_RenderCopy(rend,rpl,NULL,&rplr);
             
-            SDL_RenderCopy(rend,againTex,NULL,NULL);
+           
              SDL_RenderPresent(rend);
+            if(60/frameTime4==1) {
+                frameTime4=0;
+
+             agn.x+=r4a.frmWid;
+             if(agn.x>=agntextureWidth)
+             agn.x=0;}
 
             int mousex, mousey;
             int buttons = SDL_GetMouseState(&mousex, &mousey);
@@ -1729,27 +1833,32 @@ while(isRunning){
 
             if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT))
             {
-                if (mousex >= WINDOW_WIDTH/3.5 && mousex <= WINDOW_WIDTH/1.5 && mousey >= WINDOW_HEIGHT/3.5&& mousey <= WINDOW_HEIGHT/1.5)
-                {
+                if (mousex >= rplr.x && mousex <= (rplr.x + rplr.w) && mousey >= rplr.y && mousey <= (rplr.y + rplr.h))
+                {Mix_PlayChannel(-1,click,0);
                     gameover = 0;
                     x_pos=0.0;
                     count2=SDL_GetTicks() / 1000-last;
                    playerPosition.x=0;
-                   playerPosition.y=400;
+                   playerPosition.y=440;
                    playerRect.x=playerRect.y=0;
                    bx=0;
                    by=0;
                    b2x=0;
                    b2y=0;
-                    bombRect.x=98;
-                    bombRect.y=505;
-                     bombRect2.x=1120;
-                     bombRect2.y=520;
+                    bombRect.x=1070;
+                    bombRect.y=540;
+                     bombRect2.x=1070;
+                     bombRect2.y=540;
                      temp=0;
-                    
+                     playerPosition.w=100;
+                     playerPosition.h=100;
                    
                 }
             }
+            else if(mousex >= rplr.x && mousex <= (rplr.x + rplr.w) && mousey >= rplr.y && mousey <= (rplr.y + rplr.h))
+            SDL_SetTextureColorMod(rpl,100,100,200);
+            else
+            SDL_SetTextureColorMod(rpl,255,255,255);
 
 
         }
@@ -1894,7 +2003,25 @@ while(isRunning){
         if(ftham==1)
          SDL_Delay(2000),SDL_RenderClear(rend),SDL_RenderCopy(rend,failed_tex,NULL,&failedr),Mix_HaltChannel(-1);
         else if(ftime>=34)
-         {SDL_RenderClear(rend),SDL_RenderCopy(rend,fup_tex,NULL,&fup),Mix_HaltChannel(-1);
+         {SDL_RenderClear(rend),SDL_RenderCopy(rend,fup_tex,NULL,&fup),SDL_RenderCopy(rend,fbt_tex,NULL,&fbt),Mix_HaltChannel(-1);
+        
+                 int mousx, mousy;
+            int button = SDL_GetMouseState(&mousx, &mousy);
+           
+            if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
+            {
+                if (mousx >= fbt.x && mousx <= (fbt.x + fbt.w) && mousy >= fbt.y && mousy <= (fbt.y + fbt.h))
+                {
+                    Mix_PlayChannel(-1,click,0);
+                  ore=10;                 
+                }
+              
+            }
+            else if(mousx >= fbt.x && mousx <= (fbt.x + fbt.w) && mousy >= fbt.y && mousy <= (fbt.y + fbt.h))
+            SDL_SetTextureColorMod(fbt_tex,100,100,200);
+            else
+            SDL_SetTextureColorMod(fbt_tex,255,255,255);
+        
         if(ore==10){
         playerPosition.x=300;
         fPosition.x=-500;
@@ -1934,18 +2061,21 @@ while(isRunning){
             {
                 if (mousx >= start_rect.x && mousx <= (start_rect.x + start_rect.w) && mousy >= start_rect.y && mousy <= (start_rect.y + start_rect.h))
                 {
+                     Mix_PlayChannel(-1,click,0);
                     
-                   gameover=100;
+                   gameover=100-100;
                    playerPosition.x=300;
                    fPosition.x=-500;
                    fPosition.y=-350;
                    flast=SDL_GetTicks()/1000;                   
                 }
                 else if(mousx >= e_rect.x && mousx <= (e_rect.x +e_rect.w) && mousy >= e_rect.y && mousy <= (e_rect.y + e_rect.h)){
+                Mix_PlayChannel(-1,click,0);
                 SDL_Quit();
                 }
                 else if(mousx >= help_rect.x && mousx <= (help_rect.x + help_rect.w) && mousy >= help_rect.y && mousy <= (help_rect.y + help_rect.h)){
                 ihp++;
+                Mix_PlayChannel(-1,click,0);
                 
                 }
             }
@@ -1980,11 +2110,13 @@ while(isRunning){
             {
                  if(mousx >=r85.x && mousx <= (r85.x + r85.w) && mousy >= r85.y && mousy <= (r85.y + r85.h)){
                 ihp2=1;
+               // Mix_PlayChannel(-1,click,0);
 
                 
                 }
                 else if(mousx >=r86.x && mousx <= (r86.x + r86.w) && mousy >= r86.y && mousy <= (r86.y + r86.h)){
                 ihp2=2,temtim3=SDL_GetTicks()/1000;
+                //Mix_PlayChannel(-1,click,0);
             }
            }
             else 
@@ -2014,18 +2146,22 @@ while(isRunning){
             {
                  if(mousx >=r90.x && mousx <= (r90.x + r90.w) && mousy >= r90.y && mousy <= (r90.y + r90.h)){
                 ihp2=78;
+                Mix_PlayChannel(-1,click,0);
 
                 
                 }
                 else if(mousx >=r91.x && mousx <= (r91.x + r91.w) && mousy >= r91.y && mousy <= (r91.y + r91.h)){
                 ihp2=79;
+                Mix_PlayChannel(-1,click,0);
             }
                else if(mousx >=r75.x && mousx <= (r75.x + r75.w) && mousy >= r75.y && mousy <= (r75.y + r75.h)){
                 ihp2=80;
+                Mix_PlayChannel(-1,click,0);
             }
 
                else if(mousx >=r93.x && mousx <= (r93.x + r93.w) && mousy >= r93.y && mousy <= (r93.y + r93.h)){
                 ihp2=4,ihp=93;
+                Mix_PlayChannel(-1,click,0);
             }
            }
             else 
@@ -2061,11 +2197,13 @@ while(isRunning){
             {
                  if(mousx >=r89.x && mousx <= (r89.x + r89.w) && mousy >= r89.y && mousy <= (r89.y + r89.h)){
                 ihp2=3;
+                Mix_PlayChannel(-1,click,0);
 
                 
                 }
                 else if(mousx >=r93.x && mousx <= (r93.x + r93.w) && mousy >= r93.y && mousy <= (r93.y + r93.h)){
                 ihp2=4;
+                Mix_PlayChannel(-1,click,0);
             }
            }
             else 
@@ -2093,6 +2231,7 @@ while(isRunning){
             {
                  if(mousx >=r93.x && mousx <= (r93.x + r93.w) && mousy >= r93.y && mousy <= (r93.y + r93.h)){
                 ihp2=4,ihp=44;
+                Mix_PlayChannel(-1,click,0);
 
                 
                 }
@@ -2129,12 +2268,12 @@ while(isRunning){
             if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
             {
                  if(mousx >=r87.x && mousx <= (r87.x + r87.w) && mousy >= r87.y && mousy <= (r87.y + r87.h)){
-                ihp2=0,ihp=0;
+                ihp2=0,ihp=0,Mix_PlayChannel(-1,click,0);
 
                 
                 }
                 else if(mousx >=r88.x && mousx <= (r88.x + r88.w) && mousy >= r88.y && mousy <= (r88.y + r88.h)){
-                SDL_Quit();
+                Mix_PlayChannel(-1,click,0),SDL_Quit();
             }
            }
             else 
@@ -2158,19 +2297,26 @@ while(isRunning){
         if(ihp2==78) {
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend,i78, NULL,NULL);
+            SDL_RenderCopy(rend,cross, NULL,&crossr);
+            cros =78;
              }
          else if(ihp2==79) {
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend,i79, NULL,NULL);
+            SDL_RenderCopy(rend,cross, NULL,&crossr);
+            cros=79;
              }
          else if(ihp2==80) {
+            
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend,i80, NULL,NULL);
             SDL_RenderCopy(rend,i89, NULL,&r89);
+            
                   if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
             {
                  if(mousx >=r89.x && mousx <= (r89.x + r89.w) && mousy >= r89.y && mousy <= (r89.y + r89.h)){
                 ihp2=81;
+                Mix_PlayChannel(-1,click,0);
 
                 
                 }
@@ -2187,9 +2333,31 @@ while(isRunning){
         }
              }
               if(ihp2==81) {
+                cros =80;
             SDL_RenderClear(rend);
             SDL_RenderCopy(rend,i81, NULL,NULL);
+            SDL_RenderCopy(rend,cross, NULL,&crossr);
              }
+        if(cros==78||cros==79||cros==80)
+                  if (button & SDL_BUTTON(SDL_BUTTON_LEFT))
+            {
+                 if(mousx >=crossr.x && mousx <= (crossr.x + crossr.w) && mousy >= crossr.y && mousy <= (crossr.y + crossr.h)){
+                ihp2=2;
+               // Mix_PlayChannel(-1,click,0);
+
+                
+                }
+            
+           }
+            else 
+            {
+           
+             if(mousx >=crossr.x && mousx <= (crossr.x + crossr.w) && mousy >= crossr.y && mousy <= (crossr.y + crossr.h))
+            SDL_SetTextureColorMod(cross,255,100,200);
+            else
+            SDL_SetTextureColorMod(cross,255,255,255);
+            
+        }
         
         SDL_RenderPresent(rend);
     }
@@ -2214,7 +2382,7 @@ while(isRunning){
             {
                 if (mousex >= replay_rect.x && mousex <= (replay_rect.x + replay_rect.w) && mousey >= replay_rect.y && mousey <= (replay_rect.y + replay_rect.h))
                 {
-
+                    Mix_PlayChannel(-1,click,0);
                      count2=SDL_GetTicks() / 1000-last;
                      gameover = 0;
                      x_pos=0.0;
